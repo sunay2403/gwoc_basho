@@ -10,7 +10,7 @@ function App(){
 
         <Routes>
           <Route path="/"             element={<Navigate to="/home" replace />} />
-          <Route path="/home"         element={<div>Info Page</div>} />
+          <Route path="/home"         element={<div>Info Page<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />s</div>} />
           <Route path="/products"     element={<div>Products Page</div>} />
           <Route path="/workshops"    element={<div>Workshop Page</div>} />
           <Route path="/experiences"  element={<div>Experiences Page</div>} />
