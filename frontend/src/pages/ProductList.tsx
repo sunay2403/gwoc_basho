@@ -1,5 +1,5 @@
 import Filter from "../components/Filter.tsx";
-import Card from "../components/card.tsx";
+import Card from "../components/Card.tsx";
 
 function ProductList(){
     return (
