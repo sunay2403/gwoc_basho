@@ -2,6 +2,8 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import ProductList from "./pages/ProductList";
 import BashoHomepage from "./pages/InfoPage";
+import WorkshopsPage from "./pages/Workshops";
+import ExperiencesPage from "./pages/Experiences";
 
 import {
   BrowserRouter,
@@ -15,6 +17,7 @@ const App: React.FC = () => {
     <div className="bg-[#EDD8B4]/15 min-h-screen">
       <BrowserRouter>
         <Navbar />
+        
 
         <Routes>
           {/* Redirect root to home */}
@@ -23,8 +26,9 @@ const App: React.FC = () => {
           {/* Main Pages */}
           <Route path="/home" element={<BashoHomepage />} />
           <Route path="/products" element={<ProductList />} />
-          <Route path="/workshops" element={<div>Workshop Page</div>} />
-          <Route path="/experiences" element={<div>Experiences Page</div>} />
+          <Route path="/workshops" element={<WorkshopsPage/>} />
+          <Route path="/experiences" element={<ExperiencesPage/>} />
+          
 
           {/* Optional: 404 fallback */}
           <Route path="*" element={<Navigate to="/home" replace />} />
