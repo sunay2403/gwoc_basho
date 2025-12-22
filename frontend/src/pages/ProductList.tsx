@@ -61,25 +61,26 @@ function ProductList(): JSX.Element {
     const filtered = products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
 
     return (
-        <div className="flex gap-6 px-4 py-8 max-w-7xl mx-auto">
+        <div className="flex gap-8 px-6 py-12 max-w-7xl mx-auto">
             <aside className="w-72 hidden md:block">
                 <Filter />
             </aside>
 
             <div className="flex-1">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-serif text-stone-800">Collection</h2>
-                    <div className="flex items-center gap-3">
-                        <input
-                            value={query}
-                            onChange={e => setQuery(e.target.value)}
-                            placeholder="Search products..."
-                            className="px-4 py-2 rounded-full border border-stone-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-200"
-                        />
+                <div className="mb-12">
+                    <div className="mb-6">
+                        <h2 className="text-5xl font-serif font-light text-stone-800 mb-2">Our Collection</h2>
+                        <p className="text-lg text-stone-600">Handcrafted pieces made with intention</p>
                     </div>
+                    <input
+                        value={query}
+                        onChange={e => setQuery(e.target.value)}
+                        placeholder="Search collection..."
+                        className="w-full max-w-md px-5 py-3 rounded-full border-2 border-stone-200 shadow-sm focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition-all"
+                    />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {filtered.map((p, idx) => (
                         <div
                             key={p.id}
