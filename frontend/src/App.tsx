@@ -4,6 +4,7 @@ import ProductList from "./pages/ProductList";
 import BashoHomepage from "./pages/InfoPage";
 import WorkshopsPage from "./pages/Workshops";
 import ExperiencesPage from "./pages/Experiences";
+import BashoMediaSocialProof from "./pages/SocialMedia";
 
 import {
   BrowserRouter,
@@ -28,6 +29,7 @@ const App: React.FC = () => {
           <Route path="/products" element={<ProductList />} />
           <Route path="/workshops" element={<WorkshopsPage/>} />
           <Route path="/experiences" element={<ExperiencesPage/>} />
+          <Route path="/media" element={<BashoMediaSocialProof/>}/>
           
 
           {/* Optional: 404 fallback */}
