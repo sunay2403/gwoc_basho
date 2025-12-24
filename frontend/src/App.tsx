@@ -5,7 +5,7 @@ import BashoHomepage from "./pages/InfoPage";
 import WorkshopsPage from "./pages/Workshops";
 import ExperiencesPage from "./pages/Experiences";
 import BashoMediaSocialProof from "./pages/SocialMedia";
-
+import StudioPage from "./pages/Studio";
 import {
   BrowserRouter,
   Routes,
@@ -30,7 +30,7 @@ const App: React.FC = () => {
           <Route path="/workshops" element={<WorkshopsPage/>} />
           <Route path="/experiences" element={<ExperiencesPage/>} />
           <Route path="/media" element={<BashoMediaSocialProof/>}/>
-          
+          <Route path="/studio" element={<StudioPage/>}/>
 
           {/* Optional: 404 fallback */}
           <Route path="*" element={<Navigate to="/home" replace />} />
