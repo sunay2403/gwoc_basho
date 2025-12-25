@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { NavLink } from "react-router-dom";
-import { Leaf, Calendar, MapPin, Clock, Mail, Phone, Image } from 'lucide-react';
+import { Leaf, Calendar, Clock, Mail, Phone, Image } from 'lucide-react';
 import g1 from '../assets/gallary1.png';
 import g2 from '../assets/gallary2.jpg';
 import g3 from '../assets/gallary3.png';
@@ -47,9 +47,6 @@ const StudioPage: React.FC = () => {
         {src:g3},
         {src:g4},
     ], []);
-    const events = [...upcoming, ...past];
-    
-
     
 
     return (
