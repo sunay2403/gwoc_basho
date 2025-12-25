@@ -5,7 +5,38 @@ const BashoMediaSocialProof = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState(null);
   const [scrollY, setScrollY] = useState(0);
+  const [likedImages, setLikedImages] = useState({});
+  const [likedTestimonials, setLikedTestimonials] = useState({});
   const galleryRef = useRef(null);
+
+  const [mounted, setMounted] = useState(false);
+
+useEffect(() => {
+  setMounted(true);
+}, []);
+
+
+  // Toggle like on an image
+  const toggleLike = (idx, e) => {
+    e.stopPropagation();
+    setLikedImages(prev => ({
+      ...prev,
+      [idx]: !prev[idx]
+    }));
+  };
+
+  // Toggle like on a testimonial
+  const toggleTestimonialLike = (idx) => {
+    setLikedTestimonials(prev => ({
+      ...prev,
+      [idx]: !prev[idx]
+    }));
+  };
+
+  // Open Instagram post/profile
+  const openInstagram = (url) => {
+    window.open(url || 'https://www.instagram.com/bashobyyshivangi/', '_blank');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,60 +107,73 @@ const BashoMediaSocialProof = () => {
     }
   ];
 
+  // Real Instagram account data: @bashobyyshivangi
+  // 1,320 Followers | 93 Following | 159 Posts
+  // Bio: A sanctuary for clay art lovers 🌿✨ | Products ~ Shipping Pan India 🇮🇳 | Workshops ~ 📍Surat, Gujarat
+
   const galleryImages = [
     {
-      url: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800&q=80",
-      caption: "Morning tea bowl with natural ash glaze",
-      likes: 342,
-      type: "product"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&q=80",
-      caption: "Hand-thrown dinner plate collection",
-      likes: 287,
-      type: "product"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80",
-      caption: "Raw clay texture—embracing imperfection",
-      likes: 421,
-      type: "detail"
-    },
-    {
       url: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80",
-      caption: "Workshop moment: First touch with clay",
-      likes: 518,
-      type: "workshop"
+      caption: "Handcrafted tea bowl from our Surat studio 🌿",
+      likes: 127,
+      type: "product",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
     },
     {
-      url: "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=800&q=80",
-      caption: "Sake set for mindful gatherings",
-      likes: 395,
-      type: "product"
+      url: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800&q=80",
+      caption: "Morning rituals with handmade ceramics ✨",
+      likes: 243,
+      type: "product",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
     },
     {
-      url: "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=800&q=80",
-      caption: "Rustic serving bowls in earth tones",
-      likes: 264,
-      type: "product"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=800&q=80",
-      caption: "Studio table—where poetry meets clay",
-      likes: 389,
-      type: "studio"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=800&q=80",
-      caption: "Minimalist tea ceremony setup",
-      likes: 456,
-      type: "lifestyle"
+      url: "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80",
+      caption: "New collection dropping soon! Pan India shipping 🇮🇳",
+      likes: 189,
+      type: "product",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
     },
     {
       url: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80",
-      caption: "Hands shaping—meditation in motion",
-      likes: 612,
-      type: "workshop"
+      caption: "Workshop vibes at Bashō 📍Surat, Gujarat",
+      likes: 312,
+      type: "workshop",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&q=80",
+      caption: "Earth tones, earthy souls 🌍",
+      likes: 156,
+      type: "product",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80",
+      caption: "The beauty of wabi-sabi in every piece",
+      likes: 278,
+      type: "detail",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=800&q=80",
+      caption: "Behind the scenes at our clay sanctuary 🌿",
+      likes: 201,
+      type: "studio",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=800&q=80",
+      caption: "Minimalist pottery for mindful living",
+      likes: 334,
+      type: "lifestyle",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=800&q=80",
+      caption: "Custom orders now open! DM for details ✨",
+      likes: 167,
+      type: "product",
+      postUrl: "https://www.instagram.com/bashobyyshivangi/"
     }
   ];
 
@@ -155,10 +199,17 @@ const BashoMediaSocialProof = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f5f3ef]">
+    <div
+  className={`
+    bg-stone-50 min-h-screen
+    transition-all duration-1000 ease-out
+    ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"}
+  `}
+>
+
       {/* Hero Section */}
       <section className="relative py-32 px-6 overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 opacity-5"
           style={{
             backgroundImage: 'url(https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=1600&q=80)',
@@ -219,7 +270,18 @@ const BashoMediaSocialProof = () => {
                       <p className="text-sm font-medium text-[#2a2420]">{testimonial.author}</p>
                       <p className="text-xs text-[#5a4a3a]">{testimonial.location}</p>
                     </div>
-                    <Heart className="text-[#8b6f47]" size={20} strokeWidth={1.5} />
+                    <button
+                      onClick={() => toggleTestimonialLike(idx)}
+                      className="p-2 rounded-full hover:bg-[#8b6f47]/10 transition-all duration-300 cursor-pointer"
+                      aria-label={likedTestimonials[idx] ? "Unlike" : "Like"}
+                    >
+                      <Heart
+                        className={`transition-all duration-300 ${likedTestimonials[idx] ? "text-red-500 scale-110" : "text-[#8b6f47]"}`}
+                        size={20}
+                        strokeWidth={1.5}
+                        fill={likedTestimonials[idx] ? "#ef4444" : "none"}
+                      />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -235,10 +297,27 @@ const BashoMediaSocialProof = () => {
             <h2 className="text-5xl font-serif font-light text-[#f5f3ef] mb-4">
               Through the Lens
             </h2>
-            <p className="text-lg text-[#c7b8a3] mb-8">
-              Every piece tells a story. Every moment captured with intention.
+            <p className="text-lg text-[#c7b8a3] mb-4">
+              A sanctuary for clay art lovers 🌿✨
             </p>
-            <a 
+            <p className="text-sm text-[#c7b8a3]/80 mb-8">
+              Products ~ Shipping Pan India 🇮🇳 | Workshops ~ 📍Surat, Gujarat
+            </p>
+            <div className="flex items-center justify-center gap-8 mb-8 text-[#f5f3ef]">
+              <div className="text-center">
+                <span className="block text-2xl font-bold">159</span>
+                <span className="text-xs text-[#c7b8a3]">Posts</span>
+              </div>
+              <div className="text-center">
+                <span className="block text-2xl font-bold">1,320</span>
+                <span className="text-xs text-[#c7b8a3]">Followers</span>
+              </div>
+              <div className="text-center">
+                <span className="block text-2xl font-bold">93</span>
+                <span className="text-xs text-[#c7b8a3]">Following</span>
+              </div>
+            </div>
+            <a
               href="https://www.instagram.com/bashobyyshivangi/"
               target="_blank"
               rel="noopener noreferrer"
@@ -257,6 +336,7 @@ const BashoMediaSocialProof = () => {
                 style={{
                   animationDelay: `${idx * 50}ms`
                 }}
+                onClick={() => openInstagram(image.postUrl)}
               >
                 <img
                   src={image.url}
@@ -267,14 +347,47 @@ const BashoMediaSocialProof = () => {
                   <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                     <p className="text-white text-sm mb-3">{image.caption}</p>
                     <div className="flex items-center space-x-4 text-white/80 text-xs">
-                      <span className="flex items-center space-x-1">
-                        <Heart size={14} fill="white" />
-                        <span>{image.likes}</span>
-                      </span>
-                      <span className="flex items-center space-x-1">
-                        <MessageCircle size={14} />
+                      {/* Clickable Heart Button */}
+                      <button
+                        onClick={(e) => toggleLike(idx, e)}
+                        className="flex items-center space-x-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                        aria-label={likedImages[idx] ? "Unlike" : "Like"}
+                      >
+                        <Heart
+                          size={16}
+                          fill={likedImages[idx] ? "#ef4444" : "white"}
+                          className={`transition-all duration-300 ${likedImages[idx] ? "text-red-500 scale-110" : "text-white"}`}
+                        />
+                        <span className={likedImages[idx] ? "text-red-400" : ""}>
+                          {likedImages[idx] ? image.likes + 1 : image.likes}
+                        </span>
+                      </button>
+
+                      {/* Clickable Comment Button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openInstagram(image.postUrl);
+                        }}
+                        className="flex items-center space-x-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                        aria-label="View comments on Instagram"
+                      >
+                        <MessageCircle size={16} className="hover:text-white transition-colors" />
                         <span>{Math.floor(image.likes * 0.15)}</span>
-                      </span>
+                      </button>
+
+                      {/* View on Instagram Link */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openInstagram(image.postUrl);
+                        }}
+                        className="ml-auto flex items-center space-x-1 hover:text-white transition-colors text-[10px] opacity-70 hover:opacity-100"
+                        aria-label="View on Instagram"
+                      >
+                        <Instagram size={12} />
+                        <span>View</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -282,10 +395,10 @@ const BashoMediaSocialProof = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Workshop Moments - Authentic */}
-      <section className="py-24 px-6 bg-linear-to-br from-[#e8e4dd] to-[#f5f3ef]">
+      < section className="py-24 px-6 bg-linear-to-br from-[#e8e4dd] to-[#f5f3ef]" >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
@@ -348,68 +461,177 @@ const BashoMediaSocialProof = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
-      {/* Studio & Behind The Scenes */}
-      <section className="py-24 px-6 bg-white">
+      {/* Studio & Behind The Scenes - Authentic Basho Experience */}
+      < section className="py-24 px-6 bg-white" >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-[#8b6f47]/10 rounded-full">
+              <Leaf className="text-[#8b6f47]" size={16} strokeWidth={1.5} />
+              <span className="text-[#8b6f47] text-xs font-medium tracking-widest uppercase">📍 Surat, Gujarat</span>
+            </div>
             <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
               Inside the Studio
             </h2>
-            <p className="text-lg text-[#5a4a3a]">
-              Where Shivangi transforms earth into art, silence into stories
+            <p className="text-lg text-[#5a4a3a] max-w-2xl mx-auto">
+              A sanctuary for clay art lovers — where Shivangi transforms earth into art,
+              silence into stories, and strangers into creators
             </p>
           </div>
 
+          {/* The Making Process */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-serif text-[#2a2420] text-center mb-8">The Journey of Clay</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { step: "01", title: "Wedging", desc: "Preparing the clay, removing air bubbles", image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80" },
+                { step: "02", title: "Centering", desc: "Finding balance on the wheel", image: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&q=80" },
+                { step: "03", title: "Shaping", desc: "Hands guiding the form", image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&q=80" },
+                { step: "04", title: "Firing", desc: "Transformation through fire", image: "https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=400&q=80" }
+              ].map((item, idx) => (
+                <div key={idx} className="group relative aspect-[3/4] rounded-2xl overflow-hidden">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2a2420] via-[#2a2420]/40 to-transparent">
+                    <div className="absolute top-4 left-4">
+                      <span className="text-[#c7b8a3] text-xs font-mono">{item.step}</span>
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <h4 className="text-white font-serif text-lg mb-1">{item.title}</h4>
+                      <p className="text-[#c7b8a3] text-xs">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Studio Atmosphere */}
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="relative aspect-square rounded-2xl overflow-hidden group">
               <img
                 src="https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=600&q=80"
-                alt="Studio space"
+                alt="Basho Studio Space in Surat"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-[#2a2420]/40 group-hover:bg-[#2a2420]/60 transition-colors flex items-end p-6">
+              <div className="absolute inset-0 bg-[#2a2420]/40 group-hover:bg-[#2a2420]/60 transition-colors flex flex-col items-start justify-end p-6">
+                <span className="text-[#c7b8a3] text-xs mb-2">🌿 Where it happens</span>
                 <p className="text-white font-serif text-xl">The Sacred Space</p>
+                <p className="text-[#c7b8a3] text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Natural light, earthy textures, and the gentle hum of creativity
+                </p>
               </div>
             </div>
 
             <div className="relative aspect-square rounded-2xl overflow-hidden group">
               <img
                 src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80"
-                alt="Clay preparation"
+                alt="Clay and raw materials"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-[#2a2420]/40 group-hover:bg-[#2a2420]/60 transition-colors flex items-end p-6">
+              <div className="absolute inset-0 bg-[#2a2420]/40 group-hover:bg-[#2a2420]/60 transition-colors flex flex-col items-start justify-end p-6">
+                <span className="text-[#c7b8a3] text-xs mb-2">🍂 Earth's gifts</span>
                 <p className="text-white font-serif text-xl">Raw Materials</p>
+                <p className="text-[#c7b8a3] text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Locally sourced clay, natural glazes, and organic pigments
+                </p>
               </div>
             </div>
 
             <div className="relative aspect-square rounded-2xl overflow-hidden group">
               <img
                 src="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=600&q=80"
-                alt="Exhibition setup"
+                alt="Basho exhibitions and displays"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-[#2a2420]/40 group-hover:bg-[#2a2420]/60 transition-colors flex items-end p-6">
+              <div className="absolute inset-0 bg-[#2a2420]/40 group-hover:bg-[#2a2420]/60 transition-colors flex flex-col items-start justify-end p-6">
+                <span className="text-[#c7b8a3] text-xs mb-2">✨ Sharing beauty</span>
                 <p className="text-white font-serif text-xl">Pop-up Exhibitions</p>
+                <p className="text-[#c7b8a3] text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  Bringing wabi-sabi aesthetics to art lovers across India
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-linear-to-br from-[#8b6f47] to-[#6d5638] rounded-3xl p-12 text-white text-center">
-            <Sparkles className="mx-auto mb-6 text-[#f5f3ef]" size={48} strokeWidth={1} />
-            <h3 className="text-3xl font-serif font-light mb-4">A Living Art Space</h3>
-            <p className="text-[#f5f3ef]/90 text-lg max-w-3xl mx-auto leading-relaxed">
-              Basho isn't just a pottery studio. It's a sanctuary where time moves slower, 
-              where imperfection is celebrated, and where every piece carries the spirit of Japanese minimalism.
+          {/* Studio Stats & Details */}
+          <div className="grid md:grid-cols-4 gap-6 mb-12">
+            {[
+              { number: "500+", label: "Pieces Created", icon: "🏺" },
+              { number: "150+", label: "Workshop Attendees", icon: "👐" },
+              { number: "3+", label: "Years of Craft", icon: "🌱" },
+              { number: "∞", label: "Cups of Chai", icon: "☕" }
+            ].map((stat, idx) => (
+              <div key={idx} className="text-center p-6 bg-[#f5f3ef] rounded-2xl hover:shadow-lg transition-shadow duration-300">
+                <span className="text-3xl mb-2 block">{stat.icon}</span>
+                <span className="block text-3xl font-serif text-[#2a2420] mb-1">{stat.number}</span>
+                <span className="text-sm text-[#5a4a3a]">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Shivangi's Philosophy */}
+          <div className="bg-gradient-to-br from-[#8b6f47] to-[#6d5638] rounded-3xl p-12 text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+              <div className="md:w-1/3 text-center">
+                <div className="w-32 h-32 mx-auto bg-[#f5f3ef]/20 rounded-full flex items-center justify-center mb-4">
+                  <span className="text-5xl">芭</span>
+                </div>
+                <p className="text-[#f5f3ef]/80 text-sm italic">Bashō - "Banana Tree"</p>
+              </div>
+              <div className="md:w-2/3">
+                <Sparkles className="mb-4 text-[#f5f3ef]" size={32} strokeWidth={1} />
+                <h3 className="text-3xl font-serif font-light mb-4">A Living Art Space</h3>
+                <p className="text-[#f5f3ef]/90 text-lg leading-relaxed mb-4">
+                  "Basho isn't just a pottery studio. It's a sanctuary where time moves slower,
+                  where imperfection is celebrated, and where every piece carries the spirit of Japanese minimalism."
+                </p>
+                <p className="text-[#f5f3ef]/70 text-sm">
+                  — Shivangi, Founder of Basho
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {["Wabi-Sabi", "Mindfulness", "Handcrafted", "Slow Living"].map((tag, idx) => (
+                    <span key={idx} className="px-3 py-1 bg-white/10 rounded-full text-xs text-[#f5f3ef]/80">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Visit CTA */}
+          <div className="mt-12 text-center">
+            <p className="text-[#5a4a3a] mb-4">
+              Want to experience the studio in person?
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="https://www.instagram.com/bashobyyshivangi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center space-x-2 px-6 py-3 bg-[#2a2420] text-white rounded-full hover:bg-[#3d352e] transition-all duration-300"
+              >
+                <Instagram size={18} />
+                <span>DM for Studio Visits</span>
+              </a>
+              <button className="px-6 py-3 border-2 border-[#8b6f47] text-[#8b6f47] rounded-full hover:bg-[#8b6f47] hover:text-white transition-all duration-300">
+                Book a Workshop
+              </button>
+            </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Video Testimonials */}
-      <section className="py-24 px-6 bg-[#2a2420]">
+      < section className="py-24 px-6 bg-[#2a2420]" >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-serif font-light text-[#f5f3ef] mb-4">
@@ -456,10 +678,10 @@ const BashoMediaSocialProof = () => {
             </p>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Customer Experience Stories */}
-      <section className="py-24 px-6 bg-linear-to-b from-[#f5f3ef] to-white">
+      < section className="py-24 px-6 bg-linear-to-b from-[#f5f3ef] to-white" >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
@@ -503,11 +725,11 @@ const BashoMediaSocialProof = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Final Trust Banner */}
-      <section className="py-24 px-6 bg-[#2a2420] relative overflow-hidden">
-        <div 
+      < section className="py-24 px-6 bg-[#2a2420] relative overflow-hidden" >
+        <div
           className="absolute inset-0 opacity-10"
           style={{
             backgroundImage: 'url(https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=1600&q=80)',
@@ -523,11 +745,11 @@ const BashoMediaSocialProof = () => {
             Join the Journey
           </h2>
           <p className="text-xl text-[#c7b8a3] mb-12 leading-relaxed">
-            This isn't about buying pottery. It's about choosing to live with more intention, 
+            This isn't about buying pottery. It's about choosing to live with more intention,
             more beauty, more presence.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
+            <a
               href="https://www.instagram.com/bashobyyshivangi/"
               target="_blank"
               rel="noopener noreferrer"
