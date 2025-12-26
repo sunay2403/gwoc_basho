@@ -1,7 +1,7 @@
 import logo from "../assets/logo.jpg";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { auth } from "../api/firebase";
 
@@ -47,11 +47,11 @@ const Navbar: React.FC = () => {
         <NavLink to="/corporate">Corporate</NavLink>
       </div>
 
-      {/* Auth Buttons */}
+      {/* Auth / Profile */}
       <div className="ml-12 flex items-center gap-6">
         {!user ? (
           <>
-            {/* Login (quiet, underline reveal) */}
+            {/* Login */}
             <NavLink
               to="/login"
               className="
@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
               Login
             </NavLink>
 
-            {/* Sign Up (primary ritual button) */}
+            {/* Sign Up */}
             <NavLink
               to="/signup"
               className="
@@ -83,20 +83,22 @@ const Navbar: React.FC = () => {
             </NavLink>
           </>
         ) : (
-          /* Logout (calm outline) */
-          <button
-            onClick={() => signOut(auth)}
+          /* Profile icon */
+          <NavLink
+            to="/profile"
             className="
-              px-6 py-2.5 rounded-full
-              border border-[#C85428]/60
-              text-sm uppercase tracking-widest
+              flex items-center justify-center
+              w-10 h-10 rounded-full
+              bg-[#C85428]/10
               text-[#C85428]
-              hover:bg-[#C85428] hover:text-white
+              text-sm font-medium uppercase
+              hover:bg-[#C85428]/20
               transition-all duration-300
             "
+            title="Profile"
           >
-            Logout
-          </button>
+            {user.email?.[0]?.toUpperCase()}
+          </NavLink>
         )}
       </div>
     </nav>

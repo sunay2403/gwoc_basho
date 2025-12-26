@@ -9,6 +9,7 @@ import StudioPage from "./pages/Studio";
 import Signup from "./pages/SignUp";
 import Login from "./pages/Login";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import Profile from "./pages/Profile";
 import {
   BrowserRouter,
   Routes,
@@ -36,6 +37,8 @@ const App: React.FC = () => {
           <Route path="/studio" element={<StudioPage/>}/>
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
+          <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
+          
 
           {/* Optional: 404 fallback */}
           <Route path="*" element={<Navigate to="/home" replace />} />
