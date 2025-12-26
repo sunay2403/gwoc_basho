@@ -6,6 +6,9 @@ import WorkshopsPage from "./pages/Workshops";
 import ExperiencesPage from "./pages/Experiences";
 import BashoMediaSocialProof from "./pages/SocialMedia";
 import StudioPage from "./pages/Studio";
+import Signup from "./pages/SignUp";
+import Login from "./pages/Login";
+import ProtectedRoute from "./pages/ProtectedRoute";
 import {
   BrowserRouter,
   Routes,
@@ -26,11 +29,13 @@ const App: React.FC = () => {
 
           {/* Main Pages */}
           <Route path="/home" element={<BashoHomepage />} />
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/workshops" element={<WorkshopsPage/>} />
+          <Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+          <Route path="/workshops" element={<ProtectedRoute><WorkshopsPage/></ProtectedRoute>} />
           <Route path="/experiences" element={<ExperiencesPage/>} />
           <Route path="/media" element={<BashoMediaSocialProof/>}/>
           <Route path="/studio" element={<StudioPage/>}/>
+          <Route path="/signup" element={<Signup/>}/>
+          <Route path="/login" element={<Login/>}/>
 
           {/* Optional: 404 fallback */}
           <Route path="*" element={<Navigate to="/home" replace />} />
