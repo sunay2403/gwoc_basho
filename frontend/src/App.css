@@ -118,3 +118,30 @@
     animation: bounceIn 0.5s ease-out;
   }
 }
+
+/* ============================= */
+/* FORM INPUT BASE STYLE         */
+/* ============================= */
+
+.input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #e7e5e4; /* stone-200 */
+  font-size: 0.95rem;
+  color: #1c1917; /* stone-900 */
+  outline: none;
+}
+
+.input::placeholder {
+  color: #a8a29e; /* stone-400 */
+}
+
+.input:focus {
+  border-bottom-color: #b45309; /* amber-700 */
+}
+textarea.input {
+  min-height: 120px;
+  resize: none;
+}
