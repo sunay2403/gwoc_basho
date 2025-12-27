@@ -6,6 +6,7 @@ import WorkshopsPage from "./pages/Workshops";
 import ExperiencesPage from "./pages/Experiences";
 import BashoMediaSocialProof from "./pages/SocialMedia";
 import StudioPage from "./pages/Studio";
+import CorporatePage from "./pages/Corporate";
 import Signup from "./pages/SignUp";
 import Login from "./pages/Login";
 import ProtectedRoute from "./pages/ProtectedRoute";
@@ -35,7 +36,7 @@ const App: React.FC = () => {
           <Route path="/experiences" element={<ExperiencesPage/>} />
           <Route path="/media" element={<BashoMediaSocialProof/>}/>
           <Route path="/studio" element={<StudioPage/>}/>
-          <Route path="/signup" element={<Signup/>}/>
+          <Route path="/corporate" element={<CorporatePage />} />          <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
           
