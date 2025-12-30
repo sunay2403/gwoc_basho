@@ -18,10 +18,16 @@ from django.contrib import admin
 from django.urls import path
 from workshops.views import WorkshopSlotListView
 from workshop_booking.views import BookingCreateView
+from corporate.views import (
+    
+    CorporateInquiryCreateView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/workshops/", WorkshopSlotListView.as_view()),
     path("api/bookings/", BookingCreateView.as_view()),
+    path("api/corporate/inquiry/", CorporateInquiryCreateView.as_view()),
+
     
 ]

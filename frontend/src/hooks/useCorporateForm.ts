@@ -39,7 +39,8 @@ export const useCorporateForm = () => {
 
     if (!form.name.trim()) newErrors.name = "Name is required";
     if (!form.company.trim()) newErrors.company = "Company is required";
-    if (!form.message.trim()) newErrors.message = "Please describe your requirement";
+    if (!form.message.trim())
+      newErrors.message = "Please describe your requirement";
 
     if (!form.email.trim()) {
       newErrors.email = "Email is required";
@@ -55,25 +56,43 @@ export const useCorporateForm = () => {
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setIsSuccess(false);
 
-    // 🔹 mock API delay
-    await new Promise(res => setTimeout(res, 1200));
+    try {
+      const res = await fetch(
+        "http://127.0.0.1:8000/api/corporate/inquiry/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(form)
+        }
+      );
 
-    console.log("Corporate Inquiry:", form);
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data?.detail || "Submission failed");
+      }
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setForm(initialState);
+      setIsSuccess(true);
+      setForm(initialState);
+    } catch (err) {
+      console.error("Corporate inquiry failed:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
   const resetForm = () => setForm(initialState);
 
-  return { 
-    form, 
-    errors, 
-    isSubmitting, 
-    isSuccess, 
-    updateField, 
-    submit, 
+  return {
+    form,
+    errors,
+    isSubmitting,
+    isSuccess,
+    updateField,
+    submit,
     resetForm
-    };
+  };
 };

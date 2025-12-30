@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     # Local apps
     'workshop_booking',
     'workshops',
+    "corporate"
+
 ]
 
 
