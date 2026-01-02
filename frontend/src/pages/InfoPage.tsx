@@ -37,32 +37,32 @@ const BashoHomepage = () => {
   const getOpacity = (index: number) => {
     const section = sectionsRef.current[index];
     if (!section) return 0;
-    
+
     const rect = section.getBoundingClientRect();
     const windowHeight = window.innerHeight;
-    
+
     if (rect.top > windowHeight) return 0;
     if (rect.bottom < 0) return 0;
-    
+
     const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
     const opacity = Math.min(visibleHeight / (windowHeight * 0.6), 1);
-    
+
     return opacity;
   };
 
   const getTransform = (index: number) => {
     const section = sectionsRef.current[index];
     if (!section) return 'translateY(100px)';
-    
+
     const rect = section.getBoundingClientRect();
     const windowHeight = window.innerHeight;
-    
+
     if (rect.top > windowHeight) return 'translateY(100px)';
     if (rect.bottom < 0) return 'translateY(-50px)';
-    
+
     const progress = 1 - (rect.top / windowHeight);
     const translateY = Math.max(0, 100 - (progress * 150));
-    
+
     return `translateY(${translateY}px)`;
   };
 
@@ -70,7 +70,7 @@ const BashoHomepage = () => {
     <div className="bg-stone-50 min-h-screen overflow-x-hidden">
       {/* Fixed Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-1 bg-stone-200 z-50">
-        <div 
+        <div
           className="h-full bg-linear-to-r from-amber-700 to-amber-500 transition-all duration-300"
           style={{ width: `${scrollProgress}%` }}
         />
@@ -87,60 +87,60 @@ const BashoHomepage = () => {
           </button>
           <div className="h-4 w-px bg-stone-300"></div>
           <button
-  onClick={() => scrollToSection('story')}
-  className="text-amber px-4 py-2 rounded-full 
+            onClick={() => scrollToSection('story')}
+            className="text-amber px-4 py-2 rounded-full 
              hover:bg-black hover:text-white 
              transition duration-300"
->
-  Story
-</button>
+          >
+            Story
+          </button>
 
-<button
-  onClick={() => scrollToSection('craft')}
-  className="text-amber px-4 py-2 rounded-full 
+          <button
+            onClick={() => scrollToSection('craft')}
+            className="text-amber px-4 py-2 rounded-full 
              hover:bg-black hover:text-white 
              transition duration-300"
->
-  Craft
-</button>
+          >
+            Craft
+          </button>
 
-<button
-  onClick={() => scrollToSection('collection')}
-  className="text-amber px-4 py-2 rounded-full 
+          <button
+            onClick={() => scrollToSection('collection')}
+            className="text-amber px-4 py-2 rounded-full 
              hover:bg-black hover:text-white 
              transition duration-300"
->
-  Shop
-</button>
-</div>
+          >
+            Shop
+          </button>
+        </div>
       </nav>
 
       {/* Hero - Full Screen */}
-      <section 
+      <section
         id="hero"
         ref={el => { sectionsRef.current[0] = el; }}
         className="min-h-screen flex items-center justify-center relative overflow-hidden"
       >
         {/* Background Image */}
         <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=1600&q=80" 
-            alt="Japanese pottery background"
-            className="w-full h-full object-cover opacity-30"
+          <img
+            src="http://localhost:8000/media/extracted/page_2_img_1.jpeg"
+            alt="Shivangi at Basho studio"
+            className="w-full h-full object-cover opacity-40"
           />
           <div className="absolute inset-0 bg-linear-to-b from-stone-50/60 via-stone-50/80 to-stone-50"></div>
         </div>
 
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div 
+          <div
             className="absolute top-20 right-1/4 w-96 h-96 border border-amber-800/10 rounded-full"
             style={{
               transform: `scale(${1 + scrollProgress * 0.01}) rotate(${scrollProgress * 2}deg)`,
               transition: 'transform 0.3s ease-out'
             }}
           ></div>
-          <div 
+          <div
             className="absolute bottom-1/4 left-1/4 w-64 h-64 border border-stone-300/30 rounded-full"
             style={{
               transform: `scale(${1 - scrollProgress * 0.005}) rotate(-${scrollProgress}deg)`,
@@ -149,7 +149,7 @@ const BashoHomepage = () => {
           ></div>
         </div>
 
-        <div 
+        <div
           className="text-center z-10 px-6"
           style={{
             opacity: Math.max(0, 1 - scrollProgress * 0.02),
@@ -168,7 +168,7 @@ const BashoHomepage = () => {
           <p className="text-lg text-stone-500 max-w-2xl mx-auto leading-relaxed">
             Inspired by the wandering poet Matsuo Bashō, we craft tableware that tells stories
           </p>
-          
+
           <div className="mt-16 animate-bounce">
             <Droplet className="mx-auto text-stone-400" size={24} />
           </div>
@@ -176,12 +176,12 @@ const BashoHomepage = () => {
       </section>
 
       {/* The Poet's Story */}
-      <section 
+      <section
         id="story"
         ref={el => { sectionsRef.current[1] = el; }}
         className="min-h-screen flex items-center py-24 px-6"
       >
-        <div 
+        <div
           className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center"
           style={{
             opacity: getOpacity(1),
@@ -200,40 +200,37 @@ const BashoHomepage = () => {
             </h2>
             <div className="space-y-6 text-lg text-stone-600 leading-relaxed">
               <p>
-                He walked <strong className="text-stone-800">thousands of miles</strong> through medieval Japan, 
-                carrying only a bamboo hat and staff. Not seeking comfort, but <em>truth</em>.
+                Basho is more than a studio — it is <strong className="text-stone-800">A Place</strong> of happiness where every moment with clay is cherished.
               </p>
               <p>
-                Bashō believed poetry lives in <strong className="text-amber-800">fleeting moments</strong> — 
-                a frog jumping into a pond, the first cherry blossom, autumn rain on stone.
+                Inspired by the legendary Japanese poet known for haiku — short, flowing verses that capture life — pottery at Basho flows with <strong className="text-amber-800">rhythm and soul</strong>.
               </p>
               <p className="text-xl text-stone-700 italic border-l-4 border-amber-800 pl-6">
-                "Do not seek to follow in the footsteps of the wise; seek what they sought."
+                "Each piece at Basho is crafted with love and individuality, making it truly one of a kind."
               </p>
               <p>
-                This is why we named our pottery after him. Every bowl, every plate — 
-                a pause to notice beauty in the everyday.
+                Like poetry, we believe functional art should be a pause to notice beauty in the everyday. Come, discover Basho and create your own poetry.
               </p>
             </div>
           </div>
 
           <div className="relative">
             <div className="aspect-square bg-linear-to-br from-amber-100 to-stone-100 rounded-3xl overflow-hidden shadow-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800&q=80"
-                alt="Japanese tea ceremony bowl"
+              <img
+                src="http://localhost:8000/media/extracted/page_2_img_1.jpeg"
+                alt="Shivangi at the wheel"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-linear-to-t from-stone-900/40 to-transparent flex flex-col items-center justify-end p-8">
                 <div className="text-center space-y-4 text-white">
                   <div className="text-3xl font-serif leading-relaxed">
-                    古池や<br/>
-                    蛙飛びこむ<br/>
+                    古池や<br />
+                    蛙飛びこむ<br />
                     水の音
                   </div>
                   <div className="text-sm opacity-90 pt-4 border-t border-white/30">
-                    An ancient pond<br/>
-                    A frog jumps in<br/>
+                    An ancient pond<br />
+                    A frog jumps in<br />
                     The splash of water
                   </div>
                 </div>
@@ -244,11 +241,11 @@ const BashoHomepage = () => {
       </section>
 
       {/* The Journey Begins */}
-      <section 
+      <section
         ref={el => { sectionsRef.current[2] = el; }}
         className="min-h-screen flex items-center py-24 px-6 bg-linear-to-b from-stone-50 to-amber-50"
       >
-        <div 
+        <div
           className="max-w-5xl mx-auto text-center"
           style={{
             opacity: getOpacity(2),
@@ -261,35 +258,35 @@ const BashoHomepage = () => {
             Shivangi's Journey
           </h2>
           <p className="text-2xl text-stone-600 max-w-3xl mx-auto leading-relaxed mb-16">
-            Just as Bashō traveled to find poetry, Shivangi discovered clay. 
-            Not to escape life, but to <span className="text-amber-800 font-medium">understand it deeper</span>.
+            Hi, I'm Shivangi — the hands and heart behind Basho.
+            I created this sanctuary to transform earth into art and <span className="text-amber-800 font-medium">share the rhythm of soul</span>.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: <Sparkles size={40} />,
-                title: "The Discovery",
-                text: "A fascination with Japanese tea ceremonies. The way a simple bowl could hold an entire philosophy.",
+                title: "One of a Kind",
+                text: "Each piece at Basho is crafted with love and individuality. No two pieces are ever the same.",
                 color: "from-amber-100 to-amber-50",
-                image: "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=600&q=80"
+                image: "http://localhost:8000/media/extracted/page_4_img_1.jpeg"
               },
               {
                 icon: <Wind size={40} />,
-                title: "The Practice",
-                text: "Hours at the wheel. Learning to let go of perfection, embracing the beauty of 'wabi-sabi' — imperfect, impermanent.",
+                title: "Soulful Flow",
+                text: "Much like a haiku, our pottery captures the essence of a moment through simple, flowing forms.",
                 color: "from-stone-200 to-stone-100",
-                image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=80"
+                image: "http://localhost:8000/media/extracted/page_12_img_1.jpeg"
               },
               {
                 icon: <Moon size={40} />,
-                title: "The Calling",
-                text: "Creating pieces that slow you down. That make you pause. That turn meals into rituals.",
+                title: "A Happy Place",
+                text: "Basho is where time slows down. Every piece is an invitation to cherish your own happy place.",
                 color: "from-amber-200 to-amber-100",
-                image: "https://images.unsplash.com/photo-1578500351865-d6d8f8c6c90d?w=600&q=80"
+                image: "http://localhost:8000/media/extracted/page_18_img_1.jpeg"
               }
             ].map((item, idx) => (
-              <div 
+              <div
                 key={idx}
                 className="group relative overflow-hidden rounded-2xl transform hover:scale-105 transition-all duration-500 shadow-lg"
                 style={{
@@ -299,7 +296,7 @@ const BashoHomepage = () => {
                 }}
               >
                 <div className="aspect-square">
-                  <img 
+                  <img
                     src={item.image}
                     alt={item.title}
                     className="w-full h-full object-cover"
@@ -317,11 +314,11 @@ const BashoHomepage = () => {
       </section>
 
       {/* The Philosophy - Large Text */}
-      <section 
+      <section
         ref={el => { sectionsRef.current[3] = el; }}
         className="min-h-screen flex items-center py-24 px-6"
       >
-        <div 
+        <div
           className="max-w-6xl mx-auto"
           style={{
             opacity: getOpacity(3),
@@ -340,27 +337,27 @@ const BashoHomepage = () => {
 
           <div className="grid md:grid-cols-3 gap-16 mb-16">
             {[
-              { 
-                kanji: "侘", 
-                word: "Wabi", 
+              {
+                kanji: "侘",
+                word: "Wabi",
                 meaning: "Finding beauty in simplicity and humble, rustic elegance",
                 image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&q=80"
               },
-              { 
-                kanji: "寂", 
-                word: "Sabi", 
+              {
+                kanji: "寂",
+                word: "Sabi",
                 meaning: "The beauty that comes with age — weathered, worn, telling stories",
                 image: "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=500&q=80"
               },
-              { 
-                kanji: "間", 
-                word: "Ma", 
+              {
+                kanji: "間",
+                word: "Ma",
                 meaning: "The space between. The pause. The breath. What's not there matters too.",
                 image: "https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=500&q=80"
               }
             ].map((concept, idx) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="group"
                 style={{
                   opacity: getOpacity(3),
@@ -369,7 +366,7 @@ const BashoHomepage = () => {
                 }}
               >
                 <div className="aspect-square rounded-2xl overflow-hidden mb-6 shadow-lg">
-                  <img 
+                  <img
                     src={concept.image}
                     alt={concept.word}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -396,12 +393,12 @@ const BashoHomepage = () => {
       </section>
 
       {/* The Craft - Visual Heavy */}
-      <section 
+      <section
         id="craft"
         ref={el => { sectionsRef.current[4] = el; }}
         className="min-h-screen py-24 px-6 bg-stone-100"
       >
-        <div 
+        <div
           className="max-w-7xl mx-auto"
           style={{
             opacity: getOpacity(4),
@@ -463,7 +460,7 @@ const BashoHomepage = () => {
               "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=400&q=80",
               "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80"
             ].map((img, idx) => (
-              <div 
+              <div
                 key={idx}
                 className="aspect-square rounded-2xl overflow-hidden hover:scale-105 transition-all duration-500 shadow-lg"
                 style={{
@@ -472,7 +469,7 @@ const BashoHomepage = () => {
                   transitionDelay: `${idx * 100}ms`
                 }}
               >
-                <img 
+                <img
                   src={img}
                   alt={`Pottery process ${idx + 1}`}
                   className="w-full h-full object-cover"
@@ -484,12 +481,12 @@ const BashoHomepage = () => {
       </section>
 
       {/* Collection Showcase */}
-      <section 
+      <section
         id="collection"
         ref={el => { sectionsRef.current[5] = el; }}
         className="min-h-screen py-24 px-6"
       >
-        <div 
+        <div
           className="max-w-7xl mx-auto"
           style={{
             opacity: getOpacity(5),
@@ -508,38 +505,38 @@ const BashoHomepage = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { 
-                name: "Tea Ceremony Bowls", 
-                desc: "Hand-thrown vessels for mindful moments", 
+              {
+                name: "Tea Ceremony Bowls",
+                desc: "Hand-thrown vessels for mindful moments",
                 size: "md:col-span-2 md:row-span-2",
                 image: "https://images.unsplash.com/photo-1556909190-44e3b0d4cbe5?w=800&q=80"
               },
-              { 
-                name: "Serving Plates", 
-                desc: "Rustic elegance for sharing meals", 
+              {
+                name: "Serving Plates",
+                desc: "Rustic elegance for sharing meals",
                 size: "",
                 image: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&q=80"
               },
-              { 
-                name: "Sake Sets", 
-                desc: "Traditional forms, modern soul", 
+              {
+                name: "Sake Sets",
+                desc: "Traditional forms, modern soul",
                 size: "",
                 image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&q=80"
               },
-              { 
-                name: "Custom Tableware", 
-                desc: "Bespoke sets for your home", 
+              {
+                name: "Custom Tableware",
+                desc: "Bespoke sets for your home",
                 size: "",
                 image: "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=600&q=80"
               },
-              { 
-                name: "Vases & Décor", 
-                desc: "Sculptural pieces that breathe", 
+              {
+                name: "Vases & Décor",
+                desc: "Sculptural pieces that breathe",
                 size: "",
                 image: "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=600&q=80"
               }
             ].map((item, idx) => (
-              <div 
+              <div
                 key={idx}
                 className={`${item.size} group relative aspect-square rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-700 cursor-pointer`}
                 style={{
@@ -548,7 +545,7 @@ const BashoHomepage = () => {
                   transitionDelay: `${idx * 80}ms`
                 }}
               >
-                <img 
+                <img
                   src={item.image}
                   alt={item.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -571,11 +568,11 @@ const BashoHomepage = () => {
       </section>
 
       {/* Workshops */}
-      <section 
+      <section
         ref={el => { sectionsRef.current[6] = el; }}
         className="min-h-screen flex items-center py-24 px-6 bg-linear-to-b from-amber-50 to-stone-50"
       >
-        <div 
+        <div
           className="max-w-6xl mx-auto text-center"
           style={{
             opacity: getOpacity(6),
@@ -587,14 +584,14 @@ const BashoHomepage = () => {
             Learn the Art
           </h2>
           <p className="text-2xl text-stone-600 mb-16 max-w-3xl mx-auto leading-relaxed">
-            Join us for pottery workshops where we slow down, get our hands dirty, 
+            Join us for pottery workshops where we slow down, get our hands dirty,
             and remember what it feels like to <span className="text-amber-800 font-medium">create</span>.
           </p>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="relative group overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
               <div className="aspect-video">
-                <img 
+                <img
                   src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80"
                   alt="Pottery workshop"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -617,7 +614,7 @@ const BashoHomepage = () => {
 
             <div className="relative group overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
               <div className="aspect-video">
-                <img 
+                <img
                   src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80"
                   alt="Private studio event"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -642,11 +639,11 @@ const BashoHomepage = () => {
       </section>
 
       {/* Instagram Gallery Preview */}
-      <section 
+      <section
         ref={el => { sectionsRef.current[7] = el; }}
         className="py-24 px-6 bg-stone-100"
       >
-        <div 
+        <div
           className="max-w-6xl mx-auto"
           style={{
             opacity: getOpacity(7),
@@ -674,7 +671,7 @@ const BashoHomepage = () => {
               "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=400&q=80",
               "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=400&q=80"
             ].map((img, idx) => (
-              <div 
+              <div
                 key={idx}
                 className="aspect-square rounded-xl overflow-hidden hover:scale-105 transition-all duration-500 shadow-lg cursor-pointer"
                 style={{
@@ -682,7 +679,7 @@ const BashoHomepage = () => {
                   transitionDelay: `${idx * 50}ms`
                 }}
               >
-                <img 
+                <img
                   src={img}
                   alt={`Instagram post ${idx + 1}`}
                   className="w-full h-full object-cover"
@@ -692,8 +689,8 @@ const BashoHomepage = () => {
           </div>
 
           <div className="text-center">
-            <a 
-              href="https://www.instagram.com/bashobyyshivangi/" 
+            <a
+              href="https://www.instagram.com/bashobyyshivangi/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-10 py-4 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-full hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-xl text-lg font-medium"
@@ -705,20 +702,20 @@ const BashoHomepage = () => {
       </section>
 
       {/* Final CTA */}
-      <section 
+      <section
         ref={el => { sectionsRef.current[8] = el; }}
         className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden"
       >
         <div className="absolute inset-0">
-          <img 
+          <img
             src="https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=1600&q=80"
             alt="Japanese pottery"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-linear-to-br from-stone-900/90 to-amber-900/80"></div>
         </div>
-        
-        <div 
+
+        <div
           className="relative z-10 text-center text-white"
           style={{
             opacity: getOpacity(8),
@@ -734,15 +731,15 @@ const BashoHomepage = () => {
             Follow us on Instagram for daily inspiration, new collections, and stories from the studio
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <a 
-              href="https://www.instagram.com/bashobyyshivangi/" 
+            <a
+              href="https://www.instagram.com/bashobyyshivangi/"
               target="_blank"
               rel="noopener noreferrer"
               className="px-12 py-4 bg-white text-stone-800 rounded-full hover:bg-stone-100 transition-all duration-300 transform hover:scale-105 shadow-xl text-lg font-medium"
             >
               Follow on Instagram
             </a>
-            <button 
+            <button
               onClick={() => scrollToSection('collection')}
               className="px-12 py-4 border-2 border-white text-white rounded-full hover:bg-white hover:text-stone-800 transition-all duration-300 transform hover:scale-105 text-lg font-medium"
             >
