@@ -341,19 +341,19 @@ const BashoHomepage = () => {
                 kanji: "侘",
                 word: "Wabi",
                 meaning: "Finding beauty in simplicity and humble, rustic elegance",
-                image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&q=80"
+                image: "http://localhost:8000/media/extracted/page_3_img_1.jpeg"
               },
               {
                 kanji: "寂",
                 word: "Sabi",
                 meaning: "The beauty that comes with age — weathered, worn, telling stories",
-                image: "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=500&q=80"
+                image: "http://localhost:8000/media/extracted/page_6_img_1.jpeg"
               },
               {
                 kanji: "間",
                 word: "Ma",
                 meaning: "The space between. The pause. The breath. What's not there matters too.",
-                image: "https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=500&q=80"
+                image: "http://localhost:8000/media/extracted/page_7_img_1.jpeg"
               }
             ].map((concept, idx) => (
               <div
@@ -455,10 +455,10 @@ const BashoHomepage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=400&q=80",
-              "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400&q=80",
-              "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=400&q=80",
-              "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80"
+              "http://localhost:8000/media/extracted/page_9_img_1.jpeg",
+              "http://localhost:8000/media/extracted/page_10_img_2.jpeg",
+              "http://localhost:8000/media/extracted/page_11_img_1.jpeg",
+              "http://localhost:8000/media/extracted/page_13_img_1.jpeg"
             ].map((img, idx) => (
               <div
                 key={idx}
@@ -509,31 +509,31 @@ const BashoHomepage = () => {
                 name: "Tea Ceremony Bowls",
                 desc: "Hand-thrown vessels for mindful moments",
                 size: "md:col-span-2 md:row-span-2",
-                image: "https://images.unsplash.com/photo-1556909190-44e3b0d4cbe5?w=800&q=80"
+                image: "http://localhost:8000/media/extracted/page_16_img_1.jpeg"
               },
               {
                 name: "Serving Plates",
                 desc: "Rustic elegance for sharing meals",
                 size: "",
-                image: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&q=80"
+                image: "http://localhost:8000/media/extracted/page_14_img_1.jpeg"
               },
               {
                 name: "Sake Sets",
                 desc: "Traditional forms, modern soul",
                 size: "",
-                image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&q=80"
+                image: "http://localhost:8000/media/extracted/page_15_img_2.jpeg"
               },
               {
                 name: "Custom Tableware",
                 desc: "Bespoke sets for your home",
                 size: "",
-                image: "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=600&q=80"
+                image: "http://localhost:8000/media/extracted/page_17_img_1.jpeg"
               },
               {
                 name: "Vases & Décor",
                 desc: "Sculptural pieces that breathe",
                 size: "",
-                image: "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=600&q=80"
+                image: "http://localhost:8000/media/extracted/page_18_img_3.jpeg"
               }
             ].map((item, idx) => (
               <div
@@ -592,8 +592,8 @@ const BashoHomepage = () => {
             <div className="relative group overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
               <div className="aspect-video">
                 <img
-                  src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80"
-                  alt="Pottery workshop"
+                  src="http://localhost:8000/media/extracted/page_20_img_2.jpeg"
+                  alt="Pottery workshop teaching"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
               </div>
@@ -615,8 +615,8 @@ const BashoHomepage = () => {
             <div className="relative group overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
               <div className="aspect-video">
                 <img
-                  src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80"
-                  alt="Private studio event"
+                  src="http://localhost:8000/media/extracted/page_21_img_1.jpeg"
+                  alt="Private studio gathering"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
               </div>
@@ -662,14 +662,14 @@ const BashoHomepage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {[
-              "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=400&q=80",
-              "https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=400&q=80",
-              "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=400&q=80",
-              "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&q=80",
-              "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80",
-              "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=400&q=80",
-              "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=400&q=80",
-              "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=400&q=80"
+              "http://localhost:8000/media/extracted/page_4_img_2.jpeg",
+              "http://localhost:8000/media/extracted/page_5_img_1.jpeg",
+              "http://localhost:8000/media/extracted/page_8_img_2.jpeg",
+              "http://localhost:8000/media/extracted/page_12_img_2.jpeg",
+              "http://localhost:8000/media/extracted/page_19_img_2.jpeg",
+              "http://localhost:8000/media/extracted/page_22_img_1.jpeg",
+              "http://localhost:8000/media/extracted/page_10_img_3.jpeg",
+              "http://localhost:8000/media/extracted/page_11_img_3.jpeg"
             ].map((img, idx) => (
               <div
                 key={idx}
@@ -708,7 +708,7 @@ const BashoHomepage = () => {
       >
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=1600&q=80"
+            src="http://localhost:8000/media/extracted/page_1_img_1.jpeg"
             alt="Japanese pottery"
             className="w-full h-full object-cover"
           />
