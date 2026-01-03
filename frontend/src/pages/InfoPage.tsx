@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { Leaf, Mountain, Sparkles, Wind, Sun, Moon, Droplet } from 'lucide-react';
-
+import pottery1 from '../assets/pottery_1.png';
+import pottery2 from '../assets/pottery_2.png';
+import pottery3 from '../assets/pottery_3.png';
+import shivangiPlates from '../assets/shivangi_plates.png';
+import shivangistory from '../assets/shivangi_story.png';
+import gallary1 from '../assets/gallary1.png';
+import gallary2 from '../assets/gallary2.jpg';
+import gallary3 from '../assets/gallary3.png';
+import gallary4 from '../assets/gallary4.png';
+import plate from '../assets/plate.png';
 const BashoHomepage = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [, setActiveSection] = useState<number>(0);
@@ -124,7 +133,7 @@ const BashoHomepage = () => {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="http://localhost:8000/media/extracted/page_2_img_1.jpeg"
+            src={shivangiPlates}
             alt="Shivangi at Basho studio"
             className="w-full h-full object-cover opacity-40"
           />
@@ -200,16 +209,16 @@ const BashoHomepage = () => {
             </h2>
             <div className="space-y-6 text-lg text-stone-600 leading-relaxed">
               <p>
-                Basho is more than a studio — it is <strong className="text-stone-800">A Place</strong> of happiness where every moment with clay is cherished.
+
               </p>
               <p>
-                Inspired by the legendary Japanese poet known for haiku — short, flowing verses that capture life — pottery at Basho flows with <strong className="text-amber-800">rhythm and soul</strong>.
-              </p>
-              <p className="text-xl text-stone-700 italic border-l-4 border-amber-800 pl-6">
-                "Each piece at Basho is crafted with love and individuality, making it truly one of a kind."
+                Basho, a Japanese word that means <strong className="text-stone-800">A Place</strong>. But for me, it's my happy place, where every moment with place is cherished. Each piece at Basho is crafted with love and individuality, making it truly one of a kind.
               </p>
               <p>
-                Like poetry, we believe functional art should be a pause to notice beauty in the everyday. Come, discover Basho and create your own poetry.
+                Basho was also the name of a legendary Japanese poet known for haiku. Haiku is short, flowing verses that captures life Like poetry, pottery at Basho flows with rhythm and soul.
+              </p>
+              <p>
+                So come, discover Basho and create your own poetry.
               </p>
             </div>
           </div>
@@ -217,8 +226,8 @@ const BashoHomepage = () => {
           <div className="relative">
             <div className="aspect-square bg-linear-to-br from-amber-100 to-stone-100 rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="http://localhost:8000/media/extracted/page_2_img_1.jpeg"
-                alt="Shivangi at the wheel"
+                src={gallary3}
+                alt="masto basho"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-linear-to-t from-stone-900/40 to-transparent flex flex-col items-center justify-end p-8">
@@ -257,33 +266,63 @@ const BashoHomepage = () => {
           <h2 className="text-5xl font-serif font-light text-stone-800 mb-8">
             Shivangi's Journey
           </h2>
-          <p className="text-2xl text-stone-600 max-w-3xl mx-auto leading-relaxed mb-16">
-            Hi, I'm Shivangi — the hands and heart behind Basho.
-            I created this sanctuary to transform earth into art and <span className="text-amber-800 font-medium">share the rhythm of soul</span>.
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-12 bg-[#f5f3ef] rounded-3xl p-8 md:p-12 shadow-xl border border-stone-200">
+            <div className="md:w-1/2">
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                <img
+                  src={shivangistory}
+                  alt="Shivangi at the wheel"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-stone-900/40 to-transparent"></div>
+              </div>
+            </div>
+            <div className="md:w-1/2 space-y-6">
+              <div className="inline-block px-4 py-1 bg-[#8b6f47]/20 text-[#8b6f47] text-sm font-medium rounded-full mb-2">
+                Meet the Artist
+              </div>
+              <h3 className="text-3xl font-serif text-[#2a2420] leading-tight">
+                Hi, I’m Shivangi.
+              </h3>
+              <div className="text-[#5a4a3a] leading-relaxed space-y-4 font-light text-lg">
+                <p>
+                  <strong className="text-[#8b6f47]">Basho</strong> (Bashō) is a Japanese word that means <em>"A Place"</em>. But for me, it's my happy place, where every moment is cherished.
+                </p>
+                <p>
+                  Each piece at Basho is crafted with love and individuality, making it truly one of a kind.
+                </p>
+                <p>
+                  Basho was also the name of a legendary Japanese poet known for haiku. Haiku is short, flowing verses that capture life. Like poetry, pottery at Basho flows with rhythm and soul.
+                </p>
+                <p className="font-serif italic text-xl text-[#2a2420] pt-4">
+                  "So come, discover Basho and create your own poetry."
+                </p>
+              </div>
+            </div>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-9">
             {[
               {
                 icon: <Sparkles size={40} />,
                 title: "One of a Kind",
                 text: "Each piece at Basho is crafted with love and individuality. No two pieces are ever the same.",
                 color: "from-amber-100 to-amber-50",
-                image: "http://localhost:8000/media/extracted/page_4_img_1.jpeg"
+                image: pottery1
               },
               {
                 icon: <Wind size={40} />,
                 title: "Soulful Flow",
                 text: "Much like a haiku, our pottery captures the essence of a moment through simple, flowing forms.",
                 color: "from-stone-200 to-stone-100",
-                image: "http://localhost:8000/media/extracted/page_12_img_1.jpeg"
+                image: pottery2
               },
               {
                 icon: <Moon size={40} />,
                 title: "A Happy Place",
                 text: "Basho is where time slows down. Every piece is an invitation to cherish your own happy place.",
                 color: "from-amber-200 to-amber-100",
-                image: "http://localhost:8000/media/extracted/page_18_img_1.jpeg"
+                image: pottery3
               }
             ].map((item, idx) => (
               <div
@@ -341,19 +380,19 @@ const BashoHomepage = () => {
                 kanji: "侘",
                 word: "Wabi",
                 meaning: "Finding beauty in simplicity and humble, rustic elegance",
-                image: "http://localhost:8000/media/extracted/page_3_img_1.jpeg"
+                image: gallary1
               },
               {
                 kanji: "寂",
                 word: "Sabi",
                 meaning: "The beauty that comes with age — weathered, worn, telling stories",
-                image: "http://localhost:8000/media/extracted/page_6_img_1.jpeg"
+                image: gallary2
               },
               {
                 kanji: "間",
                 word: "Ma",
                 meaning: "The space between. The pause. The breath. What's not there matters too.",
-                image: "http://localhost:8000/media/extracted/page_7_img_1.jpeg"
+                image: gallary4
               }
             ].map((concept, idx) => (
               <div
@@ -455,10 +494,10 @@ const BashoHomepage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              "http://localhost:8000/media/extracted/page_9_img_1.jpeg",
-              "http://localhost:8000/media/extracted/page_10_img_2.jpeg",
-              "http://localhost:8000/media/extracted/page_11_img_1.jpeg",
-              "http://localhost:8000/media/extracted/page_13_img_1.jpeg"
+              gallary1,
+              gallary2,
+              gallary3,
+              plate
             ].map((img, idx) => (
               <div
                 key={idx}
@@ -509,31 +548,31 @@ const BashoHomepage = () => {
                 name: "Tea Ceremony Bowls",
                 desc: "Hand-thrown vessels for mindful moments",
                 size: "md:col-span-2 md:row-span-2",
-                image: "http://localhost:8000/media/extracted/page_16_img_1.jpeg"
+                image: pottery1
               },
               {
                 name: "Serving Plates",
                 desc: "Rustic elegance for sharing meals",
                 size: "",
-                image: "http://localhost:8000/media/extracted/page_14_img_1.jpeg"
+                image: pottery2
               },
               {
                 name: "Sake Sets",
                 desc: "Traditional forms, modern soul",
                 size: "",
-                image: "http://localhost:8000/media/extracted/page_15_img_2.jpeg"
+                image: pottery3
               },
               {
                 name: "Custom Tableware",
                 desc: "Bespoke sets for your home",
                 size: "",
-                image: "http://localhost:8000/media/extracted/page_17_img_1.jpeg"
+                image: plate
               },
               {
                 name: "Vases & Décor",
                 desc: "Sculptural pieces that breathe",
                 size: "",
-                image: "http://localhost:8000/media/extracted/page_18_img_3.jpeg"
+                image: gallary4
               }
             ].map((item, idx) => (
               <div
@@ -592,7 +631,7 @@ const BashoHomepage = () => {
             <div className="relative group overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
               <div className="aspect-video">
                 <img
-                  src="http://localhost:8000/media/extracted/page_20_img_2.jpeg"
+                  src={gallary2}
                   alt="Pottery workshop teaching"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
@@ -615,7 +654,7 @@ const BashoHomepage = () => {
             <div className="relative group overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
               <div className="aspect-video">
                 <img
-                  src="http://localhost:8000/media/extracted/page_21_img_1.jpeg"
+                  src={gallary1}
                   alt="Private studio gathering"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
@@ -662,14 +701,14 @@ const BashoHomepage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {[
-              "http://localhost:8000/media/extracted/page_4_img_2.jpeg",
-              "http://localhost:8000/media/extracted/page_5_img_1.jpeg",
-              "http://localhost:8000/media/extracted/page_8_img_2.jpeg",
-              "http://localhost:8000/media/extracted/page_12_img_2.jpeg",
-              "http://localhost:8000/media/extracted/page_19_img_2.jpeg",
-              "http://localhost:8000/media/extracted/page_22_img_1.jpeg",
-              "http://localhost:8000/media/extracted/page_10_img_3.jpeg",
-              "http://localhost:8000/media/extracted/page_11_img_3.jpeg"
+              gallary1,
+              gallary2,
+              gallary3,
+              gallary4,
+              pottery1,
+              pottery2,
+              pottery3,
+              plate
             ].map((img, idx) => (
               <div
                 key={idx}
@@ -708,7 +747,7 @@ const BashoHomepage = () => {
       >
         <div className="absolute inset-0">
           <img
-            src="http://localhost:8000/media/extracted/page_1_img_1.jpeg"
+            src={gallary3}
             alt="Japanese pottery"
             className="w-full h-full object-cover"
           />
@@ -761,6 +800,10 @@ const BashoHomepage = () => {
           <p className="text-stone-500 mb-8">
             Handcrafted pottery inspired by Japanese poetry and philosophy
           </p>
+          <div className="flex flex-col items-center space-y-2 mb-8 text-stone-400">
+            <p>+91 9879575601</p>
+            <p>@bashobyyshivangi</p>
+          </div>
           <div className="flex justify-center space-x-8 text-sm">
             <button onClick={() => scrollToSection('story')} className="hover:text-amber-600 transition">About</button>
             <button onClick={() => scrollToSection('collection')} className="hover:text-amber-600 transition">Collection</button>

@@ -1,6 +1,7 @@
 // frontend/src/pages/Workshops.tsx
 import React, { useEffect, useState } from "react";
 import { Leaf, Droplet, Mountain } from "lucide-react";
+import gallary2 from "../assets/gallary2.jpg";
 
 /* ---------------------------------- */
 /* Types & Data                        */
@@ -63,8 +64,7 @@ const WorkshopsPage: React.FC = () => {
     setSubmitting(false);
 
     setSuccess(
-      `Registered ${form.name || "Guest"} for ${
-        slots.find(s => s.id === selectedSlot)?.title
+      `Registered ${form.name || "Guest"} for ${slots.find(s => s.id === selectedSlot)?.title
       }`
     );
 
@@ -91,7 +91,7 @@ const WorkshopsPage: React.FC = () => {
       {/* ---------------------------------- */}
       <section className="relative min-h-[65vh] flex items-center justify-center overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=1600&q=80"
+          src={gallary2}
           alt="Pottery studio"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />
@@ -164,11 +164,10 @@ const WorkshopsPage: React.FC = () => {
                 <div
                   key={s.id}
                   onClick={() => setSelectedSlot(s.id)}
-                  className={`border-2 rounded-2xl p-5 cursor-pointer transition-colors ${
-                    selectedSlot === s.id
-                      ? "border-amber-400 bg-amber-50"
-                      : "border-stone-100"
-                  }`}
+                  className={`border-2 rounded-2xl p-5 cursor-pointer transition-colors ${selectedSlot === s.id
+                    ? "border-amber-400 bg-amber-50"
+                    : "border-stone-100"
+                    }`}
                 >
                   <div className="flex justify-between items-center">
                     <div>
@@ -231,7 +230,7 @@ const WorkshopsPage: React.FC = () => {
                 </FormField>
                 <FormField label="Participants">
                   <select name="participants" value={form.participants} onChange={handleChange} className="input">
-                    {[1,2,3,4].map(n => (
+                    {[1, 2, 3, 4].map(n => (
                       <option key={n} value={n}>{n} participant{n > 1 ? "s" : ""}</option>
                     ))}
                   </select>
