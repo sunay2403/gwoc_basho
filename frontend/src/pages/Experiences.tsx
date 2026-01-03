@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Leaf, Droplet, Mountain, Users, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import gallary1 from "../assets/gallary1.png";
 
 /* ----------------------------------
    Experience Data
@@ -67,7 +68,7 @@ const ExperiencesPage: React.FC = () => {
       -----------------------------------*/}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1505575978878-5b7a8f39b01f?w=1600&q=80"
+          src={gallary1}
           alt=""
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />
@@ -79,7 +80,7 @@ const ExperiencesPage: React.FC = () => {
             Studio Experiences
           </h1>
           <p className="text-lg md:text-xl text-stone-600 leading-relaxed">
-            Slow down. Touch clay. Create with intention.  
+            Slow down. Touch clay. Create with intention.
             Basho’s experiences reconnect you with craft, nature, and presence.
           </p>
 

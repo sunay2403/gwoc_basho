@@ -2,6 +2,11 @@ import { useMemo, useState, useEffect } from "react";
 import Filter from "../components/Filter.tsx";
 import Card from "../components/Card.tsx";
 import type { JSX } from "react/jsx-dev-runtime";
+import pottery1 from "../assets/pottery_1.png";
+import pottery2 from "../assets/pottery_2.png";
+import pottery3 from "../assets/pottery_3.png";
+import plate from "../assets/plate.png";
+import plateBowl from "../assets/plate_bowl.jpg";
 
 interface Product {
     id: number;
@@ -25,35 +30,35 @@ function ProductList(): JSX.Element {
             id: 1,
             name: "Tea Bowl — Rustic White",
             price: 1299,
-            image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800&q=80",
+            image: plate,
             description: "Hand-thrown tea bowl with subtle glaze variations."
         },
         {
             id: 2,
             name: "Serving Plate — Matte",
             price: 899,
-            image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&q=80",
+            image: pottery1,
             description: "Wide plate for sharing, with a soft matte finish."
         },
         {
             id: 3,
             name: "Sake Set — Minimal",
             price: 699,
-            image: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=800&q=80",
+            image: pottery2,
             description: "Pouring jug and two cups — simple and elegant."
         },
         {
             id: 4,
             name: "Small Vase — Textured",
             price: 499,
-            image: "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=800&q=80",
+            image: pottery3,
             description: "Sculptural vase with tactile surface."
         },
         {
             id: 5,
             name: "Serving Platter — Oval",
             price: 1599,
-            image: "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=800&q=80",
+            image: plateBowl,
             description: "Large platter for family-style meals."
         }
     ], []);
