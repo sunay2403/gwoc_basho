@@ -1,90 +1,88 @@
 import { useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../api/firebase";
 import { Leaf } from "lucide-react";
+import { saveAuth } from "../utils/auth";
 
-// Google provider (create once)
-const googleProvider = new GoogleAuthProvider();
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function Signup() {
   const [fullName, setFullName] = useState("");
-  const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // -------------------------------
-  // Email + Password signup
-  // -------------------------------
-  const handleSignup = async () => {
-    try {
-      setLoading(true);
-      setError("");
-
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-
-      await setDoc(doc(db, "users", res.user.uid), {
-        uid: res.user.uid,
-        fullName,
-        username,
-        email,
-        phone,
-        bio: "",
-        location: "",
-        role: "user",
-        authProvider: "password",
-        createdAt: serverTimestamp(),
-      });
-
-      window.location.href = "/";
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+  // -------------------------
+  // Validation
+  // -------------------------
+  const validate = (): boolean => {
+    if (!fullName.trim()) {
+      setError("Full name is required");
+      return false;
     }
+
+    if (!email.includes("@")) {
+      setError("Please enter a valid email");
+      return false;
+    }
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters");
+      return false;
+    }
+
+    if (!/\d/.test(password)) {
+      setError("Password must contain at least one number");
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+
+    return true;
   };
 
-  // -------------------------------
-  // Google signup
-  // -------------------------------
-  const handleGoogleSignup = async () => {
+  // -------------------------
+  // Submit Handler
+  // -------------------------
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loading) return;
+
+    setError(null);
+    if (!validate()) return;
+
     try {
       setLoading(true);
-      setError("");
 
-      const res = await signInWithPopup(auth, googleProvider);
-      const user = res.user;
+      const res = await fetch(
+        `${API_BASE}/api/auth/custom/signup/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            full_name: fullName,
+            phone,
+          }),
+        }
+      );
 
-      const userRef = doc(db, "users", user.uid);
-      const snap = await getDoc(userRef);
+      const data = await res.json();
 
-      // Create profile only first time
-      if (!snap.exists()) {
-        await setDoc(userRef, {
-          uid: user.uid,
-          fullName: user.displayName || "",
-          username: user.email?.split("@")[0] || "",
-          email: user.email,
-          phone: user.phoneNumber || "",
-          bio: "",
-          location: "",
-          role: "user",
-          authProvider: "google",
-          createdAt: serverTimestamp(),
-        });
+      if (!res.ok) {
+        throw new Error(data.error || "Signup failed");
       }
 
+      saveAuth(data);
       window.location.href = "/";
-    } catch (err) {
-      setError("Google sign-in failed");
+    } catch (err: any) {
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -93,87 +91,79 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-stone-50 to-amber-50 px-6">
       <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-stone-200 p-10">
-        
+
         {/* Header */}
-        <div className="text-center mb-10">
-          <Leaf className="mx-auto text-amber-800 mb-4 animate-pulse" size={48} />
-          <h1 className="text-4xl font-serif text-stone-800 mb-2">
-            Begin Your Journey
+        <div className="text-center mb-8">
+          <Leaf className="mx-auto text-amber-800 mb-4" size={48} />
+          <h1 className="text-3xl font-serif text-stone-800 mb-1">
+            Create your account
           </h1>
-          <p className="text-stone-500">
-            Create an account to enter the world of Bashō
+          <p className="text-stone-500 text-sm">
+            Enter the world of Bashō
           </p>
         </div>
 
-        {/* Inputs */}
-        <div className="space-y-5">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            placeholder="Full Name"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            placeholder="Full name"
+            value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-          />
-
-          <input
-            type="text"
-            placeholder="Username"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
-            onChange={(e) => setUsername(e.target.value)}
+            className="input"
+            required
           />
 
           <input
             type="tel"
             placeholder="Phone (optional)"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            className="input"
           />
 
           <input
             type="email"
             placeholder="Email"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="input"
+            required
           />
 
           <input
             type="password"
             placeholder="Password"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="input"
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="input"
+            required
           />
 
           {error && (
             <p className="text-red-600 text-sm text-center">{error}</p>
           )}
 
-          {/* Email signup */}
           <button
-            onClick={handleSignup}
+            type="submit"
             disabled={loading}
-            className="w-full py-4 bg-amber-800 text-white rounded-full hover:bg-amber-900 transition-all duration-300 shadow-xl"
+            className="w-full py-3 bg-amber-800 text-white rounded-full hover:bg-amber-900 transition disabled:opacity-50"
           >
-            {loading ? "Creating..." : "Sign Up"}
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
-
-          {/* Google signup */}
-          <button
-            onClick={handleGoogleSignup}
-            disabled={loading}
-            className="w-full py-4 border border-stone-300 rounded-full bg-white hover:bg-stone-100 transition-all duration-300 flex items-center justify-center gap-3 shadow"
-          >
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              alt="Google"
-              className="w-5 h-5"
-            />
-            <span className="text-stone-700 font-medium">
-              Continue with Google
-            </span>
-          </button>
-        </div>
+        </form>
 
         {/* Footer */}
-        <p className="text-center text-stone-500 text-sm mt-8">
+        <p className="text-center text-stone-500 text-sm mt-6">
           Already have an account?{" "}
           <a href="/login" className="text-amber-800 hover:underline">
             Login

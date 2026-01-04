@@ -24,3 +24,13 @@ dist-ssr
 *.sw?
 
 .env
+
+# Python
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django DB (optional)
+backend/db.sqlite3
