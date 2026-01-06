@@ -1,14 +1,13 @@
 import { useState } from "react";
 import {
-  signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../api/firebase";
 import { Leaf } from "lucide-react";
 
-// Google provider (create once)
 const googleProvider = new GoogleAuthProvider();
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,26 +15,77 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Email + Password login
+  // -----------------------------
+  // Custom Email + Password Login
+  // -----------------------------
   const handleLogin = async () => {
+    if (loading) return;
+
     try {
       setLoading(true);
       setError("");
-      await signInWithEmailAndPassword(auth, email, password);
+
+      const res = await fetch(
+        `${API_BASE}/api/auth/custom/login/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Invalid credentials");
+      }
+
+      // Store JWT
+      localStorage.setItem("accessToken", data.access);
+      localStorage.setItem("refreshToken", data.refresh);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
       window.location.href = "/";
-    } catch {
-      setError("Invalid credentials");
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  // Google login
+  // -----------------------------
+  // Google Login (Firebase → Django)
+  // -----------------------------
   const handleGoogleLogin = async () => {
+    if (loading) return;
+
     try {
       setLoading(true);
       setError("");
-      await signInWithPopup(auth, googleProvider);
+
+      const res = await signInWithPopup(auth, googleProvider);
+      const idToken = await res.user.getIdToken();
+
+      const backendRes = await fetch(
+        `${API_BASE}/api/auth/firebase/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken }),
+        }
+      );
+
+      const data = await backendRes.json();
+
+      if (!backendRes.ok) {
+        throw new Error("Google authentication failed");
+      }
+
+      // Store JWT
+      localStorage.setItem("accessToken", data.access);
+      localStorage.setItem("refreshToken", data.refresh);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
       window.location.href = "/";
     } catch {
       setError("Google sign-in failed");
@@ -64,14 +114,14 @@ export default function Login() {
           <input
             type="email"
             placeholder="Email"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:outline-none focus:ring-2 focus:ring-amber-700"
+            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
             type="password"
             placeholder="Password"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:outline-none focus:ring-2 focus:ring-amber-700"
+            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
             onChange={(e) => setPassword(e.target.value)}
           />
 
@@ -83,7 +133,7 @@ export default function Login() {
           <button
             onClick={handleLogin}
             disabled={loading}
-            className="w-full py-4 bg-amber-800 text-white rounded-full hover:bg-amber-900 transition-all duration-300 shadow-xl"
+            className="w-full py-4 bg-amber-800 text-white rounded-full hover:bg-amber-900 transition shadow-xl disabled:opacity-50"
           >
             {loading ? "Entering..." : "Login"}
           </button>
@@ -92,7 +142,7 @@ export default function Login() {
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full py-4 border border-stone-300 rounded-full bg-white hover:bg-stone-100 transition-all duration-300 flex items-center justify-center gap-3 shadow"
+            className="w-full py-4 border border-stone-300 rounded-full bg-white hover:bg-stone-100 transition flex items-center justify-center gap-3 shadow"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"

@@ -1,23 +1,89 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Quote, Play, Instagram, Heart, MessageCircle, Sparkles, Leaf } from 'lucide-react';
+import { Play, Instagram, Heart, MessageCircle, Sparkles, Leaf, Plus, X, Upload, Quote } from 'lucide-react';
+import pottery1 from '../assets/pottery_1.png';
+import pottery2 from '../assets/pottery_2.png';
+import pottery3 from '../assets/pottery_3.png';
+import plate from '../assets/plate.png';
+import shivangiStory from '../assets/shivangi_story.png';
+import shivangiPlates from '../assets/shivangi_plates.png';
+import gallary1 from '../assets/gallary1.png';
+import gallary2 from '../assets/gallary2.jpg';
+import gallary3 from '../assets/gallary3.png';
+import gallary4 from '../assets/gallary4.png';
 
 const BashoMediaSocialProof = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<number | null>(null);
   const [scrollY, setScrollY] = useState(0);
-  const [likedImages, setLikedImages] = useState({});
-  const [likedTestimonials, setLikedTestimonials] = useState({});
-  const galleryRef = useRef(null);
+  const [likedImages, setLikedImages] = useState<Record<number, boolean>>({});
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   const [mounted, setMounted] = useState(false);
+  const [experiences, setExperiences] = useState<any[]>([]);
+  const [textTestimonials, setTextTestimonials] = useState<any[]>([]);
 
-useEffect(() => {
-  setMounted(true);
-}, []);
+  const [galleryImagesState, setGalleryImages] = useState<any[]>([
+    { url: pottery1, caption: "Handcrafted with love", likes: 124, postUrl: "" },
+    { url: pottery2, caption: "Sunflowers and ceramics", likes: 89, postUrl: "" },
+    { url: pottery3, caption: "Serving joy", likes: 205, postUrl: "" }
+  ]);
+  const [videoTestimonialsState, setVideoTestimonials] = useState<any[]>([]);
+  const [showExperienceForm, setShowExperienceForm] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    story: '',
+    author: '',
+    image: null as File | null
+  });
+
+  const fetchDynamicContent = async () => {
+    try {
+      const expResponse = await fetch('http://localhost:8000/api/experiences/');
+      if (expResponse.ok) {
+        const data = await expResponse.json();
+        setExperiences(data);
+      }
+
+      const textResponse = await fetch('http://localhost:8000/api/text-testimonials/');
+      if (textResponse.ok) {
+        const data = await textResponse.json();
+        if (data.length > 0) setTextTestimonials(data);
+      }
+
+      const galleryResponse = await fetch('http://localhost:8000/api/gallery/');
+      if (galleryResponse.ok) {
+        const data = await galleryResponse.json();
+        const mappedData = data.map((item: any) => ({
+          ...item,
+          url: item.image.startsWith('http') ? item.image : `http://localhost:8000${item.image}`,
+          postUrl: item.post_url
+        }));
+        if (mappedData.length > 0) setGalleryImages(mappedData);
+      }
+
+      const videoResponse = await fetch('http://localhost:8000/api/video-testimonials/');
+      if (videoResponse.ok) {
+        const data = await videoResponse.json();
+        const mappedData = data.map((video: any) => ({
+          ...video,
+          thumbnail: video.thumbnail.startsWith('http') ? video.thumbnail : `http://localhost:8000${video.thumbnail}`
+        }));
+        if (mappedData.length > 0) setVideoTestimonials(mappedData);
+      }
+    } catch (error) {
+      console.error('Error fetching dynamic content:', error);
+    }
+  };
+
+  useEffect(() => {
+    setMounted(true);
+    fetchDynamicContent();
+  }, []);
 
 
   // Toggle like on an image
-  const toggleLike = (idx, e) => {
+  // Toggle like on an image
+  const toggleLike = (idx: number, e: React.MouseEvent) => {
     e.stopPropagation();
     setLikedImages(prev => ({
       ...prev,
@@ -25,16 +91,8 @@ useEffect(() => {
     }));
   };
 
-  // Toggle like on a testimonial
-  const toggleTestimonialLike = (idx) => {
-    setLikedTestimonials(prev => ({
-      ...prev,
-      [idx]: !prev[idx]
-    }));
-  };
-
   // Open Instagram post/profile
-  const openInstagram = (url) => {
+  const openInstagram = (url?: string) => {
     window.open(url || 'https://www.instagram.com/bashobyyshivangi/', '_blank');
   };
 
@@ -46,173 +104,74 @@ useEffect(() => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Authentic testimonials inspired by Japanese pottery philosophy
-  const textTestimonials = [
-    {
-      text: "Basho taught me that imperfection is beauty. Each piece carries the weight of mindfulness.",
-      author: "Priya Mehta",
-      location: "Mumbai",
-      category: "Philosophy"
-    },
-    {
-      text: "The bowl I received isn't perfect—and that's exactly what makes it mine. It has a soul.",
-      author: "Aditya Sharma",
-      location: "Delhi",
-      category: "Philosophy"
-    },
-    {
-      text: "Every morning, my tea ritual changed. The cup slows me down, makes me present.",
-      author: "Kavya Iyer",
-      location: "Bangalore",
-      category: "Experience"
-    },
-    {
-      text: "Shivangi's work reminds me that beauty doesn't need to shout. It whispers.",
-      author: "Rohan Das",
-      location: "Kolkata",
-      category: "Artistry"
-    },
-    {
-      text: "I joined the workshop with zero experience. By the end, I created my own bowl—rough, imperfect, and absolutely beautiful.",
-      author: "Anjali Verma",
-      location: "Pune",
-      category: "Workshop"
-    },
-    {
-      text: "These aren't just plates. They're conversations about time, care, and the art of living slowly.",
-      author: "Vikram Singh",
-      location: "Jaipur",
-      category: "Philosophy"
-    }
-  ];
-
+  // Display list: combine static placeholders with dynamic data
   const customerStories = [
     {
       title: "From Stranger to Creator",
-      story: "I walked into Basho's workshop carrying the weight of a stressful job and a restless mind. Shivangi handed me a lump of clay and said, 'Let it guide you.' Three hours later, I had created something with my own hands—a wobbly bowl that held more than water. It held a memory of stillness I didn't know I needed.",
+      story: "I walked into Basho's workshop carrying the weight of a stressful job and a restless mind. Shivangi handed me a lump of clay and said, 'Let it guide you.' Three hours later, I had created something with my own hands—a wobbly bowl that held more than water.",
       author: "Meera Krishnan",
-      image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=80"
-    },
-    {
-      title: "The Tea Ceremony That Changed Everything",
-      story: "My grandmother used to say that tea tastes different in the right cup. I never understood until I held a Basho tea bowl. The weight, the texture, the way it sits in your palm—it transforms drinking into ritual. Now every morning feels sacred.",
-      author: "Arjun Patel",
-      image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&q=80"
-    },
-    {
-      title: "Birthday Gift That Keeps Giving",
-      story: "For my 30th birthday, my sister took me to Basho's couple pottery date. We laughed, got messy, and created two completely different bowls that somehow belong together. Three years later, we still use them for our Sunday brunches. They've witnessed so many conversations, so much life.",
-      author: "Sanya & Karan",
-      image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&q=80"
+      image: gallary3
     }
   ];
+
+  const allStories = experiences.length > 0 ? experiences : customerStories;
+
+  // Real Instagram account data: @bashobyyshivangi
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      setFormData(prev => ({ ...prev, image: files[0] }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('story', formData.story);
+    data.append('author', formData.author);
+    if (formData.image) data.append('image', formData.image);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/experiences/', {
+        method: 'POST',
+        body: data,
+      });
+      if (response.ok) {
+        setShowExperienceForm(false);
+        setFormData({ title: '', story: '', author: '', image: null });
+        fetchDynamicContent();
+      }
+    } catch (error) {
+      console.error('Error submitting experience:', error);
+    }
+  };
 
   // Real Instagram account data: @bashobyyshivangi
   // 1,320 Followers | 93 Following | 159 Posts
   // Bio: A sanctuary for clay art lovers 🌿✨ | Products ~ Shipping Pan India 🇮🇳 | Workshops ~ 📍Surat, Gujarat
 
-  const galleryImages = [
-    {
-      url: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80",
-      caption: "Handcrafted tea bowl from our Surat studio 🌿",
-      likes: 127,
-      type: "product",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800&q=80",
-      caption: "Morning rituals with handmade ceramics ✨",
-      likes: 243,
-      type: "product",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1493106641515-6b5631de4bb9?w=800&q=80",
-      caption: "New collection dropping soon! Pan India shipping 🇮🇳",
-      likes: 189,
-      type: "product",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80",
-      caption: "Workshop vibes at Bashō 📍Surat, Gujarat",
-      likes: 312,
-      type: "workshop",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&q=80",
-      caption: "Earth tones, earthy souls 🌍",
-      likes: 156,
-      type: "product",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80",
-      caption: "The beauty of wabi-sabi in every piece",
-      likes: 278,
-      type: "detail",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=800&q=80",
-      caption: "Behind the scenes at our clay sanctuary 🌿",
-      likes: 201,
-      type: "studio",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=800&q=80",
-      caption: "Minimalist pottery for mindful living",
-      likes: 334,
-      type: "lifestyle",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=800&q=80",
-      caption: "Custom orders now open! DM for details ✨",
-      likes: 167,
-      type: "product",
-      postUrl: "https://www.instagram.com/bashobyyshivangi/"
-    }
-  ];
-
-  const videoTestimonials = [
-    {
-      thumbnail: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=80",
-      duration: "0:42",
-      author: "Ananya, Workshop Attendee",
-      quote: "I never thought I could create something this beautiful with my own hands"
-    },
-    {
-      thumbnail: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=600&q=80",
-      duration: "0:38",
-      author: "Ravi, Repeat Customer",
-      quote: "Every meal feels like a ceremony now"
-    },
-    {
-      thumbnail: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=600&q=80",
-      duration: "0:51",
-      author: "Divya, Studio Visitor",
-      quote: "Basho isn't just pottery—it's a philosophy of living"
-    }
-  ];
-
   return (
     <div
-  className={`
+      className={`
     bg-stone-50 min-h-screen
     transition-all duration-1000 ease-out
     ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"}
   `}
->
+    >
 
       {/* Hero Section */}
       <section className="relative py-32 px-6 overflow-hidden">
         <div
           className="absolute inset-0 opacity-5"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=1600&q=80)',
+            backgroundImage: `url(${shivangiPlates})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             transform: `translateY(${scrollY * 0.3}px)`
@@ -239,6 +198,55 @@ useEffect(() => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
+              Our Story
+            </h2>
+            <p className="text-lg text-[#5a4a3a]">
+              The hands and heart behind Basho
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-12 bg-[#f5f3ef] rounded-3xl p-8 md:p-12 shadow-xl border border-stone-200">
+            <div className="md:w-1/2">
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                <img
+                  src={shivangiStory}
+                  alt="Shivangi at the wheel"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-stone-900/40 to-transparent"></div>
+              </div>
+            </div>
+            <div className="md:w-1/2 space-y-6">
+              <div className="inline-block px-4 py-1 bg-[#8b6f47]/20 text-[#8b6f47] text-sm font-medium rounded-full mb-2">
+                Meet the Artist
+              </div>
+              <h3 className="text-3xl font-serif text-[#2a2420] leading-tight">
+                Hi, I’m Shivangi.
+              </h3>
+              <div className="text-[#5a4a3a] leading-relaxed space-y-4 font-light text-lg">
+                <p>
+                  <strong className="text-[#8b6f47]">Basho</strong> (Bashō) is a Japanese word that means <em>"A Place"</em>. But for me, it's my happy place, where every moment is cherished.
+                </p>
+                <p>
+                  Each piece at Basho is crafted with love and individuality, making it truly one of a kind.
+                </p>
+                <p>
+                  Basho was also the name of a legendary Japanese poet known for haiku. Haiku is short, flowing verses that capture life. Like poetry, pottery at Basho flows with rhythm and soul.
+                </p>
+                <p className="font-serif italic text-xl text-[#2a2420] pt-4">
+                  "So come, discover Basho and create your own poetry."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Philosophy-Based Testimonials Grid */}
+      <section className="py-24 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
               Voices of Wabi-Sabi
             </h2>
             <p className="text-lg text-[#5a4a3a]">
@@ -250,19 +258,18 @@ useEffect(() => {
             {textTestimonials.map((testimonial, idx) => (
               <div
                 key={idx}
-                className="group relative p-8 bg-linear-to-br from-[#f5f3ef] to-[#e8e4dd] rounded-2xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
-                style={{
-                  animationDelay: `${idx * 100}ms`
-                }}
+                className="group relative p-8 bg-linear-to-br from-[#f5f3ef] to-[#e8e4dd] rounded-2xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-stone-200"
               >
                 <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-opacity">
                   <Quote size={64} className="text-[#8b6f47]" strokeWidth={1} />
                 </div>
-                <div className="relative z-10">
-                  <span className="inline-block px-3 py-1 bg-[#8b6f47]/20 text-[#8b6f47] text-xs font-medium rounded-full mb-4">
-                    {testimonial.category}
-                  </span>
-                  <p className="text-lg text-[#2a2420] leading-relaxed mb-6 font-light italic">
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="mb-4">
+                    <span className="inline-block px-3 py-1 bg-[#8b6f47]/20 text-[#8b6f47] text-xs font-medium rounded-full">
+                      {testimonial.category}
+                    </span>
+                  </div>
+                  <p className="text-lg text-[#2a2420] leading-relaxed mb-6 font-light italic flex-grow">
                     "{testimonial.text}"
                   </p>
                   <div className="flex items-center justify-between pt-4 border-t border-[#8b6f47]/20">
@@ -270,18 +277,6 @@ useEffect(() => {
                       <p className="text-sm font-medium text-[#2a2420]">{testimonial.author}</p>
                       <p className="text-xs text-[#5a4a3a]">{testimonial.location}</p>
                     </div>
-                    <button
-                      onClick={() => toggleTestimonialLike(idx)}
-                      className="p-2 rounded-full hover:bg-[#8b6f47]/10 transition-all duration-300 cursor-pointer"
-                      aria-label={likedTestimonials[idx] ? "Unlike" : "Like"}
-                    >
-                      <Heart
-                        className={`transition-all duration-300 ${likedTestimonials[idx] ? "text-red-500 scale-110" : "text-[#8b6f47]"}`}
-                        size={20}
-                        strokeWidth={1.5}
-                        fill={likedTestimonials[idx] ? "#ef4444" : "none"}
-                      />
-                    </button>
                   </div>
                 </div>
               </div>
@@ -301,7 +296,7 @@ useEffect(() => {
               A sanctuary for clay art lovers 🌿✨
             </p>
             <p className="text-sm text-[#c7b8a3]/80 mb-8">
-              Products ~ Shipping Pan India 🇮🇳 | Workshops ~ 📍Surat, Gujarat
+              Products ~ Shipping Pan India 🇮🇳 | Workshops ~ 📍Surat, Gujarat | +91 9879575601
             </p>
             <div className="flex items-center justify-center gap-8 mb-8 text-[#f5f3ef]">
               <div className="text-center">
@@ -329,7 +324,7 @@ useEffect(() => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4" ref={galleryRef}>
-            {galleryImages.map((image, idx) => (
+            {galleryImagesState.map((image, idx) => (
               <div
                 key={idx}
                 className="group relative aspect-square overflow-hidden rounded-xl cursor-pointer"
@@ -412,7 +407,7 @@ useEffect(() => {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="relative aspect-4/5 rounded-3xl overflow-hidden group">
               <img
-                src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80"
+                src={gallary1}
                 alt="Workshop in progress"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
@@ -429,7 +424,7 @@ useEffect(() => {
             <div className="space-y-8">
               <div className="relative aspect-video rounded-3xl overflow-hidden group">
                 <img
-                  src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=800&q=80"
+                  src={gallary4}
                   alt="Hands shaping clay"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
@@ -445,7 +440,7 @@ useEffect(() => {
 
               <div className="relative aspect-video rounded-3xl overflow-hidden group">
                 <img
-                  src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&q=80"
+                  src={gallary2}
                   alt="Finished pieces"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
@@ -485,10 +480,10 @@ useEffect(() => {
             <h3 className="text-2xl font-serif text-[#2a2420] text-center mb-8">The Journey of Clay</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { step: "01", title: "Wedging", desc: "Preparing the clay, removing air bubbles", image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80" },
-                { step: "02", title: "Centering", desc: "Finding balance on the wheel", image: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&q=80" },
-                { step: "03", title: "Shaping", desc: "Hands guiding the form", image: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&q=80" },
-                { step: "04", title: "Firing", desc: "Transformation through fire", image: "https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=400&q=80" }
+                { step: "01", title: "Wedging", desc: "Preparing the clay, removing air bubbles", image: pottery1 },
+                { step: "02", title: "Centering", desc: "Finding balance on the wheel", image: pottery2 },
+                { step: "03", title: "Shaping", desc: "Hands guiding the form", image: pottery3 },
+                { step: "04", title: "Firing", desc: "Transformation through fire", image: plate }
               ].map((item, idx) => (
                 <div key={idx} className="group relative aspect-[3/4] rounded-2xl overflow-hidden">
                   <img
@@ -514,7 +509,7 @@ useEffect(() => {
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="relative aspect-square rounded-2xl overflow-hidden group">
               <img
-                src="https://images.unsplash.com/photo-1580794852943-c38f85ff0d6e?w=600&q=80"
+                src={gallary1}
                 alt="Basho Studio Space in Surat"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
@@ -529,7 +524,7 @@ useEffect(() => {
 
             <div className="relative aspect-square rounded-2xl overflow-hidden group">
               <img
-                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80"
+                src={gallary2}
                 alt="Clay and raw materials"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
@@ -544,7 +539,7 @@ useEffect(() => {
 
             <div className="relative aspect-square rounded-2xl overflow-hidden group">
               <img
-                src="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=600&q=80"
+                src={gallary4}
                 alt="Basho exhibitions and displays"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
@@ -643,7 +638,7 @@ useEffect(() => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {videoTestimonials.map((video, idx) => (
+            {videoTestimonialsState.map((video, idx) => (
               <div
                 key={idx}
                 className="group relative aspect-[9/16] rounded-2xl overflow-hidden cursor-pointer"
@@ -681,43 +676,48 @@ useEffect(() => {
       </section >
 
       {/* Customer Experience Stories */}
-      < section className="py-24 px-6 bg-linear-to-b from-[#f5f3ef] to-white" >
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
-              Lived Experiences
-            </h2>
-            <p className="text-lg text-[#5a4a3a]">
-              Not just reviews. Full stories of transformation through clay.
-            </p>
+      <section className="py-24 px-6 bg-linear-to-b from-[#f5f3ef] to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 text-center md:text-left gap-6">
+            <div>
+              <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
+                Lived Experiences
+              </h2>
+              <p className="text-lg text-[#5a4a3a]">
+                Not just reviews. Full stories of transformation through clay.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowExperienceForm(true)}
+              className="inline-flex items-center space-x-2 px-6 py-3 bg-[#8b6f47] text-white rounded-full hover:bg-[#6d5638] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 mx-auto md:mx-0 cursor-pointer"
+            >
+              <Plus size={20} />
+              <span>Add Your Story</span>
+            </button>
           </div>
 
-          <div className="space-y-12">
-            {customerStories.map((story, idx) => (
+          <div className="grid md:grid-cols-3 gap-12">
+            {allStories.map((story, idx) => (
               <div
                 key={idx}
-                className={`flex flex-col ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-8 items-center`}
+                className="group flex flex-col items-center text-center"
               >
-                <div className="md:w-1/2">
-                  <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
-                    <img
-                      src={story.image}
-                      alt={story.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
+                <div className="aspect-square w-full rounded-2xl overflow-hidden mb-8 shadow-xl">
+                  <img
+                    src={story.image.startsWith('http') ? story.image : `http://localhost:8000${story.image}`}
+                    alt={story.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
                 </div>
-                <div className="md:w-1/2 space-y-4">
-                  <div className="inline-flex items-center space-x-2 mb-2">
-                    <div className="w-2 h-2 bg-[#8b6f47] rounded-full"></div>
-                    <div className="w-2 h-2 bg-[#8b6f47] rounded-full"></div>
-                    <div className="w-2 h-2 bg-[#8b6f47] rounded-full"></div>
+                <div className="space-y-4">
+                  <div className="flex justify-center mb-2">
+                    <Sparkles className="text-[#8b6f47]/40" size={24} strokeWidth={1} />
                   </div>
-                  <h3 className="text-3xl font-serif text-[#2a2420] mb-4">{story.title}</h3>
-                  <p className="text-lg text-[#5a4a3a] leading-relaxed italic">
-                    "{story.story}"
+                  <h3 className="text-2xl font-serif text-[#2a2420]">{story.title}</h3>
+                  <p className="text-stone-600 leading-relaxed italic">
+                    "{story.story.length > 200 ? story.story.substring(0, 197) + "..." : story.story}"
                   </p>
-                  <p className="text-sm font-medium text-[#8b6f47] pt-4">
+                  <p className="text-sm font-medium text-[#8b6f47] tracking-widest uppercase pt-2">
                     — {story.author}
                   </p>
                 </div>
@@ -725,14 +725,94 @@ useEffect(() => {
             ))}
           </div>
         </div>
-      </section >
+      </section>
+
+      {/* Experience Form Modal */}
+      {
+        showExperienceForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
+            <div className="bg-white rounded-3xl p-8 max-w-2xl w-full shadow-2xl relative">
+              <button
+                onClick={() => setShowExperienceForm(false)}
+                className="absolute top-6 right-6 p-2 hover:bg-stone-100 rounded-full transition-colors cursor-pointer"
+              >
+                <X size={24} />
+              </button>
+              <h3 className="text-3xl font-serif text-[#2a2420] mb-6">Share Your Story</h3>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none"
+                      placeholder="E.g. My First Workshop"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Your Name</label>
+                    <input
+                      type="text"
+                      name="author"
+                      value={formData.author}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none"
+                      placeholder="Meera Krishnan"
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Your Story</label>
+                  <textarea
+                    name="story"
+                    value={formData.story}
+                    onChange={handleInputChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none resize-none"
+                    placeholder="Tell us about your experience..."
+                    required
+                  ></textarea>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Upload Photo</label>
+                  <div className="relative group">
+                    <input
+                      type="file"
+                      onChange={handleImageChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                      accept="image/*"
+                    />
+                    <div className="flex items-center justify-center space-x-3 px-6 py-4 bg-stone-100 border-2 border-dashed border-stone-300 rounded-xl group-hover:bg-stone-200 transition-colors">
+                      <Upload className="text-stone-400" size={20} />
+                      <span className="text-stone-600 font-medium">
+                        {formData.image ? (formData.image as File).name : "Click to upload an image"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-[#8b6f47] text-white rounded-xl hover:bg-[#6d5638] transition-all duration-300 shadow-lg font-medium text-lg cursor-pointer"
+                >
+                  Publish Story
+                </button>
+              </form>
+            </div>
+          </div>
+        )
+      }
 
       {/* Final Trust Banner */}
       < section className="py-24 px-6 bg-[#2a2420] relative overflow-hidden" >
         <div
           className="absolute inset-0 opacity-10"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=1600&q=80)',
+            backgroundImage: `url(${gallary3})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}
@@ -772,7 +852,7 @@ useEffect(() => {
         </p>
         <p className="text-xs text-[#8b6f47] mt-2">— Matsuo Bashō</p>
       </footer>
-    </div>
+    </div >
   );
 };
 

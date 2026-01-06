@@ -1,6 +1,11 @@
 import { useMemo, useState, useEffect } from "react";
 import Card from "../components/Card.tsx";
 import type { JSX } from "react/jsx-dev-runtime";
+import pottery1 from "../assets/pottery_1.png";
+import pottery2 from "../assets/pottery_2.png";
+import pottery3 from "../assets/pottery_3.png";
+import plate from "../assets/plate.png";
+import plateBowl from "../assets/plate_bowl.jpg";
 
 interface Product {
     id: number;
@@ -42,35 +47,60 @@ function ProductList(): JSX.Element {
             name: "Tea Bowl — Rustic White",
             category: "1",
             price: 1299,
+<<<<<<< HEAD
             image: { src: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=800&q=80" },
+=======
+            image: plate,
+            description: "Hand-thrown tea bowl with subtle glaze variations."
+>>>>>>> 06db649c241233fcd9bf3b9670d1e4acc2d8c258
         },
         {
             id: 2,
             name: "Serving Plate — Matte",
             category: "2",
             price: 899,
+<<<<<<< HEAD
             image: { src: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&q=80" },
+=======
+            image: pottery1,
+            description: "Wide plate for sharing, with a soft matte finish."
+>>>>>>> 06db649c241233fcd9bf3b9670d1e4acc2d8c258
         },
         {
             id: 3,
             name: "Sake Set — Minimal",
             category: "3",
             price: 699,
+<<<<<<< HEAD
             image: { src: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=800&q=80" },
+=======
+            image: pottery2,
+            description: "Pouring jug and two cups — simple and elegant."
+>>>>>>> 06db649c241233fcd9bf3b9670d1e4acc2d8c258
         },
         {
             id: 4,
             name: "Small Vase — Textured",
             category: "4",
             price: 499,
+<<<<<<< HEAD
             image: { src: "https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?w=800&q=80" },
+=======
+            image: pottery3,
+            description: "Sculptural vase with tactile surface."
+>>>>>>> 06db649c241233fcd9bf3b9670d1e4acc2d8c258
         },
         {
             id: 5,
             name: "Serving Platter — Oval",
             category: "5",
             price: 1599,
+<<<<<<< HEAD
             image: { src: "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=800&q=80" },
+=======
+            image: plateBowl,
+            description: "Large platter for family-style meals."
+>>>>>>> 06db649c241233fcd9bf3b9670d1e4acc2d8c258
         }
     ], []);
 
