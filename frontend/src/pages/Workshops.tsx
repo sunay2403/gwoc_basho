@@ -8,19 +8,13 @@ import gallary2 from "../assets/gallary2.jpg";
 /* ---------------------------------- */
 
 type Slot = {
-  id: string;
+  id: number;
   title: string;
-  date: string;
+  date_label: string;
   capacity: number;
-  price?: string;
+  price: string;
+  remaining: number;
 };
-
-const slots: Slot[] = [
-  { id: "sat-morn", title: "Saturday — Morning", date: "Sat • 10:00 — 12:30", capacity: 10, price: "₹1200" },
-  { id: "sat-ev", title: "Saturday — Evening", date: "Sat • 16:00 — 18:30", capacity: 10, price: "₹1200" },
-  { id: "sun-all", title: "Weekend Intensive", date: "Sun • 10:00 — 15:00", capacity: 6, price: "₹2400" },
-  { id: "private", title: "Private 1:1 Session", date: "By appointment", capacity: 1, price: "₹3500" },
-];
 
 /* ---------------------------------- */
 /* Page                               */
@@ -28,7 +22,9 @@ const slots: Slot[] = [
 
 const WorkshopsPage: React.FC = () => {
   const [mounted, setMounted] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState(slots[0].id);
+  const [slots, setSlots] = useState<Slot[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -47,6 +43,28 @@ const WorkshopsPage: React.FC = () => {
     return () => clearTimeout(t);
   }, []);
 
+  /* Fetch workshop slots from backend */
+  useEffect(() => {
+    const fetchSlots = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/workshops/");
+        if (!response.ok) throw new Error("Failed to fetch slots");
+        const data = await response.json();
+        setSlots(data);
+        if (data.length > 0) {
+          setSelectedSlot(data[0].id);
+        }
+      } catch (error) {
+        console.error("Error fetching workshops:", error);
+        setSlots([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSlots();
+  }, []);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -59,23 +77,61 @@ const WorkshopsPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!selectedSlot) {
+      alert("Please select a workshop session");
+      return;
+    }
+
     setSubmitting(true);
-    await new Promise(res => setTimeout(res, 800));
-    setSubmitting(false);
+    try {
+      const response = await fetch("http://localhost:8000/api/bookings/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          slot: selectedSlot,
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          participants: form.participants,
+          gst: form.gst,
+          notes: form.notes,
+        }),
+      });
 
-    setSuccess(
-      `Registered ${form.name || "Guest"} for ${slots.find(s => s.id === selectedSlot)?.title
-      }`
-    );
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || "Booking failed");
+      }
 
-    setForm({
-      name: "",
-      email: "",
-      phone: "",
-      participants: 1,
-      gst: "",
-      notes: "",
-    });
+      const selectedSlotData = slots.find(s => s.id === selectedSlot);
+      setSuccess(
+        `Registered ${form.name || "Guest"} for ${selectedSlotData?.title || "workshop"}`
+      );
+
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        participants: 1,
+        gst: "",
+        notes: "",
+      });
+
+      // Refresh slots to update remaining availability
+      const refreshResponse = await fetch("http://localhost:8000/api/workshops/");
+      if (refreshResponse.ok) {
+        const updatedSlots = await refreshResponse.json();
+        setSlots(updatedSlots);
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert(`Booking failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -159,41 +215,48 @@ const WorkshopsPage: React.FC = () => {
               Available Sessions
             </h3>
 
-            <div className="space-y-4">
-              {slots.map(s => (
-                <div
-                  key={s.id}
-                  onClick={() => setSelectedSlot(s.id)}
-                  className={`border-2 rounded-2xl p-5 cursor-pointer transition-colors ${selectedSlot === s.id
-                    ? "border-amber-400 bg-amber-50"
-                    : "border-stone-100"
+            {loading ? (
+              <div className="text-center py-8 text-stone-500">Loading sessions...</div>
+            ) : slots.length === 0 ? (
+              <div className="text-center py-8 text-stone-500">No sessions available</div>
+            ) : (
+              <div className="space-y-4">
+                {slots.map(s => (
+                  <div
+                    key={s.id}
+                    onClick={() => setSelectedSlot(s.id)}
+                    className={`border-2 rounded-2xl p-5 cursor-pointer transition-colors ${
+                      selectedSlot === s.id
+                        ? "border-amber-400 bg-amber-50"
+                        : "border-stone-100"
                     }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="text-lg font-semibold text-stone-800">
-                        {s.title}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <div className="text-lg font-semibold text-stone-800">
+                          {s.title}
+                        </div>
+                        <div className="text-sm text-stone-500 mt-1">
+                          {s.date_label} • ₹{s.price}
+                        </div>
+                        <div className="text-xs text-stone-500 mt-2">
+                          Capacity: {s.capacity} • Available: {s.remaining}
+                        </div>
                       </div>
-                      <div className="text-sm text-stone-500 mt-1">
-                        {s.date} • {s.price}
-                      </div>
-                      <div className="text-xs text-stone-500 mt-2">
-                        Capacity: {s.capacity}
-                      </div>
-                    </div>
 
-                    <button
-                      onClick={() =>
-                        document.getElementById("book")?.scrollIntoView({ behavior: "smooth" })
-                      }
-                      className="px-5 py-2 bg-amber-800 text-white rounded-full text-sm font-medium shadow-md"
-                    >
-                      Select
-                    </button>
+                      <button
+                        onClick={() =>
+                          document.getElementById("book")?.scrollIntoView({ behavior: "smooth" })
+                        }
+                        className="px-5 py-2 bg-amber-800 text-white rounded-full text-sm font-medium shadow-md"
+                      >
+                        Select
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -239,10 +302,11 @@ const WorkshopsPage: React.FC = () => {
             </FormSection>
 
             <FormSection title="Workshop Session">
-              <select value={selectedSlot} onChange={e => setSelectedSlot(e.target.value)} className="input">
+              <select value={selectedSlot || ""} onChange={e => setSelectedSlot(Number(e.target.value))} className="input">
+                <option value="">Select a session</option>
                 {slots.map(s => (
                   <option key={s.id} value={s.id}>
-                    {s.title} • {s.date} • {s.price}
+                    {s.title} • {s.date_label} • ₹{s.price}
                   </option>
                 ))}
               </select>
