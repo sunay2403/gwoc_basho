@@ -76,7 +76,7 @@ const StudioPage: React.FC = () => {
       <header className="min-h-[70vh] flex items-center justify-center py-20 px-6 relative overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=1600&q=80"
+            src={g3}
             className="w-full h-full object-cover opacity-30"
             alt="studio"
           />
@@ -182,10 +182,10 @@ const StudioPage: React.FC = () => {
                 <h3 className="font-semibold text-lg">Contact</h3>
               </div>
               <p className="mt-2 text-stone-700">
-                bashobyyshivangi@gmail.com 
+                bashobyyshivangi@gmail.com
               </p>
-               <p className="mt-2 text-stone-700">
-               +91 98795 75601</p>
+              <p className="mt-2 text-stone-700">
+                +91 98795 75601</p>
             </aside>
           </div>
         </div>
