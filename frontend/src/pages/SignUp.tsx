@@ -7,6 +7,7 @@ import {
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../api/firebase";
 import { Leaf } from "lucide-react";
+import { syncUserWithBackend } from "../api/authSync" ; 
 
 // Google provider (create once)
 const googleProvider = new GoogleAuthProvider();
@@ -43,6 +44,8 @@ export default function Signup() {
         authProvider: "password",
         createdAt: serverTimestamp(),
       });
+
+      await syncUserWithBackend(res.user);
 
       window.location.href = "/";
     } catch (err: any) {
@@ -82,6 +85,7 @@ export default function Signup() {
         });
       }
 
+      await syncUserWithBackend(user);
       window.location.href = "/";
     } catch (err) {
       setError("Google sign-in failed");

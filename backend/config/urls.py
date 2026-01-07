@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from workshops.views import WorkshopSlotListView
 from workshop_booking.views import BookingCreateView
+from user.views import FirebaseAuthView
 from corporate.views import (
     
     CorporateInquiryCreateView,
@@ -28,6 +29,7 @@ urlpatterns = [
     path("api/workshops/", WorkshopSlotListView.as_view()),
     path("api/bookings/", BookingCreateView.as_view()),
     path("api/corporate/inquiry/", CorporateInquiryCreateView.as_view()),
+    path('api/auth/firebase/', FirebaseAuthView.as_view()),
 
     
 ]
