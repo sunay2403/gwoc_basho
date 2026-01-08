@@ -39,7 +39,7 @@ urlpatterns = [
     path('api/text-testimonials/', TextTestimonialListView.as_view(), name='text-testimonial-list'),
     path('api/gallery/', GalleryImageListView.as_view(), name='gallery-list'),
     path('api/video-testimonials/', VideoTestimonialListView.as_view(), name='video-testimonial-list'),
-
+    path('api/exhibition',include('exhibition.urls')),
     
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
