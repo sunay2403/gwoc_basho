@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'workshop_booking',
     'workshops',
     'corporate',
+    'experiences',
     'user',
+    'product',
 
 ]
 
@@ -133,8 +135,14 @@ STATIC_URL = 'static/'
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "user.authentication.FirebaseAuthentication",
     ]
 }
 
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

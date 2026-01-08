@@ -2,13 +2,13 @@ import plate from "../assets/plate_bowl.jpg";
 import { useState } from "react";
 
 export interface CardProps {
-    image?: string;
+    image?: string | null;
     name?: string;
     price?: string | number;
-    category?:{id:string,name?:string};
+    category?:{id:number,name?:string};
 }
 
-function Card({ image, name, price,category}: CardProps) {
+function Card({ image, name, price, category}: CardProps) {
     const [loaded, setLoaded] = useState(false);
     const src = image ?? plate;
 
