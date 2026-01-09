@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/gallery/', GalleryImageListView.as_view(), name='gallery-list'),
     path('api/video-testimonials/', VideoTestimonialListView.as_view(), name='video-testimonial-list'),
     path('api/payments/', include('payments.urls')),
+    path('api/exhibition',include('exhibition.urls')),
 
 
     

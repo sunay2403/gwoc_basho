@@ -1,20 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo,useState,useEffect } from "react";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import { NavLink } from "react-router-dom";
 import { Leaf, Calendar, Clock, Mail, Phone, Image } from "lucide-react";
+import type { Exhibition } from "../api/exhibition";
+import { fetchExhibitions } from "../api/exhibition";
 
 import g1 from "../assets/gallary1.png";
 import g2 from "../assets/gallary2.jpg";
 import g3 from "../assets/gallary3.png";
 import g4 from "../assets/gallary4.png";
-
-type Exhibition = {
-  id: number;
-  title: string;
-  date: string;
-  desc?: string;
-  image?: string;
-};
 
 type GalleryItem = {
   src: string;
@@ -29,41 +23,20 @@ const COLORS = {
 };
 
 const StudioPage: React.FC = () => {
-  const upcoming = useMemo<Exhibition[]>(
-    () => [
-      {
-        id: 1,
-        title: "Picasso Exhibition",
-        date: "Jan 10 — Jan 20, 2026",
-        desc: "Limited edition collection from Spain.",
-      },
-      {
-        id: 2,
-        title: "Collaborative Part",
-        date: "Feb 5, 2026",
-        desc: "Come make with us.",
-      },
-    ],
-    []
-  );
+  const [upcoming,setUpcoming] = useState<Exhibition[]>()
+  const [past,setPast] = useState<Exhibition[]>()
+  
+  useEffect(() => {
+  fetchExhibitions()
+    .then((res) => {
+      setUpcoming(res.upcoming);
+      setPast(res.past);
+    })
+    .catch(console.error);
+}, []);
 
-  const past = useMemo<Exhibition[]>(
-    () => [
-      {
-        id: 11,
-        title: "Autumn Impressions — Pop-up",
-        date: "Oct 2025",
-        desc: "Showcased seasonal tableware.",
-      },
-      {
-        id: 12,
-        title: "Mini Gallery: Forms",
-        date: "Sep 2025",
-        desc: "Sculptural pieces and installations.",
-      },
-    ],
-    []
-  );
+
+  
 
   const gallery = useMemo<GalleryItem[]>(
     () => [{ src: g1 }, { src: g2 }, { src: g3 }, { src: g4 }],
@@ -208,7 +181,7 @@ const StudioPage: React.FC = () => {
           <div className="mt-6">
             <h3 className="font-medium text-lg">Upcoming</h3>
             <div className="mt-4 grid gap-6">
-              {upcoming.map((e) => (
+              {upcoming?upcoming.map((e) => (
                 <div
                   key={e.id}
                   className="rounded-2xl border bg-white shadow-sm overflow-hidden"
@@ -216,10 +189,10 @@ const StudioPage: React.FC = () => {
                   <div className="p-6">
                     <h4 className="font-medium text-lg">{e.title}</h4>
                     <div className="text-sm text-stone-500">{e.date}</div>
-                    <p className="mt-2 text-stone-700">{e.desc}</p>
+                    <p className="mt-2 text-stone-700">{e.description}</p>
                   </div>
                 </div>
-              ))}
+              )):""}
             </div>
           </div>
 
@@ -227,7 +200,7 @@ const StudioPage: React.FC = () => {
           <div className="mt-8">
             <h3 className="font-medium text-lg">Past</h3>
             <div className="mt-4 grid gap-6">
-              {past.map((e) => (
+              {past?past.map((e) => (
                 <div
                   key={e.id}
                   className="rounded-2xl border bg-white shadow-sm overflow-hidden"
@@ -235,10 +208,10 @@ const StudioPage: React.FC = () => {
                   <div className="p-6">
                     <h4 className="font-medium text-lg">{e.title}</h4>
                     <div className="text-sm text-stone-500">{e.date}</div>
-                    <p className="mt-2 text-stone-700">{e.desc}</p>
+                    <p className="mt-2 text-stone-700">{e.description}</p>
                   </div>
                 </div>
-              ))}
+              )):""}
             </div>
           </div>
 
