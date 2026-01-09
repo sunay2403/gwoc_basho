@@ -6,9 +6,12 @@ export interface CardProps {
     name?: string;
     price?: string | number;
     category?:{id:number,name?:string};
+    productId?: number;
+    onAdd?: (productId?: number) => void;
+    adding?: boolean;
 }
 
-function Card({ image, name, price, category}: CardProps) {
+function Card({ image, name, price, category, productId, onAdd, adding }: CardProps) {
     const [loaded, setLoaded] = useState(false);
     const src = image ?? plate;
 
@@ -31,7 +34,13 @@ function Card({ image, name, price, category}: CardProps) {
             </div>
 
             <div className="px-6 pb-6 flex flex-col gap-2 border-t border-stone-100 pt-4">
-                <button className="w-full px-4 py-2.5 bg-amber-800 text-white rounded-full text-sm font-semibold shadow hover:bg-amber-900 transition-colors">Add to Cart</button>
+                <button
+                    onClick={() => onAdd && onAdd(productId)}
+                    disabled={!onAdd}
+                    className="w-full px-4 py-2.5 bg-amber-800 text-white rounded-full text-sm font-semibold shadow hover:bg-amber-900 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                    {adding ? "Adding…" : "Add to Cart"}
+                </button>
             </div>
         </div>
     );

@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Auth / Profile */}
-      <div className="ml-12 flex items-center gap-6">
+      <div className="ml-auto flex items-center gap-6">
         {!user ? (
           <>
             {/* Login */}
