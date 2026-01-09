@@ -85,7 +85,7 @@ const ExperiencesPage: React.FC = () => {
           </p>
 
           <button
-            onClick={() => navigate("/workshops#book")}
+            onClick={() => navigate("/register")}
             className="mt-10 px-8 py-3 bg-amber-800 text-white rounded-full shadow-lg font-medium"
           >
             Book an Experience

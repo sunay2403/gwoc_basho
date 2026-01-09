@@ -42,6 +42,8 @@ urlpatterns = [
     path('api/video-testimonials/', VideoTestimonialListView.as_view(), name='video-testimonial-list'),
     path('api/payments/', include('payments.urls')),
     path('api/exhibition',include('exhibition.urls')),
+    path("api/experiences/", include("experience_form.urls")),
+
 
 
     

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'cart',
     'payments',
     'exhibition',
+    'experience_form',
 
 ]
 
