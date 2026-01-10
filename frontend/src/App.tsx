@@ -11,6 +11,8 @@ import Signup from "./pages/SignUp";
 import Login from "./pages/Login";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Profile from "./pages/Profile";
+import RazorpayCheckout from "./pages/RazorpayCheckout";
+import ExperienceRegistration from "./pages/ExperienceRegistrationForm";
 import {
   BrowserRouter,
   Routes,
@@ -39,6 +41,9 @@ const App: React.FC = () => {
           <Route path="/corporate" element={<CorporatePage />} />          <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
+          <Route path="/payment" element={<RazorpayCheckout/>}/>
+          <Route path="/register" element={<ExperienceRegistration />} />
+
           
 
           {/* Optional: 404 fallback */}

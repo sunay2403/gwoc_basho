@@ -24,21 +24,31 @@ export interface Product {
   images: ProductImage[];
 }
 
+/* ------------------ Helpers ------------------ */
 
-export const getCategories = async (): Promise<Category[]> => {
-  const res = await fetch(`${API_BASE}/api/products/categories/`);
-  if (!res.ok) throw new Error("Failed to fetch categories");
+async function safeFetch<T>(url: string): Promise<T> {
+  const res = await fetch(url, {
+    credentials: "include", // SAFE even for public APIs
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`${res.status}: ${text}`);
+  }
+
   return res.json();
+}
+
+/* ------------------ APIs ------------------ */
+
+export const getCategories = (): Promise<Category[]> => {
+  return safeFetch(`${API_BASE}/api/products/categories/`);
 };
 
-export const getProducts = async (): Promise<Product[]> => {
-  const res = await fetch(`${API_BASE}/api/products/`);
-  if (!res.ok) throw new Error("Failed to fetch products");
-  return res.json();
+export const getProducts = (): Promise<Product[]> => {
+  return safeFetch(`${API_BASE}/api/products/`);
 };
 
-export const getProductBySlug = async (slug: string): Promise<Product> => {
-  const res = await fetch(`${API_BASE}/api/products/${slug}/`);
-  if (!res.ok) throw new Error("Failed to fetch product");
-  return res.json();
+export const getProductBySlug = (slug: string): Promise<Product> => {
+  return safeFetch(`${API_BASE}/api/products/${slug}/`);
 };

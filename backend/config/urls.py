@@ -35,10 +35,16 @@ urlpatterns = [
     path('api/auth/firebase/', FirebaseAuthView.as_view()),
     path('api/products/', include('product.urls')),
     path("api/admin/", include("product.admin_urls")),
+    path('api/cart/', include('cart.urls')),
     path('api/experiences/', ExperienceListCreateView.as_view(), name='experience-list'),
     path('api/text-testimonials/', TextTestimonialListView.as_view(), name='text-testimonial-list'),
     path('api/gallery/', GalleryImageListView.as_view(), name='gallery-list'),
     path('api/video-testimonials/', VideoTestimonialListView.as_view(), name='video-testimonial-list'),
+    path('api/payments/', include('payments.urls')),
+    path('api/exhibition',include('exhibition.urls')),
+    path("api/experiences/", include("experience_form.urls")),
+
+
 
     
 ]
