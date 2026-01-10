@@ -151,10 +151,30 @@ REST_FRAMEWORK = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+        "http://127.0.0.1:5173"
+
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+        "http://127.0.0.1:5173"
+
+]
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
 RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
+
+SESSION_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SECURE = False  # True only if HTTPS
+
+CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SECURE = False

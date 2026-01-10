@@ -1,4 +1,5 @@
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 from firebase_admin import auth as firebase_auth
 from .models import User
 
@@ -7,22 +8,28 @@ class FirebaseAuthentication(BaseAuthentication):
     def authenticate(self, request):
         header = request.headers.get("Authorization")
 
-        if not header or not header.startswith("Bearer "):
+        if not header:
             return None
 
-        id_token = header.split(" ")[1]
+        if not header.startswith("Bearer "):
+            raise AuthenticationFailed("Invalid Authorization header")
+
+        token = header.split(" ")[1]
 
         try:
-            decoded = firebase_auth.verify_id_token(id_token)
+            decoded = firebase_auth.verify_id_token(token)
         except Exception:
-            return None
+            raise AuthenticationFailed("Invalid Firebase token")
 
         uid = decoded.get("uid")
+        if not uid:
+            raise AuthenticationFailed("Invalid Firebase payload")
 
-        try:
-            user = User.objects.get(firebase_uid=uid)
-        except User.DoesNotExist:
-            # 🔥 VERY IMPORTANT: don't crash
-            return None
+        user, _ = User.objects.get_or_create(
+            firebase_uid=uid,
+            defaults={
+                "email": decoded.get("email", ""),
+            },
+        )
 
         return (user, None)
