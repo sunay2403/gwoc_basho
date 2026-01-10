@@ -1,13 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, firebase_uid, full_name="", phone=None, password=None, **extra_fields):
+    def create_user(
+        self,
+        email,
+        password=None,
+        firebase_uid=None,
+        full_name="",
+        phone=None,
+        **extra_fields,
+    ):
         if not email:
             raise ValueError("Users must have an email address")
-        if not firebase_uid:
-            raise ValueError("Users must have a firebase uid")
 
         email = self.normalize_email(email)
 
@@ -16,11 +26,11 @@ class UserManager(BaseUserManager):
             firebase_uid=firebase_uid,
             full_name=full_name,
             phone=phone,
-            **extra_fields
+            **extra_fields,
         )
 
-        # Password is NOT used (Firebase handles auth)
-        # But Django requires this method to exist
+        # ✅ Django password for admin / staff
+        # ❌ Firebase users can have unusable password
         if password:
             user.set_password(password)
         else:
@@ -29,24 +39,36 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, firebase_uid="admin", password=None, **extra_fields):
+    def create_superuser(self, email, password, **extra_fields):
+        """
+        Django Admin superuser
+        - MUST have a usable password
+        - Firebase UID NOT required
+        """
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("role", "admin")
 
         return self.create_user(
             email=email,
-            firebase_uid=firebase_uid,
             password=password,
-            **extra_fields
+            firebase_uid=None,  # 👈 IMPORTANT
+            **extra_fields,
         )
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    firebase_uid = models.CharField(max_length=128, unique=True)
+    # Firebase UID only for API users
+    firebase_uid = models.CharField(
+        max_length=128,
+        unique=True,
+        null=True,
+        blank=True,
+    )
 
     email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=150)
+    full_name = models.CharField(max_length=150, blank=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
 
     role = models.CharField(
@@ -56,7 +78,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             ("staff", "Staff"),
             ("admin", "Admin"),
         ],
-        default="customer"
+        default="customer",
     )
 
     is_active = models.BooleanField(default=True)
@@ -67,18 +89,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["firebase_uid"]
+    REQUIRED_FIELDS = []  # 👈 CRITICAL (no firebase_uid required)
 
     def __str__(self):
         return self.email
 
-    
-    
+
 class Address(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="addresses"
+        related_name="addresses",
     )
 
     address_line = models.TextField()

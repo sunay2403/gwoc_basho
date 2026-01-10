@@ -2,15 +2,22 @@ import { auth } from "./firebase";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-async function getAuthHeaders() {
-  const user = auth.currentUser;
-  if (!user) return { "Content-Type": "application/json" };
-
-  const token = await user.getIdToken(true);
-  return {
-    Authorization: `Bearer ${token}`,
+/**
+ * Always returns a valid HeadersInit object
+ * (no union types, no undefined values)
+ */
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
+
+  const user = auth.currentUser;
+  if (user) {
+    const token = await user.getIdToken(true);
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
 }
 
 export const getCart = async () => {
@@ -21,7 +28,7 @@ export const getCart = async () => {
   });
 
   if (!res.ok) throw new Error("Failed to fetch cart");
-  return res.json();
+  return res.json(); // ✅ returns JSON
 };
 
 export const addToCart = async (productId: number, quantity = 1) => {
@@ -34,7 +41,7 @@ export const addToCart = async (productId: number, quantity = 1) => {
   });
 
   if (!res.ok) throw new Error("Failed to add to cart");
-  return res.json();
+  return res.json(); // ✅ returns JSON
 };
 
 export const updateCartItem = async (itemId: number, quantity: number) => {
@@ -47,7 +54,7 @@ export const updateCartItem = async (itemId: number, quantity: number) => {
   });
 
   if (!res.ok) throw new Error("Failed to update cart item");
-  return res.json();
+  return true; // ✅ no JSON body
 };
 
 export const removeCartItem = async (itemId: number) => {
@@ -59,7 +66,7 @@ export const removeCartItem = async (itemId: number) => {
   });
 
   if (!res.ok) throw new Error("Failed to remove cart item");
-  return res.json();
+  return true; // ✅ no JSON body
 };
 
 export const clearCart = async () => {
@@ -71,5 +78,5 @@ export const clearCart = async () => {
   });
 
   if (!res.ok) throw new Error("Failed to clear cart");
-  return res.json();
+  return true; // ✅ no JSON body
 };
