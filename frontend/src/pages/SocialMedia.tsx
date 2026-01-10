@@ -803,6 +803,7 @@ const BashoMediaSocialProof = () => {
         </div>
       </section>
 
+
       {/* Final Trust Banner */}
       <section className="py-24 px-6 bg-[#2a2420] relative overflow-hidden">
         <div
@@ -848,7 +849,7 @@ const BashoMediaSocialProof = () => {
         </p>
         <p className="text-xs text-[#8b6f47] mt-2">— Matsuo Bashō</p>
       </footer>
-    </div>
+    </div >
   );
 };
 

@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import Card from "../components/Card";
 import type { JSX } from "react/jsx-runtime";
-import type { Category, Product} from "../api/products";
+import type { Category, Product } from "../api/products";
 import { getProducts, getCategories } from "../api/products";
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
@@ -14,6 +14,7 @@ function ProductList(): JSX.Element {
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+
 
   /* ------------------ Animation mount ------------------ */
 
@@ -28,8 +29,8 @@ function ProductList(): JSX.Element {
     const loadData = async () => {
       try {
         const [cats, prods] = await Promise.all([
-            getCategories(),
-            getProducts(),
+          getCategories(),
+          getProducts(),
         ]);
 
         setCategories(cats);
@@ -185,15 +186,14 @@ function ProductList(): JSX.Element {
                 <div
                   key={p.id}
                   style={{ transitionDelay: `${idx * 60}ms` }}
-                  className={`opacity-0 translate-y-4 ${
-                    mounted ? "opacity-100 translate-y-0" : ""
-                  } transition-all duration-500`}
+                  className={`opacity-0 translate-y-4 ${mounted ? "opacity-100 translate-y-0" : ""
+                    } transition-all duration-500`}
                 >
                   <Card
                     image={imageUrl}
                     name={p.name}
                     price={Number(p.price)}
-                    category={{id: p.id, name : p.category.name}}
+                    category={{ id: p.id, name: p.category.name }}
                   />
                 </div>
               );

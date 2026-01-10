@@ -1,6 +1,7 @@
 // frontend/src/pages/Workshops.tsx
 import React, { useEffect, useState } from "react";
 import { Leaf, Droplet, Mountain } from "lucide-react";
+import gallary2 from "../assets/gallary2.jpg";
 
 /* ---------------------------------- */
 /* Types & Data                        */
@@ -76,7 +77,7 @@ const WorkshopsPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedSlot) {
       alert("Please select a workshop session");
       return;
@@ -146,7 +147,7 @@ const WorkshopsPage: React.FC = () => {
       {/* ---------------------------------- */}
       <section className="relative min-h-[65vh] flex items-center justify-center overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=1600&q=80"
+          src={gallary2}
           alt="Pottery studio"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />
@@ -214,131 +215,133 @@ const WorkshopsPage: React.FC = () => {
               Available Sessions
             </h3>
 
-            {loading ? (
-              <div className="text-center py-8 text-stone-500">Loading sessions...</div>
-            ) : slots.length === 0 ? (
-              <div className="text-center py-8 text-stone-500">No sessions available</div>
-            ) : (
-              <div className="space-y-4">
-                {slots.map(s => (
-                  <div
-                    key={s.id}
-                    onClick={() => setSelectedSlot(s.id)}
-                    className={`border-2 rounded-2xl p-5 cursor-pointer transition-colors ${
-                      selectedSlot === s.id
-                        ? "border-amber-400 bg-amber-50"
-                        : "border-stone-100"
-                    }`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <div className="text-lg font-semibold text-stone-800">
-                          {s.title}
-                        </div>
-                        <div className="text-sm text-stone-500 mt-1">
-                          {s.date_label} • ₹{s.price}
-                        </div>
-                        <div className="text-xs text-stone-500 mt-2">
-                          Capacity: {s.capacity} • Available: {s.remaining}
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() =>
-                          document.getElementById("book")?.scrollIntoView({ behavior: "smooth" })
-                        }
-                        className="px-5 py-2 bg-amber-800 text-white rounded-full text-sm font-medium shadow-md"
-                      >
-                        Select
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------------------------- */}
-      {/* BOOKING FORM                      */}
-      {/* ---------------------------------- */}
-      <section id="book" className="py-24 px-6 bg-gradient-to-b from-stone-50 to-amber-50">
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl p-12 border border-stone-100 shadow-2xl">
-          <h3 className="text-3xl font-serif text-stone-800 mb-10">
-            Book Your Workshop
-          </h3>
-
-          {success && (
-            <div className="mb-10 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">
-              ✓ {success}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-14">
-            <FormSection title="Contact Details">
-              <div className="grid md:grid-cols-2 gap-4">
-                <FormField label="Full Name" required>
-                  <input name="name" value={form.name} onChange={handleChange} className="input" />
-                </FormField>
-                <FormField label="Email Address" required>
-                  <input type="email" name="email" value={form.email} onChange={handleChange} className="input" />
-                </FormField>
+<<<<<<< HEAD
+  {
+    loading ? (
+      <div className="text-center py-8 text-stone-500">Loading sessions...</div>
+    ) : slots.length === 0 ? (
+      <div className="text-center py-8 text-stone-500">No sessions available</div>
+    ) : (
+      <div className="space-y-4">
+        {slots.map(s => (
+          <div
+            key={s.id}
+            onClick={() => setSelectedSlot(s.id)}
+            className={`border-2 rounded-2xl p-5 cursor-pointer transition-colors ${selectedSlot === s.id
+              ? "border-amber-400 bg-amber-50"
+              : "border-stone-100"
+              }`}
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <div className="text-lg font-semibold text-stone-800">
+                  {s.title}
+                </div>
+                <div className="text-sm text-stone-500 mt-1">
+                  {s.date_label} • ₹{s.price}
+                </div>
+                <div className="text-xs text-stone-500 mt-2">
+                  Capacity: {s.capacity} • Available: {s.remaining}
+                </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <FormField label="Phone (optional)">
-                  <input name="phone" value={form.phone} onChange={handleChange} className="input" />
-                </FormField>
-                <FormField label="Participants">
-                  <select name="participants" value={form.participants} onChange={handleChange} className="input">
-                    {[1,2,3,4].map(n => (
-                      <option key={n} value={n}>{n} participant{n > 1 ? "s" : ""}</option>
-                    ))}
-                  </select>
-                </FormField>
-              </div>
-            </FormSection>
-
-            <FormSection title="Workshop Session">
-              <select value={selectedSlot || ""} onChange={e => setSelectedSlot(Number(e.target.value))} className="input">
-                <option value="">Select a session</option>
-                {slots.map(s => (
-                  <option key={s.id} value={s.id}>
-                    {s.title} • {s.date_label} • ₹{s.price}
-                  </option>
-                ))}
-              </select>
-            </FormSection>
-
-            <FormSection title="Additional Information">
-              <FormField label="GST Number (optional)">
-                <input name="gst" value={form.gst} onChange={handleChange} className="input" />
-              </FormField>
-
-              <FormField label="Notes / Special Requests">
-                <textarea name="notes" value={form.notes} onChange={handleChange} className="input h-28 resize-none" />
-              </FormField>
-            </FormSection>
-
-            <div className="pt-6">
               <button
-                type="submit"
-                disabled={submitting}
-                className="w-full py-4 bg-amber-800 text-white rounded-full font-semibold shadow-lg"
+                onClick={() =>
+                  document.getElementById("book")?.scrollIntoView({ behavior: "smooth" })
+                }
+                className="px-5 py-2 bg-amber-800 text-white rounded-full text-sm font-medium shadow-md"
               >
-                {submitting ? "Processing…" : "Confirm Booking"}
+                Select
               </button>
-
-              <p className="text-xs text-stone-500 text-center mt-4">
-                Secure payments via Razorpay • Cancellation up to 48 hours before
-              </p>
             </div>
-          </form>
+          </div>
+        ))}
+      </div>
+    )
+  }
+                </div >
+              </div >
+            </section >
+
+  {/* ---------------------------------- */ }
+{/* BOOKING FORM                      */ }
+{/* ---------------------------------- */ }
+<section id="book" className="py-24 px-6 bg-gradient-to-b from-stone-50 to-amber-50">
+  <div className="max-w-4xl mx-auto bg-white rounded-3xl p-12 border border-stone-100 shadow-2xl">
+    <h3 className="text-3xl font-serif text-stone-800 mb-10">
+      Book Your Workshop
+    </h3>
+
+    {success && (
+      <div className="mb-10 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium">
+        ✓ {success}
+      </div>
+    )}
+
+    <form onSubmit={handleSubmit} className="space-y-14">
+      <FormSection title="Contact Details">
+        <div className="grid md:grid-cols-2 gap-4">
+          <FormField label="Full Name" required>
+            <input name="name" value={form.name} onChange={handleChange} className="input" />
+          </FormField>
+          <FormField label="Email Address" required>
+            <input type="email" name="email" value={form.email} onChange={handleChange} className="input" />
+          </FormField>
         </div>
-      </section>
-    </div>
-  );
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <FormField label="Phone (optional)">
+            <input name="phone" value={form.phone} onChange={handleChange} className="input" />
+          </FormField>
+          <FormField label="Participants">
+            <select name="participants" value={form.participants} onChange={handleChange} className="input">
+              {[1, 2, 3, 4].map(n => (
+                <option key={n} value={n}>{n} participant{n > 1 ? "s" : ""}</option>
+              ))}
+            </select>
+          </FormField>
+        </div>
+      </FormSection>
+
+      <FormSection title="Workshop Session">
+        <select value={selectedSlot || ""} onChange={e => setSelectedSlot(Number(e.target.value))} className="input">
+          <option value="">Select a session</option>
+          {slots.map(s => (
+            <option key={s.id} value={s.id}>
+              {s.title} • {s.date_label} • ₹{s.price}
+            </option>
+          ))}
+        </select>
+      </FormSection>
+
+      <FormSection title="Additional Information">
+        <FormField label="GST Number (optional)">
+          <input name="gst" value={form.gst} onChange={handleChange} className="input" />
+        </FormField>
+
+        <FormField label="Notes / Special Requests">
+          <textarea name="notes" value={form.notes} onChange={handleChange} className="input h-28 resize-none" />
+        </FormField>
+      </FormSection>
+
+      <div className="pt-6">
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full py-4 bg-amber-800 text-white rounded-full font-semibold shadow-lg"
+        >
+          {submitting ? "Processing…" : "Confirm Booking"}
+        </button>
+
+        <p className="text-xs text-stone-500 text-center mt-4">
+          Secure payments via Razorpay • Cancellation up to 48 hours before
+        </p>
+      </div>
+    </form>
+  </div>
+</section>
+          </div >
+        );
 };
 
 export default WorkshopsPage;
