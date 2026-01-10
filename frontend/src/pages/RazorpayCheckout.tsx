@@ -1,66 +1,85 @@
-export default function RazorpayCheckout() {
-  const API = import.meta.env.VITE_API_BASE_URL;
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-  const payNow = async () => {
-    const res = await fetch(`${API}/api/payments/create-order/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: 500 })
-    });
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
-    const order = await res.json();
-
-    const options = {
-  key: order.key,
-  amount: order.amount,
-  currency: order.currency,
-  order_id: order.order_id,
-  name: "Test Payment",
-  description: "Razorpay Test",
-
-  method: {
-    card: true,
-    upi: false,
-    netbanking: false,
-    wallet: false,
-  },
-
-  prefill: {
-    name: "Test User",
-    email: "test@example.com",
-    contact: "9999999999",
-  },
-
-  theme: {
-    color: "#3399cc",
-  },
-
-  handler: async (response: any) => {
-    await fetch(`${API}/api/payments/verify-payment/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(response),
-    });
-    alert("Payment successful 🎉");
-  },
+type LocationState = {
+  amount: number;
+  description: string;
+  items?: any[];
+  user: {
+    name: string;
+    email: string;
+    phone: string;
+  };
 };
 
+const PaymentPage: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    const rzp = new (window as any).Razorpay(options);
+  const state = location.state as LocationState | null;
 
-rzp.on("payment.failed", (response: any) => {
-  console.error("PAYMENT FAILED:", response);
-  alert("Payment failed. Check console.");
-});
+  useEffect(() => {
+    if (!state?.amount) {
+      navigate("/", { replace: true });
+      return;
+    }
 
-rzp.open();
+    initiatePayment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  const initiatePayment = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/payments/create-order/`,
+        { amount: state!.amount }
+      );
+
+      const options = {
+        key: response.data.key,
+        amount: response.data.amount,
+        currency: "INR",
+        name: "My App",
+        description: state!.description,
+        order_id: response.data.order_id,
+        prefill: state!.user,
+        theme: { color: "#0f172a" },
+
+        handler: (res: any) => {
+          navigate("/thank-you", {
+            replace: true,
+            state: {
+              amount: state!.amount,
+              items: state!.items,
+              paymentId: res.razorpay_payment_id,
+            },
+          });
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error(error);
+      alert("Unable to initiate payment. Please try again.");
+      navigate("/", { replace: true });
+    }
   };
 
   return (
-    <div>
-      <h2>Razorpay Test Payment</h2>
-      <button onClick={payNow}>Pay ₹500</button>
+    <div className="min-h-screen flex items-center justify-center">
+      <p className="text-lg font-medium text-stone-600">
+        Redirecting to secure payment…
+      </p>
     </div>
   );
-}
+};
+
+export default PaymentPage;

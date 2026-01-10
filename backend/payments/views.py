@@ -1,37 +1,27 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from razorpay.errors import SignatureVerificationError
-from .utils import client
+import razorpay
+from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
+client = razorpay.Client(
+    auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+)
 
-@api_view(["POST"])
+@csrf_exempt
 def create_order(request):
-    amount = request.data.get("amount")  # amount in rupees
+    data = json.loads(request.body)
+
+    amount = int(data["amount"]) * 100  # INR → paise
 
     order = client.order.create({
-        "amount": int(amount) * 100,  # rupees → paise
+        "amount": amount,
         "currency": "INR",
         "payment_capture": 1
     })
 
-    return Response({
+    return JsonResponse({
         "order_id": order["id"],
         "amount": order["amount"],
-        "currency": order["currency"],
-        "key": "rzp_test_xxxxx"  # ONLY key_id, safe for frontend
+        "key": settings.RAZORPAY_KEY_ID
     })
-
-
-@api_view(["POST"])
-def verify_payment(request):
-    data = request.data
-
-    try:
-        client.utility.verify_payment_signature({
-            "razorpay_order_id": data["razorpay_order_id"],
-            "razorpay_payment_id": data["razorpay_payment_id"],
-            "razorpay_signature": data["razorpay_signature"],
-        })
-        return Response({"status": "success"})
-    except SignatureVerificationError:
-        return Response({"status": "failed"}, status=400)
