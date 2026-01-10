@@ -678,24 +678,100 @@ const BashoMediaSocialProof = () => {
       {/* Customer Experience Stories */}
       <section className="py-24 px-6 bg-linear-to-b from-[#f5f3ef] to-white">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 text-center md:text-left gap-6">
-            <div>
-              <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
-                Lived Experiences
-              </h2>
-              <p className="text-lg text-[#5a4a3a]">
-                Not just reviews. Full stories of transformation through clay.
-              </p>
-            </div>
-            <button
-              onClick={() => setShowExperienceForm(true)}
-              className="inline-flex items-center space-x-2 px-6 py-3 bg-[#8b6f47] text-white rounded-full hover:bg-[#6d5638] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 mx-auto md:mx-0 cursor-pointer"
-            >
-              <Plus size={20} />
-              <span>Add Your Story</span>
-            </button>
+          <div className="text-center mb-12">
+            <h2 className="text-5xl font-serif font-light text-[#2a2420] mb-4">
+              Lived Experiences
+            </h2>
+            <p className="text-lg text-[#5a4a3a]">
+              Not just reviews. Full stories of transformation through clay.
+            </p>
           </div>
 
+          <div className="flex flex-col items-center w-full mb-16">
+            {showExperienceForm && (
+              <div className="w-full max-w-xl mb-6 bg-white rounded-3xl p-8 shadow-2xl border border-stone-200 animate-in fade-in slide-in-from-bottom-4">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-2xl font-serif text-[#2a2420]">Share Your Story</h3>
+                  <button
+                    onClick={() => setShowExperienceForm(false)}
+                    className="p-2 hover:bg-stone-100 rounded-full transition-colors cursor-pointer text-stone-400 hover:text-stone-600"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Title</label>
+                      <input
+                        type="text"
+                        name="title"
+                        value={formData.title}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none transition-all"
+                        placeholder="E.g. My First Workshop"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Your Name</label>
+                      <input
+                        type="text"
+                        name="author"
+                        value={formData.author}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none transition-all"
+                        placeholder="Meera Krishnan"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Your Story</label>
+                    <textarea
+                      name="story"
+                      value={formData.story}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none resize-none transition-all"
+                      placeholder="Tell us about your experience..."
+                      required
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Upload Photo</label>
+                    <div className="relative group">
+                      <input
+                        type="file"
+                        onChange={handleImageChange}
+                        className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                        accept="image/*"
+                      />
+                      <div className="flex items-center justify-center space-x-3 px-6 py-4 bg-stone-50 border-2 border-dashed border-stone-300 rounded-xl group-hover:bg-stone-100 group-hover:border-[#8b6f47]/50 transition-all">
+                        <Upload className="text-stone-400 group-hover:text-[#8b6f47]" size={20} />
+                        <span className="text-stone-600 font-medium group-hover:text-[#8b6f47]">
+                          {formData.image ? (formData.image as File).name : "Click to upload an image"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full py-4 bg-[#8b6f47] text-white rounded-xl hover:bg-[#6d5638] transition-all duration-300 shadow-md hover:shadow-lg font-medium text-lg cursor-pointer transform active:scale-95"
+                  >
+                    Publish Story
+                  </button>
+                </form>
+              </div>
+            )}
+            <button
+              onClick={() => setShowExperienceForm(!showExperienceForm)}
+              className={`inline-flex items-center space-x-2 px-6 py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer ${showExperienceForm ? 'bg-stone-200 text-stone-600 hover:bg-stone-300' : 'bg-[#8b6f47] text-white hover:bg-[#6d5638]'}`}
+            >
+              {showExperienceForm ? <X size={20} /> : <Plus size={20} />}
+              <span>{showExperienceForm ? "Close" : "Add Your Story"}</span>
+            </button>
+          </div>
           <div className="grid md:grid-cols-3 gap-12">
             {allStories.map((story, idx) => (
               <div
@@ -727,88 +803,8 @@ const BashoMediaSocialProof = () => {
         </div>
       </section>
 
-      {/* Experience Form Modal */}
-      {
-        showExperienceForm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm">
-            <div className="bg-white rounded-3xl p-8 max-w-2xl w-full shadow-2xl relative">
-              <button
-                onClick={() => setShowExperienceForm(false)}
-                className="absolute top-6 right-6 p-2 hover:bg-stone-100 rounded-full transition-colors cursor-pointer"
-              >
-                <X size={24} />
-              </button>
-              <h3 className="text-3xl font-serif text-[#2a2420] mb-6">Share Your Story</h3>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Title</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={formData.title}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none"
-                      placeholder="E.g. My First Workshop"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Your Name</label>
-                    <input
-                      type="text"
-                      name="author"
-                      value={formData.author}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none"
-                      placeholder="Meera Krishnan"
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Your Story</label>
-                  <textarea
-                    name="story"
-                    value={formData.story}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#8b6f47]/20 outline-none resize-none"
-                    placeholder="Tell us about your experience..."
-                    required
-                  ></textarea>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-2">Upload Photo</label>
-                  <div className="relative group">
-                    <input
-                      type="file"
-                      onChange={handleImageChange}
-                      className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                      accept="image/*"
-                    />
-                    <div className="flex items-center justify-center space-x-3 px-6 py-4 bg-stone-100 border-2 border-dashed border-stone-300 rounded-xl group-hover:bg-stone-200 transition-colors">
-                      <Upload className="text-stone-400" size={20} />
-                      <span className="text-stone-600 font-medium">
-                        {formData.image ? (formData.image as File).name : "Click to upload an image"}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full py-4 bg-[#8b6f47] text-white rounded-xl hover:bg-[#6d5638] transition-all duration-300 shadow-lg font-medium text-lg cursor-pointer"
-                >
-                  Publish Story
-                </button>
-              </form>
-            </div>
-          </div>
-        )
-      }
-
       {/* Final Trust Banner */}
-      < section className="py-24 px-6 bg-[#2a2420] relative overflow-hidden" >
+      <section className="py-24 px-6 bg-[#2a2420] relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -852,7 +848,7 @@ const BashoMediaSocialProof = () => {
         </p>
         <p className="text-xs text-[#8b6f47] mt-2">— Matsuo Bashō</p>
       </footer>
-    </div >
+    </div>
   );
 };
 
