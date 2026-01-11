@@ -19,12 +19,15 @@ load_dotenv(BASE_DIR / ".env")
 # SECURITY
 # -------------------------------------------------------------------
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# Temporary wildcard (OK for now)
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "gwoc-basho.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 # -------------------------------------------------------------------
 # APPLICATION
@@ -59,8 +62,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ REQUIRED
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -89,7 +93,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # -------------------------------------------------------------------
-# DATABASE (POSTGRESQL - RENDER)
+# DATABASE (PostgreSQL - Render)
 # -------------------------------------------------------------------
 
 DATABASES = {
@@ -121,10 +125,15 @@ USE_I18N = True
 USE_TZ = True
 
 # -------------------------------------------------------------------
-# STATIC & MEDIA
+# STATIC & MEDIA (IMPORTANT)
 # -------------------------------------------------------------------
 
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"  # ✅ REQUIRED
+
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
