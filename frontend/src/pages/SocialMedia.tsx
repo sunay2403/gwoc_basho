@@ -708,7 +708,7 @@ const BashoMediaSocialProof = () => {
               >
                 <div className="aspect-square w-full rounded-2xl overflow-hidden mb-8 shadow-xl">
                   <img
-                    src={story.image.startsWith('http') ? story.image : `http://localhost:8000${story.image}`}
+                    src={story.image.startsWith('http') ? story.image : `${API_BASE}${story.image}`}
                     alt={story.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
