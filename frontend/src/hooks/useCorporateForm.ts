@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+
 interface CorporateInquiry {
   name: string;
   email: string;
@@ -60,7 +63,7 @@ export const useCorporateForm = () => {
 
     try {
       const res = await fetch(
-        "http://127.0.0.1:8000/api/corporate/inquiry/",
+        `${API_BASE}/api/corporate/inquiry/`,
         {
           method: "POST",
           headers: {

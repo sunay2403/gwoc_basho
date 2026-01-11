@@ -59,8 +59,12 @@ const BashoMediaSocialProof = () => {
         const data = await galleryResponse.json();
         const mappedData = data.map((item: any) => ({
           ...item,
-          url: item.image.startsWith('http') ? item.image : `${API_BASE}${item.image}`,
-          postUrl: item.post_url
+          url:
+  typeof item.image === "string" && item.image.startsWith("http")
+    ? item.image
+    : item.image
+      ? `${API_BASE}${item.image}`
+      : pottery1, // fallback image
         }));
         if (mappedData.length > 0) setGalleryImages(mappedData);
       }
@@ -70,7 +74,13 @@ const BashoMediaSocialProof = () => {
         const data = await videoResponse.json();
         const mappedData = data.map((video: any) => ({
           ...video,
-          thumbnail: video.thumbnail.startsWith('http') ? video.thumbnail : `${API_BASE}${video.thumbnail}`
+          thumbnail:
+  typeof video.thumbnail === "string" && video.thumbnail.startsWith("http")
+    ? video.thumbnail
+    : video.thumbnail
+      ? `${API_BASE}${video.thumbnail}`
+      : pottery2, // fallback
+
         }));
         if (mappedData.length > 0) setVideoTestimonials(mappedData);
       }
@@ -708,7 +718,14 @@ const BashoMediaSocialProof = () => {
               >
                 <div className="aspect-square w-full rounded-2xl overflow-hidden mb-8 shadow-xl">
                   <img
-                    src={story.image.startsWith('http') ? story.image : `${API_BASE}${story.image}`}
+                    src={
+  typeof story.image === "string" && story.image.startsWith("http")
+    ? story.image
+    : typeof story.image === "string"
+      ? `${API_BASE}${story.image}`
+      : gallary3
+}
+
                     alt={story.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
@@ -719,7 +736,10 @@ const BashoMediaSocialProof = () => {
                   </div>
                   <h3 className="text-2xl font-serif text-[#2a2420]">{story.title}</h3>
                   <p className="text-stone-600 leading-relaxed italic">
-                    "{story.story.length > 200 ? story.story.substring(0, 197) + "..." : story.story}"
+                    "{story.story && story.story.length > 200
+  ? story.story.substring(0, 197) + "..."
+  : story.story || ""}"
+
                   </p>
                   <p className="text-sm font-medium text-[#8b6f47] tracking-widest uppercase pt-2">
                     — {story.author}
