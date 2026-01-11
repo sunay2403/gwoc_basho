@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import gallary1 from "../assets/gallary1.png";
 
 /* ----------------------------------
-   Experience Data
+   Data
 -----------------------------------*/
 const EXPERIENCES = [
   {
