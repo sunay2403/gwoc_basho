@@ -12,8 +12,9 @@ import gallary3 from '../assets/gallary3.png';
 import gallary4 from '../assets/gallary4.png';
 
 const BashoMediaSocialProof = () => {
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [isVideoPlaying, setIsVideoPlaying] = useState<number | null>(null);
+
+  const [, setIsVideoPlaying] = useState<number | null>(null);
+
   const [scrollY, setScrollY] = useState(0);
   const [likedImages, setLikedImages] = useState<Record<number, boolean>>({});
   const galleryRef = useRef<HTMLDivElement>(null);
