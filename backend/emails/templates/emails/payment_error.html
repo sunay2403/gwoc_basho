@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed - Basho Studio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            background-color: #fef2f2;
+            border-left: 4px solid #dc2626;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+        }
+        .error-message p {
+            margin: 0;
+            color: #991b1b;
+            font-weight: 500;
+        }
+        .error-details {
+            background-color: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .detail-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 500;
+            color: #6b7280;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .detail-value {
+            color: #111827;
+            font-weight: 600;
+        }
+        .error-reason {
+            background-color: #fee2e2;
+            border: 1px solid #fecaca;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+        .error-reason h3 {
+            margin: 0 0 10px 0;
+            color: #991b1b;
+            font-size: 14px;
+        }
+        .error-reason p {
+            margin: 0;
+            color: #7f1d1d;
+            font-size: 14px;
+        }
+        .action-section {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+        }
+        .action-section p {
+            margin: 0;
+            color: #92400e;
+        }
+        .action-section strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #dc2626;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        .cta-button:hover {
+            background-color: #b91c1c;
+        }
+        .secondary-button {
+            display: inline-block;
+            background-color: #6b7280;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 15px 10px 15px 0;
+            font-weight: 500;
+        }
+        .secondary-button:hover {
+            background-color: #4b5563;
+        }
+        .footer-section {
+            background-color: #f3f4f6;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 8px;
+        }
+        .footer-section p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .support-info {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        .support-info p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #0369a1;
+        }
+        .signature {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+        .divider {
+            border-top: 1px solid #e5e7eb;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>✗ Payment Failed</h1>
+            <p>We encountered an issue processing your payment</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="greeting">
+                Hi {{ user_name }},
+            </div>
+
+            <div class="error-message">
+                <p>✗ Unfortunately, your payment could not be processed. Please try again or contact support.</p>
+            </div>
+
+            <!-- Error Details -->
+            {% if order_id or amount %}
+            <div class="error-details">
+                {% if order_id %}
+                <div class="detail-row">
+                    <span class="detail-label">Order ID:</span>
+                    <span class="detail-value">{{ order_id }}</span>
+                </div>
+                {% endif %}
+                {% if amount %}
+                <div class="detail-row">
+                    <span class="detail-label">Amount Attempted:</span>
+                    <span class="detail-value">₹{{ amount }}</span>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Error Reason -->
+            <div class="error-reason">
+                <h3>Reason for Failure:</h3>
+                <p>{{ error_message }}</p>
+            </div>
+
+            <!-- Action Section -->
+            <div class="action-section">
+                <strong>What You Can Do:</strong>
+                <p>
+                    • Verify your payment details and card information<br>
+                    • Ensure you have sufficient funds in your account<br>
+                    • Try using a different payment method<br>
+                    • Contact your bank if the issue persists
+                </p>
+            </div>
+
+            <!-- Retry CTA -->
+            <div style="text-align: center;">
+                <a href="{{ base_url }}" class="cta-button">Try Paying Again</a>
+                <br>
+                <a href="{{ base_url }}" class="secondary-button">Return to Checkout</a>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Support Information -->
+            <div class="support-info">
+                <p><strong>Need Help?</strong></p>
+                <p>If you continue to experience issues, our support team is here to help.</p>
+                <p>Email: {{ support_email }}</p>
+            </div>
+
+            <!-- Footer Section -->
+            <div class="footer-section">
+                <p><strong>Important:</strong></p>
+                <p>This is an automated notification. Please do not reply to this email.</p>
+                <p>Your order remains in your cart and can be completed once your payment is successful.</p>
+            </div>
+
+            <div class="signature">
+                <p>Best regards,<br><strong>Basho Studio Team</strong></p>
+                <p>We're here to help!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

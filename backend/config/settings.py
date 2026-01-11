@@ -48,16 +48,18 @@ INSTALLED_APPS = [
     "corsheaders",
 
     # Local apps
-    "workshop_booking",
-    "workshops",
-    "corporate",
-    "experiences",
-    "user",
-    "product",
-    "cart",
-    "payments",
-    "exhibition",
-    "experience_form",
+    'workshop_booking',
+    'workshops',
+    'corporate',
+    'experiences',
+    'user',
+    'emails',
+    'product',
+    'cart',
+    'payments',
+    'exhibition',
+    'experience_form',
+
 ]
 
 MIDDLEWARE = [
@@ -194,3 +196,12 @@ RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+# Email Configuration
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
