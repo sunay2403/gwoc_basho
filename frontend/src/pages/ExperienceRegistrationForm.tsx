@@ -3,6 +3,9 @@ import { useState } from "react";
 import { EXPERIENCE_CONFIG } from "../api/experience_config";
 import type { ExperienceKey } from "../api/experience_config";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+
 const ExperienceRegistration = () => {
   const [experience, setExperience] = useState<ExperienceKey | "">("");
   const [formData, setFormData] = useState<Record<string, string>>({});
@@ -41,7 +44,7 @@ const ExperienceRegistration = () => {
     };
 
     await axios.post(
-      "http://127.0.0.1:8000/api/experiences/register/",
+      `${API_BASE}/api/experiences/register/`,
       payload
     );
 

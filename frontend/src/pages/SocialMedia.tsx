@@ -11,6 +11,9 @@ import gallary2 from '../assets/gallary2.jpg';
 import gallary3 from '../assets/gallary3.png';
 import gallary4 from '../assets/gallary4.png';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
+
 const BashoMediaSocialProof = () => {
 
   const [, setIsVideoPlaying] = useState<number | null>(null);
@@ -39,35 +42,35 @@ const BashoMediaSocialProof = () => {
 
   const fetchDynamicContent = async () => {
     try {
-      const expResponse = await fetch('http://localhost:8000/api/experiences/');
+      const expResponse = await fetch(`${API_BASE}/api/experiences/`);
       if (expResponse.ok) {
         const data = await expResponse.json();
         setExperiences(data);
       }
 
-      const textResponse = await fetch('http://localhost:8000/api/text-testimonials/');
+      const textResponse = await fetch(`${API_BASE}/api/text-testimonials/`);
       if (textResponse.ok) {
         const data = await textResponse.json();
         if (data.length > 0) setTextTestimonials(data);
       }
 
-      const galleryResponse = await fetch('http://localhost:8000/api/gallery/');
+      const galleryResponse = await fetch(`${API_BASE}/api/gallery/`);
       if (galleryResponse.ok) {
         const data = await galleryResponse.json();
         const mappedData = data.map((item: any) => ({
           ...item,
-          url: item.image.startsWith('http') ? item.image : `http://localhost:8000${item.image}`,
+          url: item.image.startsWith('http') ? item.image : `${API_BASE}${item.image}`,
           postUrl: item.post_url
         }));
         if (mappedData.length > 0) setGalleryImages(mappedData);
       }
 
-      const videoResponse = await fetch('http://localhost:8000/api/video-testimonials/');
+      const videoResponse = await fetch(`${API_BASE}/api/video-testimonials/`);
       if (videoResponse.ok) {
         const data = await videoResponse.json();
         const mappedData = data.map((video: any) => ({
           ...video,
-          thumbnail: video.thumbnail.startsWith('http') ? video.thumbnail : `http://localhost:8000${video.thumbnail}`
+          thumbnail: video.thumbnail.startsWith('http') ? video.thumbnail : `${API_BASE}${video.thumbnail}`
         }));
         if (mappedData.length > 0) setVideoTestimonials(mappedData);
       }
@@ -140,7 +143,7 @@ const BashoMediaSocialProof = () => {
     if (formData.image) data.append('image', formData.image);
 
     try {
-      const response = await fetch('http://localhost:8000/api/experiences/', {
+      const response = await fetch(`${API_BASE}/api/experiences/`, {
         method: 'POST',
         body: data,
       });

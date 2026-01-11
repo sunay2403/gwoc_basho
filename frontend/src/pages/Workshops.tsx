@@ -5,6 +5,8 @@ import { Leaf, Droplet, Mountain } from "lucide-react";
 /* ---------------------------------- */
 /* Types & Data                        */
 /* ---------------------------------- */
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 
 type Slot = {
   id: number;
@@ -46,7 +48,7 @@ const WorkshopsPage: React.FC = () => {
   useEffect(() => {
     const fetchSlots = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/workshops/");
+        const response = await fetch(`${API_BASE}/api/workshops/`);
         if (!response.ok) throw new Error("Failed to fetch slots");
         const data = await response.json();
         setSlots(data);
@@ -84,7 +86,7 @@ const WorkshopsPage: React.FC = () => {
 
     setSubmitting(true);
     try {
-      const response = await fetch("http://localhost:8000/api/bookings/", {
+      const response = await fetch(`${API_BASE}/api/bookings/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +122,7 @@ const WorkshopsPage: React.FC = () => {
       });
 
       // Refresh slots to update remaining availability
-      const refreshResponse = await fetch("http://localhost:8000/api/workshops/");
+      const refreshResponse = await fetch(`${API_BASE}/api/workshops/`);
       if (refreshResponse.ok) {
         const updatedSlots = await refreshResponse.json();
         setSlots(updatedSlots);
