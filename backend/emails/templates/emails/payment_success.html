@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmed - Basho Studio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .success-message {
+            background-color: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+        }
+        .success-message p {
+            margin: 0;
+            color: #047857;
+            font-weight: 500;
+        }
+        .order-details {
+            background-color: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 500;
+            color: #6b7280;
+        }
+        .detail-value {
+            color: #111827;
+            font-weight: 600;
+        }
+        .amount-highlight {
+            font-size: 24px;
+            color: #92400e;
+            font-weight: 700;
+        }
+        .items-section {
+            margin-bottom: 25px;
+        }
+        .items-section h3 {
+            margin: 0 0 15px 0;
+            color: #111827;
+            font-size: 16px;
+        }
+        .item {
+            background-color: #f9fafb;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #92400e;
+        }
+        .item-name {
+            font-weight: 500;
+            color: #111827;
+        }
+        .item-quantity {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        .footer-section {
+            background-color: #f3f4f6;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .footer-section p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #92400e;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        .cta-button:hover {
+            background-color: #7c3407;
+        }
+        .divider {
+            border-top: 1px solid #e5e7eb;
+            margin: 20px 0;
+        }
+        .signature {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Payment Confirmed</h1>
+            <p>Thank you for your order</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="greeting">
+                Hi {{ user_name }},
+            </div>
+
+            <div class="success-message">
+                <p>✓ Your payment has been successfully processed. Your order is confirmed!</p>
+            </div>
+
+            <p>We're excited to process your order. Below are your payment and order details:</p>
+
+            <!-- Order Details -->
+            <div class="order-details">
+                <div class="detail-row">
+                    <span class="detail-label">Order ID:</span>
+                    <span class="detail-value">{{ order_id }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Payment ID:</span>
+                    <span class="detail-value">{{ payment_id }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Amount Paid:</span>
+                    <span class="detail-value amount-highlight">₹{{ amount }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Currency:</span>
+                    <span class="detail-value">{{ currency }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Date & Time:</span>
+                    <span class="detail-value">{{ created_at }}</span>
+                </div>
+            </div>
+
+            <!-- Items Section -->
+            {% if items %}
+            <div class="items-section">
+                <h3>Order Items:</h3>
+                {% for item in items %}
+                <div class="item">
+                    <div class="item-name">{{ item.name }}</div>
+                    <div class="item-quantity">Quantity: {{ item.quantity }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Order Description -->
+            {% if description %}
+            <div>
+                <p><strong>Description:</strong> {{ description }}</p>
+            </div>
+            {% endif %}
+
+            <div class="divider"></div>
+
+            <p style="font-size: 14px; color: #6b7280;">
+                A confirmation receipt has been sent to <strong>{{ user_email }}</strong>. 
+                You can download and keep it for your records.
+            </p>
+
+            <!-- Footer Section -->
+            <div class="footer-section">
+                <p><strong>What Happens Next?</strong></p>
+                <p>Your order has been confirmed and will be processed shortly. 
+                You'll receive updates about your delivery/access via email.</p>
+                <p>If you have any questions, feel free to contact our support team.</p>
+            </div>
+
+            <div class="signature">
+                <p>Best regards,<br><strong>Basho Studio Team</strong></p>
+                <p>Thank you for your business!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
