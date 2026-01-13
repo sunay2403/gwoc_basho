@@ -11,11 +11,11 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 from .models import Order
-from emails.services import (
-    send_payment_success_email,
-    send_payment_error_email,
-    send_payment_admin_notification,
+from emails.tasks import (
+    send_payment_success_async,
+    send_payment_failed_async,
 )
+
 
 client = razorpay.Client(
     auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
@@ -130,10 +130,8 @@ def verify_payment(request):
 
                 # Send success email to user
                 if order.user:
-                    send_payment_success_email(order)
-                    
-                    # Send admin notification
-                    send_payment_admin_notification(order, 'paid')
+                    send_payment_success_async(order)
+
 
                 return JsonResponse({
                     "success": True,
