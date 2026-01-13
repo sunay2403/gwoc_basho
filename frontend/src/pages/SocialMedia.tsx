@@ -14,8 +14,6 @@ import gallary4 from '../assets/gallary4.png';
 
 const BashoMediaSocialProof = () => {
   const navigate = useNavigate();
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [isVideoPlaying, setIsVideoPlaying] = useState<number | null>(null);
   const [scrollY, setScrollY] = useState(0);
   const [likedImages, setLikedImages] = useState<Record<number, boolean>>({});
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -556,7 +554,7 @@ const BashoMediaSocialProof = () => {
           </div>
 
           {/* Studio Stats & Details */}
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {[
               { number: "500+", label: "Pieces Created", icon: "🏺" },
               { number: "150+", label: "Workshop Attendees", icon: "👐" },
@@ -647,7 +645,6 @@ const BashoMediaSocialProof = () => {
               <div
                 key={idx}
                 className="group relative aspect-[9/16] rounded-2xl overflow-hidden cursor-pointer"
-                onClick={() => setIsVideoPlaying(idx)}
               >
                 <img
                   src={video.thumbnail}

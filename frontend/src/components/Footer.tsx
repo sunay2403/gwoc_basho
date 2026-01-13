@@ -17,12 +17,12 @@ const Footer: React.FC = () => {
                     Where poetry meets clay. Handcrafted for your happy place.
                 </p>
 
-                <div className="flex flex-wrap justify-center gap-8 mb-12">
-                    <Link to="/home" className="hover:text-amber-500 transition-colors">Home</Link>
-                    <Link to="/media" className="hover:text-amber-500 transition-colors">About</Link>
-                    <Link to="/products" className="hover:text-amber-500 transition-colors">Collection</Link>
-                    <Link to="/workshops" className="hover:text-amber-500 transition-colors">Workshop</Link>
-                    <Link to="/studio" className="hover:text-amber-500 transition-colors">Contact</Link>
+                <div className="flex flex-col text-sm space-y-4 md:space-y-0 md:flex-row md:justify-center md:gap-10 mb-12 font-medium tracking-wide text-stone-300">
+                    <Link to="/home" className="hover:text-amber-500 transition-colors uppercase">Home</Link>
+                    <Link to="/media" className="hover:text-amber-500 transition-colors uppercase">About</Link>
+                    <Link to="/products" className="hover:text-amber-500 transition-colors uppercase">Collection</Link>
+                    <Link to="/workshops" className="hover:text-amber-500 transition-colors uppercase">Workshop</Link>
+                    <Link to="/studio" className="hover:text-amber-500 transition-colors uppercase">Contact</Link>
                 </div>
 
                 <div className="border-t border-stone-800 pt-8 text-sm text-stone-600">

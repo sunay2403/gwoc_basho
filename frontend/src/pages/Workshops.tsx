@@ -76,7 +76,7 @@ const WorkshopsPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedSlot) {
       alert("Please select a workshop session");
       return;
@@ -179,7 +179,7 @@ const WorkshopsPage: React.FC = () => {
       {/* INFO + SESSIONS                    */}
       {/* ---------------------------------- */}
       <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-20">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
           <div>
             <span className="inline-block px-4 py-1 bg-amber-100 text-amber-900 rounded-full text-xs font-semibold mb-6">
               STUDIO LEARNING
@@ -224,11 +224,10 @@ const WorkshopsPage: React.FC = () => {
                   <div
                     key={s.id}
                     onClick={() => setSelectedSlot(s.id)}
-                    className={`border-2 rounded-2xl p-5 cursor-pointer transition-colors ${
-                      selectedSlot === s.id
+                    className={`border-2 rounded-2xl p-5 cursor-pointer transition-colors ${selectedSlot === s.id
                         ? "border-amber-400 bg-amber-50"
                         : "border-stone-100"
-                    }`}
+                      }`}
                   >
                     <div className="flex justify-between items-center">
                       <div>
@@ -292,7 +291,7 @@ const WorkshopsPage: React.FC = () => {
                 </FormField>
                 <FormField label="Participants">
                   <select name="participants" value={form.participants} onChange={handleChange} className="input">
-                    {[1,2,3,4].map(n => (
+                    {[1, 2, 3, 4].map(n => (
                       <option key={n} value={n}>{n} participant{n > 1 ? "s" : ""}</option>
                     ))}
                   </select>

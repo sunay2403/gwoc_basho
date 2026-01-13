@@ -87,8 +87,8 @@ const BashoHomepage = () => {
         />
       </div>
 
-      {/* Floating Navigation */}
-      <nav className="fixed top-24 left-1/2 -translate-x-1/2 z-20 bg-white/80 backdrop-blur-md px-8 py-3 rounded-full shadow-lg border border-stone-200">
+      {/* Floating Navigation - Desktop Only */}
+      <nav className="fixed top-24 left-1/2 -translate-x-1/2 z-20 bg-white/80 backdrop-blur-md px-8 py-3 rounded-full shadow-lg border border-stone-200 hidden md:block">
         <div className="flex items-center space-x-8 text-sm">
           <button onClick={() => scrollToSection('hero')} className="flex items-center space-x-2">
             <div className="w-7 h-7 bg-amber-800 rounded-full flex items-center justify-center">
@@ -170,7 +170,7 @@ const BashoHomepage = () => {
           <div className="mb-8">
             <Leaf className="mx-auto text-amber-800 animate-pulse" size={48} strokeWidth={1} />
           </div>
-          <h1 className="text-8xl md:text-9xl text-stone-800 font-serif font-light mb-4 tracking-wider">
+          <h1 className="text-5xl md:text-9xl text-stone-800 font-serif font-light mb-4 tracking-wider">
             芭蕉
           </h1>
           <p className="text-2xl md:text-3xl text-stone-600 font-light mb-8">
@@ -193,7 +193,7 @@ const BashoHomepage = () => {
         className="min-h-screen flex items-center py-24 px-6"
       >
         <div
-          className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center"
+          className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center"
           style={{
             opacity: getOpacity(1),
             transform: getTransform(1),
@@ -204,7 +204,7 @@ const BashoHomepage = () => {
             <span className="inline-block px-4 py-1 bg-amber-100 text-amber-900 rounded-full text-sm mb-6">
               The Wanderer
             </span>
-            <h2 className="text-5xl font-serif font-light text-stone-800 mb-6 leading-tight">
+            <h2 className="text-4xl md:text-5xl font-serif font-light text-stone-800 mb-6 leading-tight">
               Matsuo Bashō
               <br />
               <span className="text-3xl text-stone-500">1644-1694</span>
@@ -225,7 +225,7 @@ const BashoHomepage = () => {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative mt-8 md:mt-0">
             <div className="aspect-square bg-linear-to-br from-amber-100 to-stone-100 rounded-3xl overflow-hidden shadow-2xl">
               <img
                 src={gallary3}
@@ -265,7 +265,7 @@ const BashoHomepage = () => {
           }}
         >
           <Sun className="mx-auto text-amber-700 mb-8" size={56} strokeWidth={1} />
-          <h2 className="text-5xl font-serif font-light text-stone-800 mb-8">
+          <h2 className="text-4xl md:text-5xl font-serif font-light text-stone-800 mb-8">
             Shivangi's Journey
           </h2>
           <div className="flex flex-col md:flex-row items-center gap-12 bg-[#f5f3ef] rounded-3xl p-8 md:p-12 shadow-xl border border-stone-200">
@@ -303,7 +303,7 @@ const BashoHomepage = () => {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-9">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-9 mt-12">
             {[
               {
                 icon: <Sparkles size={40} />,
@@ -371,12 +371,12 @@ const BashoHomepage = () => {
             <span className="inline-block px-4 py-1 bg-stone-200 text-stone-700 rounded-full text-sm mb-6">
               Japanese Aesthetics
             </span>
-            <h2 className="text-6xl md:text-7xl font-serif font-light text-stone-800 mb-8">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-serif font-light text-stone-800 mb-8">
               Wabi-Sabi
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-16 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-16">
             {[
               {
                 kanji: "侘",
@@ -448,7 +448,7 @@ const BashoHomepage = () => {
           }}
         >
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-serif font-light text-stone-800 mb-6">
+            <h2 className="text-4xl md:text-5xl font-serif font-light text-stone-800 mb-6">
               Handcrafted. Honest. Yours.
             </h2>
             <p className="text-xl text-stone-600 max-w-3xl mx-auto">
@@ -456,7 +456,7 @@ const BashoHomepage = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <div className="bg-linear-to-br from-amber-100 to-stone-100 rounded-3xl p-12 shadow-xl">
               <h3 className="text-3xl font-serif text-stone-800 mb-6">Natural Materials</h3>
               <ul className="space-y-4 text-lg text-stone-600">
@@ -536,7 +536,7 @@ const BashoHomepage = () => {
           }}
         >
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-serif font-light text-stone-800 mb-6">
+            <h2 className="text-4xl md:text-5xl font-serif font-light text-stone-800 mb-6">
               The Collection
             </h2>
             <p className="text-xl text-stone-600">
@@ -544,7 +544,7 @@ const BashoHomepage = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {[
               {
                 name: "Tea Ceremony Bowls",
@@ -624,7 +624,7 @@ const BashoHomepage = () => {
             transition: 'all 0.6s ease-out'
           }}
         >
-          <h2 className="text-5xl font-serif font-light text-stone-800 mb-8">
+          <h2 className="text-4xl md:text-5xl font-serif font-light text-stone-800 mb-8">
             Learn the Art
           </h2>
           <p className="text-2xl text-stone-600 mb-16 max-w-3xl mx-auto leading-relaxed">
@@ -632,7 +632,7 @@ const BashoHomepage = () => {
             and remember what it feels like to <span className="text-amber-800 font-medium">create</span>.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="relative group overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
               <div className="aspect-video">
                 <img
@@ -702,7 +702,7 @@ const BashoHomepage = () => {
           }}
         >
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-serif font-light text-stone-800 mb-6">
+            <h2 className="text-4xl md:text-5xl font-serif font-light text-stone-800 mb-6">
               Follow Our Journey
             </h2>
             <p className="text-xl text-stone-600">
@@ -774,7 +774,7 @@ const BashoHomepage = () => {
           }}
         >
           <Leaf className="mx-auto mb-8 animate-pulse" size={64} strokeWidth={1} />
-          <h2 className="text-6xl font-serif font-light mb-6">
+          <h2 className="text-4xl md:text-6xl font-serif font-light mb-6">
             Begin Your Journey
           </h2>
           <p className="text-2xl text-stone-200 mb-12 max-w-2xl mx-auto leading-relaxed">
