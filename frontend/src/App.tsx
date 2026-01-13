@@ -15,19 +15,32 @@ import RazorpayCheckout from "./pages/RazorpayCheckout";
 import ExperienceRegistration from "./pages/ExperienceRegistrationForm";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import ThankYou from "./pages/Thankyou";
+
 import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate
+  Navigate,
+  useLocation
 } from "react-router-dom";
+import { useEffect } from "react";
+import Footer from "./components/Footer";
+
+// Scroll to top helper
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 const App: React.FC = () => {
   return (
     <div className="bg-[#EDD8B4]/15 min-h-screen">
       <BrowserRouter>
+        <ScrollToTop />
         <Navbar />
-        
 
         <Routes>
           {/* Redirect root to home */}
@@ -36,24 +49,22 @@ const App: React.FC = () => {
           {/* Main Pages */}
           <Route path="/home" element={<BashoHomepage />} />
           <Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
-          <Route path="/workshops" element={<ProtectedRoute><WorkshopsPage/></ProtectedRoute>} />
-          <Route path="/experiences" element={<ExperiencesPage/>} />
-          <Route path="/media" element={<BashoMediaSocialProof/>}/>
-          <Route path="/studio" element={<StudioPage/>}/>
-          <Route path="/corporate" element={<CorporatePage />} />          <Route path="/signup" element={<Signup/>}/>
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
-          <Route path="/payment" element={<RazorpayCheckout/>}/>
+          <Route path="/workshops" element={<ProtectedRoute><WorkshopsPage /></ProtectedRoute>} />
+          <Route path="/experiences" element={<ExperiencesPage />} />
+          <Route path="/media" element={<BashoMediaSocialProof />} />
+          <Route path="/studio" element={<StudioPage />} />
+          <Route path="/corporate" element={<CorporatePage />} />          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/payment" element={<RazorpayCheckout />} />
           <Route path="/register" element={<ExperienceRegistration />} />
           <Route path="/confirm-order" element={<OrderConfirmation />} />
           <Route path="/thank-you" element={<ThankYou />} />
 
-
-          
-
           {/* Optional: 404 fallback */}
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );

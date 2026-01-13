@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Play, Instagram, Heart, MessageCircle, Sparkles, Leaf, Plus, X, Upload, Quote } from 'lucide-react';
 import pottery1 from '../assets/pottery_1.png';
 import pottery2 from '../assets/pottery_2.png';
@@ -12,6 +13,7 @@ import gallary3 from '../assets/gallary3.png';
 import gallary4 from '../assets/gallary4.png';
 
 const BashoMediaSocialProof = () => {
+  const navigate = useNavigate();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isVideoPlaying, setIsVideoPlaying] = useState<number | null>(null);
   const [scrollY, setScrollY] = useState(0);
@@ -617,7 +619,10 @@ const BashoMediaSocialProof = () => {
                 <Instagram size={18} />
                 <span>DM for Studio Visits</span>
               </a>
-              <button className="px-6 py-3 border-2 border-[#8b6f47] text-[#8b6f47] rounded-full hover:bg-[#8b6f47] hover:text-white transition-all duration-300">
+              <button
+                onClick={() => navigate('/workshops')}
+                className="px-6 py-3 border-2 border-[#8b6f47] text-[#8b6f47] rounded-full hover:bg-[#8b6f47] hover:text-white transition-all duration-300"
+              >
                 Book a Workshop
               </button>
             </div>

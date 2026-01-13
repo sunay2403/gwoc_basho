@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Leaf, Mountain, Sparkles, Wind, Sun, Moon, Droplet } from 'lucide-react';
 import pottery1 from '../assets/pottery_1.png';
 import pottery2 from '../assets/pottery_2.png';
@@ -11,6 +12,7 @@ import gallary3 from '../assets/gallary3.png';
 import gallary4 from '../assets/gallary4.png';
 import plate from '../assets/plate.png';
 const BashoHomepage = () => {
+  const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [, setActiveSection] = useState<number>(0);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
@@ -599,7 +601,10 @@ const BashoHomepage = () => {
           </div>
 
           <div className="text-center mt-16">
-            <button className="px-12 py-4 bg-amber-800 text-white rounded-full hover:bg-amber-900 transition-all duration-300 transform hover:scale-105 shadow-xl text-lg">
+            <button
+              onClick={() => navigate('/products')}
+              className="px-12 py-4 bg-amber-800 text-white rounded-full hover:bg-amber-900 transition-all duration-300 transform hover:scale-105 shadow-xl text-lg"
+            >
               Explore Full Collection
             </button>
           </div>
@@ -645,7 +650,10 @@ const BashoHomepage = () => {
                 <p className="text-stone-200 mb-6 leading-relaxed">
                   Learn wheel throwing, hand-building, and glazing. No experience needed — just curiosity.
                 </p>
-                <button className="text-amber-300 hover:text-amber-200 font-medium text-left">
+                <button
+                  onClick={() => navigate('/workshops')}
+                  className="text-amber-300 hover:text-amber-200 font-medium text-left"
+                >
                   See Schedule →
                 </button>
               </div>
@@ -668,7 +676,10 @@ const BashoHomepage = () => {
                 <p className="text-stone-200 mb-6 leading-relaxed">
                   Host team-building sessions, birthday celebrations, or intimate gatherings in our studio.
                 </p>
-                <button className="text-amber-300 hover:text-amber-200 font-medium text-left">
+                <button
+                  onClick={() => navigate('/workshops')}
+                  className="text-amber-300 hover:text-amber-200 font-medium text-left"
+                >
                   Book Now →
                 </button>
               </div>
@@ -779,42 +790,14 @@ const BashoHomepage = () => {
               Follow on Instagram
             </a>
             <button
-              onClick={() => scrollToSection('collection')}
-              className="px-12 py-4 border-2 border-white text-white rounded-full hover:bg-white hover:text-stone-800 transition-all duration-300 transform hover:scale-105 text-lg font-medium"
+              onClick={() => navigate('/products')}
+              className="px-12 py-4 border-2 border-white text-white rounded-full hover:bg-white hover:text-stone-800 transition-all duration-300 transform hover:scale-scale-105 text-lg font-medium"
             >
               Shop Collection
             </button>
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-stone-900 text-stone-400 py-12 px-6">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <div className="w-10 h-10 bg-amber-700 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold">芭</span>
-            </div>
-            <span className="text-2xl font-serif text-stone-300">Basho by Shivangi</span>
-          </div>
-          <p className="text-stone-500 mb-8">
-            Handcrafted pottery inspired by Japanese poetry and philosophy
-          </p>
-          <div className="flex flex-col items-center space-y-2 mb-8 text-stone-400">
-            <p>+91 9879575601</p>
-            <p>@bashobyyshivangi</p>
-          </div>
-          <div className="flex justify-center space-x-8 text-sm">
-            <button onClick={() => scrollToSection('story')} className="hover:text-amber-600 transition">About</button>
-            <button onClick={() => scrollToSection('collection')} className="hover:text-amber-600 transition">Collection</button>
-            <button onClick={() => scrollToSection('craft')} className="hover:text-amber-600 transition">Workshops</button>
-            <a href="https://www.instagram.com/bashobyyshivangi/" target="_blank" rel="noopener noreferrer" className="hover:text-amber-600 transition">Contact</a>
-          </div>
-          <div className="mt-8 pt-8 border-t border-stone-800 text-xs text-stone-600">
-            © 2024 Basho by Shivangi. Crafted with intention.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
