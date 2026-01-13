@@ -63,9 +63,6 @@ const ExperiencesPage: React.FC = () => {
         ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
       `}
     >
-      {/* ----------------------------------
-          HERO
-      -----------------------------------*/}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         <img
           src={gallary1}
