@@ -17,7 +17,7 @@ import {
   X,
 } from "lucide-react";
 
-/* ---------------- Types ---------------- */
+/* ================= TYPES ================= */
 
 type UserProfile = {
   fullName: string;
@@ -31,7 +31,22 @@ type UserProfile = {
   createdAt?: any;
 };
 
-/* ---------------- Component ---------------- */
+interface EditableRowProps {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  editMode?: boolean;
+  textarea?: boolean;
+  onChange?: (value: string) => void;
+}
+
+interface StaticRowProps {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}
+
+/* ================= COMPONENT ================= */
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -43,7 +58,7 @@ const Profile: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  /* ---------------- Load Profile ---------------- */
+  /* -------- Load Profile -------- */
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (currentUser) => {
@@ -94,7 +109,7 @@ const Profile: React.FC = () => {
     return () => unsub();
   }, []);
 
-  /* ---------------- Save Profile ---------------- */
+  /* -------- Save Profile -------- */
 
   const saveProfile = async () => {
     if (!user || !form) return;
@@ -111,12 +126,12 @@ const Profile: React.FC = () => {
     }
   };
 
-  /* ---------------- Render States ---------------- */
+  /* -------- States -------- */
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50 text-stone-500">
-        <Leaf className="animate-pulse" size={48} />
+      <div className="min-h-screen flex items-center justify-center bg-stone-50">
+        <Leaf className="animate-pulse text-stone-400" size={48} />
       </div>
     );
   }
@@ -129,7 +144,7 @@ const Profile: React.FC = () => {
     );
   }
 
-  /* ---------------- UI ---------------- */
+  /* ================= UI ================= */
 
   return (
     <div className="min-h-screen bg-stone-50 py-24 px-6 flex justify-center">
@@ -138,12 +153,12 @@ const Profile: React.FC = () => {
         {/* Sidebar */}
         <div className="md:w-1/3 bg-gradient-to-b from-stone-900 to-stone-800 text-white p-12 text-center flex flex-col">
           <div className="w-32 h-32 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 p-1 mx-auto mb-6">
-            <div className="w-full h-full rounded-full bg-stone-800 flex items-center justify-center overflow-hidden">
+            <div className="w-full h-full rounded-full bg-stone-800 flex items-center justify-center">
               {user.photoURL ? (
-                <img src={user.photoURL} className="w-full h-full object-cover" />
+                <img src={user.photoURL} className="w-full h-full object-cover rounded-full" />
               ) : (
                 <span className="text-4xl font-serif text-amber-500">
-                  {profile.fullName?.[0]?.toUpperCase()}
+                  {profile.fullName[0]?.toUpperCase()}
                 </span>
               )}
             </div>
@@ -183,8 +198,7 @@ const Profile: React.FC = () => {
                 onClick={() => setEditMode(true)}
                 className="flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-amber-600 text-white"
               >
-                <Edit3 size={14} />
-                Edit
+                <Edit3 size={14} /> Edit
               </button>
             ) : (
               <div className="flex gap-2">
@@ -209,22 +223,20 @@ const Profile: React.FC = () => {
           </div>
 
           <div className="grid gap-6">
-            <EditableRow icon={<UserIcon size={18} />} label="Full Name" value={form.fullName} editMode={editMode}
-              onChange={(v) => setForm({ ...form, fullName: v })} />
+            <EditableRow icon={<UserIcon size={18} />} label="Full Name" value={form.fullName}
+              editMode={editMode} onChange={(value) => setForm({ ...form, fullName: value })} />
 
             <EditableRow icon={<Mail size={18} />} label="Email" value={form.email} />
 
             <EditableRow icon={<Phone size={18} />} label="Phone" value={form.phone || ""}
-              editMode={editMode}
-              onChange={(v) => setForm({ ...form, phone: v })} />
+              editMode={editMode} onChange={(value) => setForm({ ...form, phone: value })} />
 
             <EditableRow icon={<MapPin size={18} />} label="Location" value={form.location || ""}
-              editMode={editMode}
-              onChange={(v) => setForm({ ...form, location: v })} />
+              editMode={editMode} onChange={(value) => setForm({ ...form, location: value })} />
 
             <EditableRow icon={<UserIcon size={18} />} label="Bio" value={form.bio || ""}
               textarea editMode={editMode}
-              onChange={(v) => setForm({ ...form, bio: v })} />
+              onChange={(value) => setForm({ ...form, bio: value })} />
 
             <div className="grid grid-cols-2 gap-6">
               <StaticRow icon={<Shield size={18} />} label="Role" value={profile.role} />
@@ -244,16 +256,16 @@ const Profile: React.FC = () => {
 
 export default Profile;
 
-/* ---------------- Reusable Rows ---------------- */
+/* ================= REUSABLE ================= */
 
-const EditableRow = ({
+const EditableRow: React.FC<EditableRowProps> = ({
   icon,
   label,
   value,
-  editMode,
-  textarea,
+  editMode = false,
+  textarea = false,
   onChange,
-}: any) => (
+}) => (
   <div className="flex gap-4 items-start">
     <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center">
       {icon}
@@ -282,7 +294,7 @@ const EditableRow = ({
   </div>
 );
 
-const StaticRow = ({ icon, label, value }: any) => (
+const StaticRow: React.FC<StaticRowProps> = ({ icon, label, value }) => (
   <div className="flex gap-4 items-center bg-stone-50 p-4 rounded-xl">
     <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center">
       {icon}
