@@ -10,8 +10,7 @@ import { useNavigate } from "react-router-dom";
 //const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function ProductList(): JSX.Element {
-  const navigate = useNavigate();
-
+  const navigate=useNavigate();
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
   const [selectedCats, setSelectedCats] = useState<string[]>([]);
@@ -205,43 +204,17 @@ function ProductList(): JSX.Element {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center px-6 py-5 border-b border-stone-200 bg-gradient-to-r from-stone-50 to-white sticky top-0 z-10">
-  <h2 className="font-semibold text-xl text-stone-800">Your Cart</h2>
-
-  <div className="flex items-center gap-3">
-    {/* Custom Order */}
-    <button
-      onClick={() => {
-        setShowCart(false);
-        navigate("/custom-order");
-      }}
-      className="px-4 py-2 text-sm border border-amber-800 text-amber-800 rounded-full hover:bg-amber-50 transition"
-    >
-      Custom Order
-    </button>
-
-    {/* Close */}
-    <button
-      onClick={() => setShowCart(false)}
-      className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-stone-100 transition-colors text-stone-600 hover:text-stone-900"
-      aria-label="Close cart"
-    >
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
-    </button>
-  </div>
-</div>
-
+              <h2 className="font-semibold text-xl text-stone-800">Your Cart</h2>
+              <button
+                onClick={() => setShowCart(false)}
+                className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-stone-100 transition-colors text-stone-600 hover:text-stone-900"
+                aria-label="Close cart"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             <Cart />
           </div>
         </div>
@@ -338,20 +311,39 @@ function ProductList(): JSX.Element {
                   Handcrafted pieces made with intention
                 </p>
               </div>
-              <button
-                onClick={() => setShowCart(true)}
-                className="relative px-6 py-3 bg-amber-800 text-white rounded-full font-semibold hover:bg-amber-900 transition-all hover:shadow-lg active:scale-95 flex items-center gap-2 whitespace-nowrap group"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <span>Cart</span>
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
+              <div className="flex items-center gap-3 whitespace-nowrap">
+  {/* Custom Order button */}
+  <button
+    onClick={() => navigate("/custom-order")}
+    className="px-6 py-3 bg-white border-2 border-amber-800 text-amber-800 rounded-full font-semibold hover:bg-amber-50 transition-all hover:shadow-sm active:scale-95"
+  >
+    Custom Order
+  </button>
+
+  {/* Cart button (unchanged behavior) */}
+  <button
+    onClick={() => setShowCart(true)}
+    className="relative px-6 py-3 bg-amber-800 text-white rounded-full font-semibold hover:bg-amber-900 transition-all hover:shadow-lg active:scale-95 flex items-center gap-2 group"
+  >
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+      />
+    </svg>
+
+    <span>Cart</span>
+
+    {cartCount > 0 && (
+      <span className="absolute -top-2 -right-2 inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
+        {cartCount}
+      </span>
+    )}
+  </button>
+</div>
+
             </div>
 
             {/* Search Bar and Filter Toggle */}
