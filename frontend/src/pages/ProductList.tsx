@@ -346,6 +346,7 @@ function ProductList(): JSX.Element {
                       image={imageUrl}
                       name={p.name}
                       price={Number(p.price)}
+                      stock={p.stock}
                       category={{id: p.id, name : p.category.name}}
                       productId={p.id}
                       adding={addingIds.includes(p.id)}
@@ -355,6 +356,9 @@ function ProductList(): JSX.Element {
                         try {
                           await addToCart(id, 1);
                           await loadCartCount();
+
+                          setProducts(prev => prev.map(prod => prod.id === id ? { ...prod, stock: Math.max(0,prod.stock - 1) } : prod));
+
                           console.log("Added to cart", id);
                         } catch (err) {
                           console.error("Failed to add to cart", err);

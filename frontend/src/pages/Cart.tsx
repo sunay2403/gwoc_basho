@@ -18,6 +18,7 @@ const Cart: React.FC = () => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [updatingIds, setUpdatingIds] = useState<number[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const load = async () => {
@@ -25,6 +26,7 @@ const Cart: React.FC = () => {
     try {
       const data = await getCart();
       setItems(data.items || []);
+      setError(null);
     } catch (err) {
       console.error(err);
     } finally {
@@ -42,7 +44,10 @@ const Cart: React.FC = () => {
     try {
       await updateCartItem(itemId, qty);
       await load();
-    } catch (err) {
+      setError(null);
+    } catch (err: any) {
+      const errorMsg = err?.response?.data?.detail || err?.message || "Failed to update quantity";
+      setError(errorMsg);
       console.error(err);
     } finally {
       setUpdatingIds(prev => prev.filter(id => id !== itemId));
@@ -54,6 +59,7 @@ const Cart: React.FC = () => {
     try {
       await removeCartItem(itemId);
       await load();
+      setError(null);
     } catch (err) {
       console.error(err);
     } finally {
@@ -65,6 +71,7 @@ const Cart: React.FC = () => {
     try {
       await clearCart();
       setItems([]);
+      setError(null);
     } catch (err) {
       console.error(err);
     }
@@ -111,6 +118,23 @@ const Cart: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
+      {/* Error Alert */}
+      {error && (
+        <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+          <svg className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-red-900">{error}</p>
+            <button
+              onClick={() => setError(null)}
+              className="text-xs text-red-600 hover:text-red-700 mt-1 font-medium"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
       {/* Cart Items - Scrollable */}
       <div className="flex-1 overflow-y-auto px-6 py-4">
         <div className="space-y-4">

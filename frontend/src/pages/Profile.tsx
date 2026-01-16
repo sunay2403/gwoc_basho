@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth, db } from "../api/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -21,6 +22,7 @@ const Profile: React.FC = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (currentUser) => {
@@ -142,13 +144,25 @@ const Profile: React.FC = () => {
           />
         </div>
 
-        {/* Logout */}
-        <button
-          onClick={() => signOut(auth)}
-          className="mt-12 w-full px-6 py-3 rounded-full border border-[#C85428]/60 text-sm uppercase tracking-widest text-[#C85428] hover:bg-[#C85428] hover:text-white transition-all duration-300"
-        >
-          Logout
-        </button>
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-3 mt-12">
+          <button
+            onClick={() => navigate("/purchase-history")}
+            className="w-full px-6 py-3 rounded-full bg-[#C85428] text-white text-sm uppercase tracking-widest font-semibold hover:bg-[#B84623] transition-all duration-300 flex items-center justify-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            Purchase History
+          </button>
+
+          <button
+            onClick={() => signOut(auth)}
+            className="w-full px-6 py-3 rounded-full border border-[#C85428]/60 text-sm uppercase tracking-widest text-[#C85428] hover:bg-[#C85428] hover:text-white transition-all duration-300"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

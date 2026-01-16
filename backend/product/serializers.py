@@ -26,6 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "slug",
             "description",
             "price",
+            "stock",
             "is_limited",
             "is_featured",
             "category",

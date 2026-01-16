@@ -11,6 +11,7 @@ import Signup from "./pages/SignUp";
 import Login from "./pages/Login";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Profile from "./pages/Profile";
+import PurchaseHistory from "./pages/PurchaseHistory";
 import RazorpayCheckout from "./pages/RazorpayCheckout";
 import ExperienceRegistration from "./pages/ExperienceRegistrationForm";
 import OrderConfirmation from "./pages/OrderConfirmation";
@@ -43,6 +44,7 @@ const App: React.FC = () => {
           <Route path="/corporate" element={<CorporatePage />} />          <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
+          <Route path="/purchase-history" element={<ProtectedRoute><PurchaseHistory/></ProtectedRoute>} />
           <Route path="/payment" element={<RazorpayCheckout/>}/>
           <Route path="/register" element={<ExperienceRegistration />} />
           <Route path="/confirm-order" element={<OrderConfirmation />} />
