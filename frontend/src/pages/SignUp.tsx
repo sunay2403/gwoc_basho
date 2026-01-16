@@ -3,13 +3,14 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  sendEmailVerification,
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../api/firebase";
 import { Leaf } from "lucide-react";
-import { syncUserWithBackend } from "../api/authSync" ; 
+import { syncUserWithBackend } from "../api/authSync";
 
-// Google provider (create once)
+// Google provider
 const googleProvider = new GoogleAuthProvider();
 
 export default function Signup() {
@@ -23,14 +24,22 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   // -------------------------------
-  // Email + Password signup
+  // Email + Password signup (with verification)
   // -------------------------------
   const handleSignup = async () => {
+    if (!fullName || !username || !email || !password) {
+      setError("Please fill all required fields");
+      return;
+    }
+
     try {
       setLoading(true);
       setError("");
 
       const res = await createUserWithEmailAndPassword(auth, email, password);
+
+      // 🔔 Send verification email
+      await sendEmailVerification(res.user);
 
       await setDoc(doc(db, "users", res.user.uid), {
         uid: res.user.uid,
@@ -42,21 +51,32 @@ export default function Signup() {
         location: "",
         role: "user",
         authProvider: "password",
+        emailVerified: false,
         createdAt: serverTimestamp(),
       });
 
-      await syncUserWithBackend(res.user);
+      alert("Verification email sent. Please check your inbox.");
 
-      window.location.href = "/";
+      // ❗ Force logout until verified
+      await auth.signOut();
+      window.location.href = "/login";
     } catch (err: any) {
-      setError(err.message);
+      if (err.code === "auth/email-already-in-use") {
+        setError("Email already in use");
+      } else if (err.code === "auth/invalid-email") {
+        setError("Invalid email address");
+      } else if (err.code === "auth/weak-password") {
+        setError("Password must be at least 6 characters");
+      } else {
+        setError("Signup failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   // -------------------------------
-  // Google signup
+  // Google signup (already verified)
   // -------------------------------
   const handleGoogleSignup = async () => {
     try {
@@ -69,7 +89,6 @@ export default function Signup() {
       const userRef = doc(db, "users", user.uid);
       const snap = await getDoc(userRef);
 
-      // Create profile only first time
       if (!snap.exists()) {
         await setDoc(userRef, {
           uid: user.uid,
@@ -81,13 +100,14 @@ export default function Signup() {
           location: "",
           role: "user",
           authProvider: "google",
+          emailVerified: true,
           createdAt: serverTimestamp(),
         });
       }
 
       await syncUserWithBackend(user);
       window.location.href = "/";
-    } catch (err) {
+    } catch {
       setError("Google sign-in failed");
     } finally {
       setLoading(false);
@@ -97,7 +117,6 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-stone-50 to-amber-50 px-6">
       <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-stone-200 p-10">
-        
         {/* Header */}
         <div className="text-center mb-10">
           <Leaf className="mx-auto text-amber-800 mb-4 animate-pulse" size={48} />
@@ -114,35 +133,35 @@ export default function Signup() {
           <input
             type="text"
             placeholder="Full Name"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50"
             onChange={(e) => setFullName(e.target.value)}
           />
 
           <input
             type="text"
             placeholder="Username"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50"
             onChange={(e) => setUsername(e.target.value)}
           />
 
           <input
             type="tel"
             placeholder="Phone (optional)"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50"
             onChange={(e) => setPhone(e.target.value)}
           />
 
           <input
             type="email"
             placeholder="Email"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50"
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
             type="password"
             placeholder="Password"
-            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50 focus:ring-2 focus:ring-amber-700"
+            className="w-full px-5 py-4 rounded-xl border border-stone-300 bg-stone-50"
             onChange={(e) => setPassword(e.target.value)}
           />
 
@@ -150,33 +169,28 @@ export default function Signup() {
             <p className="text-red-600 text-sm text-center">{error}</p>
           )}
 
-          {/* Email signup */}
           <button
             onClick={handleSignup}
             disabled={loading}
-            className="w-full py-4 bg-amber-800 text-white rounded-full hover:bg-amber-900 transition-all duration-300 shadow-xl"
+            className="w-full py-4 bg-amber-800 text-white rounded-full hover:bg-amber-900 shadow-xl"
           >
             {loading ? "Creating..." : "Sign Up"}
           </button>
 
-          {/* Google signup */}
           <button
             onClick={handleGoogleSignup}
             disabled={loading}
-            className="w-full py-4 border border-stone-300 rounded-full bg-white hover:bg-stone-100 transition-all duration-300 flex items-center justify-center gap-3 shadow"
+            className="w-full py-4 border border-stone-300 rounded-full bg-white hover:bg-stone-100 flex items-center justify-center gap-3 shadow"
           >
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
               alt="Google"
               className="w-5 h-5"
             />
-            <span className="text-stone-700 font-medium">
-              Continue with Google
-            </span>
+            Continue with Google
           </button>
         </div>
 
-        {/* Footer */}
         <p className="text-center text-stone-500 text-sm mt-8">
           Already have an account?{" "}
           <a href="/login" className="text-amber-800 hover:underline">
