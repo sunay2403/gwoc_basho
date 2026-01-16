@@ -5,9 +5,13 @@ import { addToCart, getCart } from "../api/cart";
 import type { JSX } from "react/jsx-runtime";
 import type { Category, Product } from "../api/products";
 import { getProducts, getCategories } from "../api/products";
+import { useNavigate } from "react-router-dom";
+
 //const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function ProductList(): JSX.Element {
+  const navigate = useNavigate();
+
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
   const [selectedCats, setSelectedCats] = useState<string[]>([]);
@@ -201,17 +205,43 @@ function ProductList(): JSX.Element {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center px-6 py-5 border-b border-stone-200 bg-gradient-to-r from-stone-50 to-white sticky top-0 z-10">
-              <h2 className="font-semibold text-xl text-stone-800">Your Cart</h2>
-              <button
-                onClick={() => setShowCart(false)}
-                className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-stone-100 transition-colors text-stone-600 hover:text-stone-900"
-                aria-label="Close cart"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+  <h2 className="font-semibold text-xl text-stone-800">Your Cart</h2>
+
+  <div className="flex items-center gap-3">
+    {/* Custom Order */}
+    <button
+      onClick={() => {
+        setShowCart(false);
+        navigate("/custom-order");
+      }}
+      className="px-4 py-2 text-sm border border-amber-800 text-amber-800 rounded-full hover:bg-amber-50 transition"
+    >
+      Custom Order
+    </button>
+
+    {/* Close */}
+    <button
+      onClick={() => setShowCart(false)}
+      className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-stone-100 transition-colors text-stone-600 hover:text-stone-900"
+      aria-label="Close cart"
+    >
+      <svg
+        className="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+
             <Cart />
           </div>
         </div>

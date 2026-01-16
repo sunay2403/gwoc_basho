@@ -15,6 +15,7 @@ import RazorpayCheckout from "./pages/RazorpayCheckout";
 import ExperienceRegistration from "./pages/ExperienceRegistrationForm";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import ThankYou from "./pages/Thankyou";
+import CustomOrder from "./pages/CustomOrder";
 import {
   BrowserRouter,
   Routes,
@@ -47,6 +48,8 @@ const App: React.FC = () => {
           <Route path="/register" element={<ExperienceRegistration />} />
           <Route path="/confirm-order" element={<OrderConfirmation />} />
           <Route path="/thank-you" element={<ThankYou />} />
+          <Route path="/custom-order" element={<CustomOrder />} />
+
 
 
           
