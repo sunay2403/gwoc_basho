@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "payments",
     "exhibition",
     "experience_form",
+    "custom_orders",
 ]
 
 MIDDLEWARE = [
