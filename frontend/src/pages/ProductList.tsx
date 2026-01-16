@@ -5,7 +5,7 @@ import { addToCart, getCart } from "../api/cart";
 import type { JSX } from "react/jsx-runtime";
 import type { Category, Product } from "../api/products";
 import { getProducts, getCategories } from "../api/products";
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+//const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function ProductList(): JSX.Element {
   const [query, setQuery] = useState("");
@@ -425,12 +425,12 @@ function ProductList(): JSX.Element {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mt-8">
               {filtered.map((p, idx) => {
-                const img =
-                  p.images.find(img => img.is_primary)?.image ||
-                  p.images[0]?.image ||
-                  null;
+const img =
+  p.images.find(img => img.is_primary)?.image ||
+  p.images[0]?.image ||
+  null;
 
-                const imageUrl = img ? `${API_BASE}${img}` : null;
+const imageUrl = img || null;
 
                 return (
                   <div
