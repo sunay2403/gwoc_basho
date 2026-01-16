@@ -10,13 +10,14 @@ import gallary1 from '../assets/gallary1.png';
 import gallary2 from '../assets/gallary2.jpg';
 import gallary3 from '../assets/gallary3.png';
 import gallary4 from '../assets/gallary4.png';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 
 const BashoMediaSocialProof = () => {
 
-  const [, setIsVideoPlaying] = useState<number | null>(null);
+  //const [, setIsVideoPlaying] = useState<number | null>(null);
 
   const [scrollY, setScrollY] = useState(0);
   const [likedImages, setLikedImages] = useState<Record<number, boolean>>({});
@@ -25,6 +26,7 @@ const BashoMediaSocialProof = () => {
   const [mounted, setMounted] = useState(false);
   const [experiences, setExperiences] = useState<any[]>([]);
   const [textTestimonials, setTextTestimonials] = useState<any[]>([]);
+  const navigate=useNavigate();
 
   const [galleryImagesState, setGalleryImages] = useState<any[]>([
     { url: pottery1, caption: "Handcrafted with love", likes: 124, postUrl: "" },
@@ -171,7 +173,7 @@ const BashoMediaSocialProof = () => {
   // 1,320 Followers | 93 Following | 159 Posts
   // Bio: A sanctuary for clay art lovers 🌿✨ | Products ~ Shipping Pan India 🇮🇳 | Workshops ~ 📍Surat, Gujarat
 
-  return (
+ return (
     <div
       className={`
     bg-stone-50 min-h-screen
@@ -568,7 +570,7 @@ const BashoMediaSocialProof = () => {
           </div>
 
           {/* Studio Stats & Details */}
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {[
               { number: "500+", label: "Pieces Created", icon: "🏺" },
               { number: "150+", label: "Workshop Attendees", icon: "👐" },
@@ -631,7 +633,10 @@ const BashoMediaSocialProof = () => {
                 <Instagram size={18} />
                 <span>DM for Studio Visits</span>
               </a>
-              <button className="px-6 py-3 border-2 border-[#8b6f47] text-[#8b6f47] rounded-full hover:bg-[#8b6f47] hover:text-white transition-all duration-300">
+              <button
+                onClick={() => navigate('/workshops')}
+                className="px-6 py-3 border-2 border-[#8b6f47] text-[#8b6f47] rounded-full hover:bg-[#8b6f47] hover:text-white transition-all duration-300"
+              >
                 Book a Workshop
               </button>
             </div>
@@ -656,7 +661,6 @@ const BashoMediaSocialProof = () => {
               <div
                 key={idx}
                 className="group relative aspect-[9/16] rounded-2xl overflow-hidden cursor-pointer"
-                onClick={() => setIsVideoPlaying(idx)}
               >
                 <img
                   src={video.thumbnail}
@@ -718,14 +722,7 @@ const BashoMediaSocialProof = () => {
               >
                 <div className="aspect-square w-full rounded-2xl overflow-hidden mb-8 shadow-xl">
                   <img
-                    src={
-  typeof story.image === "string" && story.image.startsWith("http")
-    ? story.image
-    : typeof story.image === "string"
-      ? `${API_BASE}${story.image}`
-      : gallary3
-}
-
+                    src={story.image.startsWith('http') ? story.image : `http://localhost:8000${story.image}`}
                     alt={story.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
@@ -736,10 +733,7 @@ const BashoMediaSocialProof = () => {
                   </div>
                   <h3 className="text-2xl font-serif text-[#2a2420]">{story.title}</h3>
                   <p className="text-stone-600 leading-relaxed italic">
-                    "{story.story && story.story.length > 200
-  ? story.story.substring(0, 197) + "..."
-  : story.story || ""}"
-
+                    "{story.story.length > 200 ? story.story.substring(0, 197) + "..." : story.story}"
                   </p>
                   <p className="text-sm font-medium text-[#8b6f47] tracking-widest uppercase pt-2">
                     — {story.author}
@@ -879,5 +873,6 @@ const BashoMediaSocialProof = () => {
     </div >
   );
 };
+
 
 export default BashoMediaSocialProof;
