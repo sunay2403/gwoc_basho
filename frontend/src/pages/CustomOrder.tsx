@@ -1,15 +1,16 @@
 import { useLocation } from "react-router-dom";
-import { useState,useEffect } from "react";
-
+import { useEffect, useState } from "react";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
-
 
 type LocationState = {
   productId?: number;
   productName?: string;
 };
+
+/* =======================
+   CUSTOM ORDER FORM
+======================= */
 
 const CustomOrder = () => {
   const { state } = useLocation();
@@ -21,7 +22,7 @@ const CustomOrder = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
-  /* ------------------ File Handling ------------------ */
+  /* -------- File Handling -------- */
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files || []);
@@ -32,7 +33,7 @@ const CustomOrder = () => {
     setFiles(prev => prev.filter((_, i) => i !== index));
   };
 
-  /* ------------------ Submit ------------------ */
+  /* -------- Submit -------- */
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,14 +50,13 @@ const CustomOrder = () => {
       }
 
       files.forEach(file => {
-        formData.append("images", file); // backend should expect `images`
+        formData.append("images", file);
       });
 
       await fetch(`${API_BASE}/api/custom-orders/create/`, {
-    method: "POST",
-    body: formData,
-});
-
+        method: "POST",
+        body: formData,
+      });
 
       alert("Custom order request submitted successfully!");
       setName("");
@@ -129,7 +129,7 @@ const CustomOrder = () => {
             />
           </div>
 
-          {/* Reference Images */}
+          {/* Images */}
           <div>
             <label className="block text-sm font-semibold mb-2">
               Reference Images (optional)
@@ -181,7 +181,9 @@ const CustomOrder = () => {
   );
 };
 
-/* ------------------ Showcase ------------------ */
+/* =======================
+   SHOWCASE
+======================= */
 
 type ShowcaseOrder = {
   id: number;
@@ -236,8 +238,6 @@ const PreviousCustomOrders = () => {
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
         {orders.map(order => {
           const firstImage = order.images[0]?.image;
-          
-          
 
           return (
             <div
@@ -248,7 +248,7 @@ const PreviousCustomOrders = () => {
               <div className="h-56 bg-stone-100 overflow-hidden">
                 {firstImage ? (
                   <img
-                    src={`${API_BASE}${firstImage}`}
+                    src={firstImage}   
                     alt="Custom order"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />

@@ -1,9 +1,7 @@
 from django.urls import path
-from .views import CustomOrderCreateView,CustomOrderShowcaseView
+from .views import CreateCustomOrder, CustomOrderShowcase
 
 urlpatterns = [
-    path("create/", CustomOrderCreateView.as_view(), name="custom-order-create"),
-    path("showcase/", CustomOrderShowcaseView.as_view()),
-
+    path("create/", CreateCustomOrder.as_view()),
+    path("showcase/", CustomOrderShowcase.as_view()),
 ]
-

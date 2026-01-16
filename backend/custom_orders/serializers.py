@@ -5,7 +5,7 @@ from .models import CustomOrder, CustomOrderImage
 class CustomOrderImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomOrderImage
-        fields = ["id", "image"]
+        fields = ("id", "image")
 
 
 class CustomOrderSerializer(serializers.ModelSerializer):
@@ -13,24 +13,12 @@ class CustomOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomOrder
-        fields = [
+        fields = (
             "id",
-            "product",
             "name",
             "email",
+            "product",
             "requirements",
             "images",
             "created_at",
-        ]
-
-class CustomOrderShowcaseSerializer(serializers.ModelSerializer):
-    images = CustomOrderImageSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = CustomOrder
-        fields = [
-            "id",
-            "requirements",
-            "images",
-            "created_at",
-        ]
+        )
