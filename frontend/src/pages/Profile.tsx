@@ -1,10 +1,23 @@
-
 import { useEffect, useState } from "react";
 import { auth, db } from "../api/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import type { User } from "firebase/auth";
-import { Leaf, User as UserIcon, Mail, Phone, MapPin, Calendar, Shield, LogOut, Camera } from 'lucide-react';
+import {
+  Leaf,
+  User as UserIcon,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Shield,
+  LogOut,
+  Edit3,
+  Save,
+  X,
+} from "lucide-react";
+
+/* ---------------- Types ---------------- */
 
 type UserProfile = {
   fullName: string;
@@ -18,11 +31,19 @@ type UserProfile = {
   createdAt?: any;
 };
 
+/* ---------------- Component ---------------- */
+
 const Profile: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [form, setForm] = useState<UserProfile | null>(null);
+
   const [loading, setLoading] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  /* ---------------- Load Profile ---------------- */
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (currentUser) => {
@@ -34,12 +55,11 @@ const Profile: React.FC = () => {
       }
 
       try {
-        const userRef = doc(db, "users", currentUser.uid);
-        const snap = await getDoc(userRef);
+        const ref = doc(db, "users", currentUser.uid);
+        const snap = await getDoc(ref);
 
-        // Auto-create profile if missing
         if (!snap.exists()) {
-          const provider: "google" | "password" =
+          const provider =
             currentUser.providerData[0]?.providerId === "google.com"
               ? "google"
               : "password";
@@ -56,13 +76,15 @@ const Profile: React.FC = () => {
             createdAt: new Date(),
           };
 
-          await setDoc(userRef, newProfile);
+          await setDoc(ref, newProfile);
           setProfile(newProfile);
+          setForm(newProfile);
         } else {
-          setProfile(snap.data() as UserProfile);
+          const data = snap.data() as UserProfile;
+          setProfile(data);
+          setForm(data);
         }
-      } catch (err) {
-        console.error("Profile load error:", err);
+      } catch {
         setError("Failed to load profile");
       } finally {
         setLoading(false);
@@ -72,117 +94,147 @@ const Profile: React.FC = () => {
     return () => unsub();
   }, []);
 
-  /* ---------- Render states ---------- */
+  /* ---------------- Save Profile ---------------- */
+
+  const saveProfile = async () => {
+    if (!user || !form) return;
+
+    try {
+      setSaving(true);
+      await setDoc(doc(db, "users", user.uid), form, { merge: true });
+      setProfile(form);
+      setEditMode(false);
+    } catch {
+      setError("Failed to save profile");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  /* ---------------- Render States ---------------- */
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-stone-500 bg-stone-50">
-        <div className="flex flex-col items-center animate-pulse">
-          <Leaf className="text-amber-800 mb-4" size={48} />
-          <p className="font-serif text-xl">Loading your sanctuary...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-stone-50 text-stone-500">
+        <Leaf className="animate-pulse" size={48} />
       </div>
     );
   }
 
-  if (!user) {
+  if (!user || !profile || !form) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <p className="text-stone-500 font-serif text-xl">Please log in to view your profile.</p>
+        {error || "Not logged in"}
       </div>
     );
   }
 
-  if (error || !profile) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-600 bg-stone-50">
-        {error || "Profile not found"}
-      </div>
-    );
-  }
+  /* ---------------- UI ---------------- */
 
   return (
     <div className="min-h-screen bg-stone-50 py-24 px-6 flex justify-center">
-      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-stone-100 flex flex-col md:flex-row">
+      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-stone-100 flex flex-col md:flex-row overflow-hidden">
 
-        {/* Sidebar / Left Panel */}
-        <div className="md:w-1/3 bg-linear-to-b from-stone-900 to-stone-800 text-white p-12 flex flex-col items-center text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-12 opacity-10">
-            <Leaf size={120} />
-          </div>
-
-          <div className="relative z-10">
-            <div className="w-32 h-32 rounded-full bg-linear-to-br from-amber-500 to-amber-700 p-1 mb-6 shadow-xl mx-auto">
-              <div className="w-full h-full rounded-full bg-stone-800 flex items-center justify-center overflow-hidden">
-                {user.photoURL ? (
-                  <img src={user.photoURL} alt={profile.fullName} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-4xl font-serif text-amber-500">
-                    {profile.fullName?.[0]?.toUpperCase() || profile.email?.[0]?.toUpperCase()}
-                  </span>
-                )}
-              </div>
+        {/* Sidebar */}
+        <div className="md:w-1/3 bg-gradient-to-b from-stone-900 to-stone-800 text-white p-12 text-center flex flex-col">
+          <div className="w-32 h-32 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 p-1 mx-auto mb-6">
+            <div className="w-full h-full rounded-full bg-stone-800 flex items-center justify-center overflow-hidden">
+              {user.photoURL ? (
+                <img src={user.photoURL} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-4xl font-serif text-amber-500">
+                  {profile.fullName?.[0]?.toUpperCase()}
+                </span>
+              )}
             </div>
-
-            <h1 className="text-2xl font-serif mb-2 tracking-wide">
-              {profile.fullName}
-            </h1>
-            <p className="text-stone-400 text-sm mb-8 font-light">
-              @{profile.username}
-            </p>
-
-            <button
-              onClick={() => signOut(auth)}
-              className="group flex items-center space-x-2 px-6 py-2 rounded-full border border-stone-600 hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400 transition-all duration-300 text-sm tracking-widest uppercase"
-            >
-              <LogOut size={16} />
-              <span>Logout</span>
-            </button>
           </div>
 
-          <div className="mt-auto pt-12 text-stone-500 text-xs">
-            Member since {new Date(profile.createdAt?.seconds ? profile.createdAt.seconds * 1000 : profile.createdAt).getFullYear()}
-          </div>
+          <h1 className="text-2xl font-serif">{profile.fullName}</h1>
+          <p className="text-stone-400 text-sm mb-8">@{profile.username}</p>
+
+          <button
+            onClick={() => signOut(auth)}
+            className="mx-auto flex items-center gap-2 px-6 py-2 rounded-full border border-stone-600 hover:border-red-500 hover:text-red-400 transition text-sm"
+          >
+            <LogOut size={16} />
+            Logout
+          </button>
+
+          <p className="mt-auto text-xs text-stone-500 pt-10">
+            Member since{" "}
+            {new Date(
+              profile.createdAt?.seconds
+                ? profile.createdAt.seconds * 1000
+                : profile.createdAt
+            ).getFullYear()}
+          </p>
         </div>
 
-        {/* Main Content / Right Panel */}
+        {/* Main */}
         <div className="md:w-2/3 p-12">
-          <div className="flex items-center space-x-3 mb-8">
-            <Leaf className="text-amber-800" size={24} />
-            <h2 className="text-3xl font-serif text-stone-800">Your Journey</h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-serif text-stone-800 flex items-center gap-2">
+              <Leaf className="text-amber-800" size={24} />
+              Profile Details
+            </h2>
+
+            {!editMode ? (
+              <button
+                onClick={() => setEditMode(true)}
+                className="flex items-center gap-2 text-sm px-4 py-2 rounded-full bg-amber-600 text-white"
+              >
+                <Edit3 size={14} />
+                Edit
+              </button>
+            ) : (
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setForm(profile);
+                    setEditMode(false);
+                  }}
+                  className="px-4 py-2 rounded-full border"
+                >
+                  <X size={14} />
+                </button>
+                <button
+                  onClick={saveProfile}
+                  disabled={saving}
+                  className="px-4 py-2 rounded-full bg-amber-600 text-white"
+                >
+                  <Save size={14} />
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="grid gap-6">
-            <ProfileCard icon={<Mail size={20} />} label="Email" value={profile.email} />
-            <ProfileCard icon={<Phone size={20} />} label="Phone" value={profile.phone || "Not provided"} />
-            <ProfileCard icon={<MapPin size={20} />} label="Location" value={profile.location || "Not provided"} />
-            <ProfileCard icon={<UserIcon size={20} />} label="Bio" value={profile.bio || "Tell us about yourself..."} />
+            <EditableRow icon={<UserIcon size={18} />} label="Full Name" value={form.fullName} editMode={editMode}
+              onChange={(v) => setForm({ ...form, fullName: v })} />
 
-            <div className="grid grid-cols-2 gap-6 mt-4">
-              <ProfileCard
-                icon={<Shield size={20} />}
-                label="Role"
-                value={profile.role.charAt(0).toUpperCase() + profile.role.slice(1)}
-                compact
-              />
-              <ProfileCard
-                icon={<Calendar size={20} />}
-                label="Joined"
-                value={profile.createdAt ? new Date(profile.createdAt.seconds ? profile.createdAt.seconds * 1000 : profile.createdAt).toLocaleDateString() : "—"}
-                compact
-              />
-            </div>
-          </div>
+            <EditableRow icon={<Mail size={18} />} label="Email" value={form.email} />
 
-          <div className="mt-10 p-6 bg-stone-50 rounded-2xl border border-stone-200">
-            <div className="flex items-center space-x-3 mb-4">
-              <Camera className="text-stone-400" size={20} />
-              <h3 className="font-serif text-stone-700">Recent Activity</h3>
+            <EditableRow icon={<Phone size={18} />} label="Phone" value={form.phone || ""}
+              editMode={editMode}
+              onChange={(v) => setForm({ ...form, phone: v })} />
+
+            <EditableRow icon={<MapPin size={18} />} label="Location" value={form.location || ""}
+              editMode={editMode}
+              onChange={(v) => setForm({ ...form, location: v })} />
+
+            <EditableRow icon={<UserIcon size={18} />} label="Bio" value={form.bio || ""}
+              textarea editMode={editMode}
+              onChange={(v) => setForm({ ...form, bio: v })} />
+
+            <div className="grid grid-cols-2 gap-6">
+              <StaticRow icon={<Shield size={18} />} label="Role" value={profile.role} />
+              <StaticRow icon={<Calendar size={18} />} label="Joined"
+                value={new Date(
+                  profile.createdAt?.seconds
+                    ? profile.createdAt.seconds * 1000
+                    : profile.createdAt
+                ).toLocaleDateString()} />
             </div>
-            <p className="text-stone-500 text-sm italic">
-              You haven't booked any workshops or ordered items yet. <br />
-              <span className="text-amber-700 cursor-pointer hover:underline">Explore our collection</span> to get started.
-            </p>
           </div>
         </div>
       </div>
@@ -192,21 +244,52 @@ const Profile: React.FC = () => {
 
 export default Profile;
 
-interface ProfileCardProps {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  compact?: boolean;
-}
+/* ---------------- Reusable Rows ---------------- */
 
-const ProfileCard = ({ icon, label, value, compact }: ProfileCardProps) => (
-  <div className={`flex items-center space-x-4 p-4 rounded-xl hover:bg-stone-50 transition-colors duration-300 border border-transparent hover:border-stone-100 ${compact ? 'bg-stone-50/50' : ''}`}>
-    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-800 shrink-0">
+const EditableRow = ({
+  icon,
+  label,
+  value,
+  editMode,
+  textarea,
+  onChange,
+}: any) => (
+  <div className="flex gap-4 items-start">
+    <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center">
       {icon}
     </div>
-    <div className="overflow-hidden">
-      <p className="text-xs text-stone-500 uppercase tracking-wider mb-0.5">{label}</p>
-      <p className="text-stone-800 font-medium truncate">{value}</p>
+    <div className="flex-1">
+      <p className="text-xs uppercase text-stone-500 mb-1">{label}</p>
+      {editMode && onChange ? (
+        textarea ? (
+          <textarea
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            rows={3}
+            className="w-full border rounded-xl px-4 py-2"
+          />
+        ) : (
+          <input
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full border rounded-xl px-4 py-2"
+          />
+        )
+      ) : (
+        <p className="text-stone-800 font-medium">{value || "—"}</p>
+      )}
+    </div>
+  </div>
+);
+
+const StaticRow = ({ icon, label, value }: any) => (
+  <div className="flex gap-4 items-center bg-stone-50 p-4 rounded-xl">
+    <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center">
+      {icon}
+    </div>
+    <div>
+      <p className="text-xs uppercase text-stone-500">{label}</p>
+      <p className="font-medium">{value}</p>
     </div>
   </div>
 );
