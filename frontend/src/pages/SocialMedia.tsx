@@ -722,10 +722,17 @@ const BashoMediaSocialProof = () => {
               >
                 <div className="aspect-square w-full rounded-2xl overflow-hidden mb-8 shadow-xl">
                   <img
-                    src={story.image.startsWith('http') ? story.image : `${API_BASE}/${story.image}`}
-                    alt={story.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
+  src={
+    typeof story.image === "string" && story.image.startsWith("http")
+      ? story.image
+      : story.image
+      ? `${API_BASE}${story.image}`
+      : gallary3   // 👈 fallback image 
+  }
+  alt={story.title}
+  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+/>
+
                 </div>
                 <div className="space-y-4">
                   <div className="flex justify-center mb-2">
