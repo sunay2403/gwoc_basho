@@ -362,7 +362,7 @@ function ProductList(): JSX.Element {
                   p.images[0]?.image ||
                   null;
 
-                const imageUrl = img ? `${API_BASE}${img}` : null;
+                const imageUrl = img ? img : null;
 
                 return (
                   <div
