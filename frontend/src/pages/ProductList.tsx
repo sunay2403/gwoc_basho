@@ -24,7 +24,7 @@ function ProductList(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [addingIds, setAddingIds] = useState<number[]>([]);
 
-  /* ------------------ Animation mount ----------------- */
+  /* ------------------ Animation mount ---------------- */
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 80);
