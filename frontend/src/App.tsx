@@ -16,6 +16,7 @@ import ExperienceRegistration from "./pages/ExperienceRegistrationForm";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import ThankYou from "./pages/Thankyou";
 import CustomOrder from "./pages/CustomOrder";
+import PurchaseHistory from "./pages/PurchaseHistory";
 import {
   BrowserRouter,
   Routes,
@@ -49,6 +50,7 @@ const App: React.FC = () => {
           <Route path="/confirm-order" element={<OrderConfirmation />} />
           <Route path="/thank-you" element={<ThankYou />} />
           <Route path="/custom-order" element={<CustomOrder />} />
+          <Route path="/purchase-history" element={<ProtectedRoute><PurchaseHistory/></ProtectedRoute>} />
 
 
 

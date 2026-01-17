@@ -30,6 +30,13 @@ class CartAddItemView(APIView):
 
         product = get_object_or_404(Product, pk=product_id)
 
+        # Validate stock availability
+        if product.stock <= 0:
+            return Response(
+                {'detail': f'{product.name} is currently out of stock'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         cart, _ = Cart.objects.get_or_create(user=request.user)
 
         item, created = CartItem.objects.get_or_create(
@@ -39,9 +46,23 @@ class CartAddItemView(APIView):
         )
 
         if not created:
-            item.quantity = max(1, item.quantity + quantity)
+            new_quantity = item.quantity + quantity
+            # Validate total quantity doesn't exceed stock
+            if new_quantity > product.stock:
+                return Response(
+                    {'detail': f'Only {product.stock} units of {product.name} available. You already have {item.quantity} in cart.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            item.quantity = max(1, new_quantity)
             item.price = product.price
             item.save()
+        else:
+            # Validate quantity for new item
+            if quantity > product.stock:
+                return Response(
+                    {'detail': f'Only {product.stock} units of {product.name} available'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         serializer = CartSerializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -54,6 +75,14 @@ class CartUpdateItemView(APIView):
         cart = get_object_or_404(Cart, user=request.user)
         item = get_object_or_404(CartItem, pk=item_id, cart=cart)
         quantity = int(request.data.get('quantity', item.quantity))
+        
+        # Validate stock availability for updated quantity
+        if quantity > 0 and quantity > item.product.stock:
+            return Response(
+                {'detail': f'Only {item.product.stock} units of {item.product.name} available'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
         if quantity <= 0:
             item.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)

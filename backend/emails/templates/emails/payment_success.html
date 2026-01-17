@@ -156,11 +156,11 @@
         <!-- Main Content -->
         <div class="content">
             <div class="greeting">
-                Hi {{ user_name }},
+                Hello {{ user_name }},
             </div>
 
             <div class="success-message">
-                <p>✓ Your payment has been successfully processed. Your order is confirmed!</p>
+                <p>Your payment has been successfully processed. Your order is confirmed!</p>
             </div>
 
             <p>We're excited to process your order. Below are your payment and order details:</p>
@@ -177,11 +177,7 @@
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Amount Paid:</span>
-                    <span class="detail-value amount-highlight">₹{{ amount }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Currency:</span>
-                    <span class="detail-value">{{ currency }}</span>
+                    <span class="detail-value amount-highlight">{{ currency }}{{ amount }}</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Date & Time:</span>

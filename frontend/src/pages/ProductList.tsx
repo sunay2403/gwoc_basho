@@ -3,20 +3,20 @@ import Card from "../components/Card";
 import Cart from "./Cart";
 import { addToCart, getCart } from "../api/cart";
 import type { JSX } from "react/jsx-runtime";
-import type { Category, Product } from "../api/products";
+import type { Category, Product} from "../api/products";
 import { getProducts, getCategories } from "../api/products";
 import { useNavigate } from "react-router-dom";
 
-//const API_BASE = import.meta.env.VITE_API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function ProductList(): JSX.Element {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+
   const [query, setQuery] = useState("");
   const [mounted, setMounted] = useState(false);
   const [selectedCats, setSelectedCats] = useState<string[]>([]);
   const [priceLimit, setPriceLimit] = useState<number>(0);
   const [showCart, setShowCart] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -52,8 +52,8 @@ function ProductList(): JSX.Element {
     const loadData = async () => {
       try {
         const [cats, prods] = await Promise.all([
-          getCategories(),
-          getProducts(),
+            getCategories(),
+            getProducts(),
         ]);
 
         setCategories(cats);
@@ -107,93 +107,7 @@ function ProductList(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-stone-50">
-      {/* Mobile Filter Drawer */}
-      {showFilters && (
-        <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-end lg:hidden transition-opacity duration-300"
-          onClick={() => setShowFilters(false)}
-        >
-          <div
-            className="bg-white w-full sm:w-80 h-full shadow-2xl overflow-y-auto animate-fade-in-right"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-6 border-b border-stone-200 flex justify-between items-center bg-stone-50">
-              <h3 className="font-semibold text-lg text-stone-800">Filters</h3>
-              <button
-                onClick={() => setShowFilters(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-stone-200 text-stone-500"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="p-6 space-y-8">
-              {/* Categories */}
-              <div>
-                <h4 className="font-semibold text-stone-800 mb-4 text-sm uppercase tracking-wide">Categories</h4>
-                <div className="flex flex-col gap-3">
-                  {categories.map(cat => (
-                    <label key={cat.id} className="group flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-stone-50 transition-colors">
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          checked={selectedCats.includes(String(cat.id))}
-                          onChange={() =>
-                            setSelectedCats(prev =>
-                              prev.includes(String(cat.id))
-                                ? prev.filter(x => x !== String(cat.id))
-                                : [...prev, String(cat.id)]
-                            )
-                          }
-                          className="w-5 h-5 rounded border-2 border-stone-300 text-amber-800 focus:ring-2 focus:ring-amber-200 focus:ring-offset-0 cursor-pointer accent-amber-800"
-                        />
-                      </div>
-                      <span className="text-stone-700 group-hover:text-stone-900 font-medium text-sm">{cat.name}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price Range */}
-              <div className="pt-4 border-t border-stone-200">
-                <h4 className="font-semibold text-stone-800 mb-4 text-sm uppercase tracking-wide">Price Range</h4>
-                <div className="space-y-4">
-                  <input
-                    type="range"
-                    min={0}
-                    max={maxPrice}
-                    value={priceLimit}
-                    onChange={e => setPriceLimit(Number(e.target.value))}
-                    className="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-amber-800"
-                  />
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-stone-600">₹0</span>
-                    <div className="px-4 py-2 bg-stone-100 rounded-lg">
-                      <span className="font-bold text-amber-900">₹{priceLimit}</span>
-                    </div>
-                    <span className="text-sm text-stone-600">₹{maxPrice}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Clear Filters */}
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedCats([]);
-                  setPriceLimit(maxPrice);
-                  setShowFilters(false);
-                }}
-                className="w-full px-4 py-3 bg-[#8E5022] text-white rounded-xl text-sm font-semibold hover:bg-amber-900 transition-all shadow-md active:scale-[0.98]"
-              >
-                Clear All Filters
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
+      {/* Cart Modal */}
       {showCart && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center transition-opacity duration-300"
@@ -311,43 +225,24 @@ function ProductList(): JSX.Element {
                   Handcrafted pieces made with intention
                 </p>
               </div>
-              <div className="flex items-center gap-3 whitespace-nowrap">
-  {/* Custom Order button */}
-  <button
-    onClick={() => navigate("/custom-order")}
-    className="px-6 py-3 bg-white border-2 border-amber-800 text-amber-800 rounded-full font-semibold hover:bg-amber-50 transition-all hover:shadow-sm active:scale-95"
-  >
-    Custom Order
-  </button>
-
-  {/* Cart button (unchanged behavior) */}
-  <button
-    onClick={() => setShowCart(true)}
-    className="relative px-6 py-3 bg-amber-800 text-white rounded-full font-semibold hover:bg-amber-900 transition-all hover:shadow-lg active:scale-95 flex items-center gap-2 group"
-  >
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-      />
-    </svg>
-
-    <span>Cart</span>
-
-    {cartCount > 0 && (
-      <span className="absolute -top-2 -right-2 inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
-        {cartCount}
-      </span>
-    )}
-  </button>
-</div>
-
+              <button
+                onClick={() => setShowCart(true)}
+                className="relative px-6 py-3 bg-amber-800 text-white rounded-full font-semibold hover:bg-amber-900 transition-all hover:shadow-lg active:scale-95 flex items-center gap-2 whitespace-nowrap group"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Cart</span>
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
             </div>
 
-            {/* Search Bar and Filter Toggle */}
-            <div className="flex flex-col sm:flex-row gap-4 max-w-2xl mb-6">
+            {/* Search Bar */}
+            <div className="flex items-center gap-3 max-w-2xl mb-6">
               <div className="relative flex-1">
                 <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -359,26 +254,15 @@ function ProductList(): JSX.Element {
                   className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-stone-200 bg-white shadow-sm focus:outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-100 transition-all text-stone-800 placeholder-stone-400"
                 />
               </div>
-              <div className="flex gap-2">
+              {query && (
                 <button
-                  onClick={() => setShowFilters(true)}
-                  className="lg:hidden px-5 py-4 bg-white border-2 border-stone-200 text-stone-700 font-medium rounded-2xl hover:bg-stone-50 transition-colors flex items-center gap-2 whitespace-nowrap"
+                  type="button"
+                  onClick={() => setQuery("")}
+                  className="px-5 py-4 text-stone-600 hover:text-stone-900 font-medium hover:bg-stone-100 rounded-2xl transition-colors"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                  </svg>
-                  Filters
+                  Clear
                 </button>
-                {query && (
-                  <button
-                    type="button"
-                    onClick={() => setQuery("")}
-                    className="px-5 py-4 text-stone-600 hover:text-stone-900 font-medium hover:bg-stone-100 rounded-2xl transition-colors"
-                  >
-                    Clear
-                  </button>
-                )}
-              </div>
+              )}
             </div>
 
             {/* Active Filters Display */}
@@ -447,25 +331,27 @@ function ProductList(): JSX.Element {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 mt-8">
               {filtered.map((p, idx) => {
-const img =
-  p.images.find(img => img.is_primary)?.image ||
-  p.images[0]?.image ||
-  null;
+                const img =
+                  p.images.find(img => img.is_primary)?.image ||
+                  p.images[0]?.image ||
+                  null;
 
-const imageUrl = img || null;
+                const imageUrl = img ? `${API_BASE}${img}` : null;
 
                 return (
                   <div
                     key={p.id}
                     style={{ transitionDelay: `${idx * 40}ms` }}
-                    className={`opacity-0 translate-y-8 ${mounted ? "opacity-100 translate-y-0" : ""
-                      } transition-all duration-500 ease-out`}
+                    className={`opacity-0 translate-y-8 ${
+                      mounted ? "opacity-100 translate-y-0" : ""
+                    } transition-all duration-500 ease-out`}
                   >
                     <Card
                       image={imageUrl}
                       name={p.name}
                       price={Number(p.price)}
-                      category={{ id: p.id, name: p.category.name }}
+                      stock={p.stock}
+                      category={{id: p.id, name : p.category.name}}
                       productId={p.id}
                       adding={addingIds.includes(p.id)}
                       onAdd={async (productId) => {
@@ -474,6 +360,9 @@ const imageUrl = img || null;
                         try {
                           await addToCart(id, 1);
                           await loadCartCount();
+
+                          setProducts(prev => prev.map(prod => prod.id === id ? { ...prod, stock: Math.max(0,prod.stock - 1) } : prod));
+
                           console.log("Added to cart", id);
                         } catch (err) {
                           console.error("Failed to add to cart", err);
