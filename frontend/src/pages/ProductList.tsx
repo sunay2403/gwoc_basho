@@ -7,7 +7,7 @@ import type { Category, Product} from "../api/products";
 import { getProducts, getCategories } from "../api/products";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+//const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function ProductList(): JSX.Element {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ function ProductList(): JSX.Element {
     return () => clearTimeout(t);
   }, []);
 
-  /* ------------------ Fetch cart count ------------------ */
+  /* ------------------ Fetch cart count ----------------- */
 
   const loadCartCount = async () => {
     try {
