@@ -39,7 +39,7 @@ export type StudioMeta = {
 };
 
 export async function fetchStudioMeta(): Promise<StudioMeta> {
-  const res = await fetch("/meta/");
+  const res = await fetch(`${API_BASE}/api/meta/`);
   if (!res.ok) throw new Error("Failed to fetch studio meta");
   return res.json();
 }
