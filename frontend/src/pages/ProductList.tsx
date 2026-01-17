@@ -24,7 +24,7 @@ function ProductList(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [addingIds, setAddingIds] = useState<number[]>([]);
 
-  /* ------------------ Animation mount ------------------ */
+  /* ------------------ Animation mount ----------------- */
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 80);
@@ -225,20 +225,46 @@ function ProductList(): JSX.Element {
                   Handcrafted pieces made with intention
                 </p>
               </div>
-              <button
-                onClick={() => setShowCart(true)}
-                className="relative px-6 py-3 bg-amber-800 text-white rounded-full font-semibold hover:bg-amber-900 transition-all hover:shadow-lg active:scale-95 flex items-center gap-2 whitespace-nowrap group"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <span>Cart</span>
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
+              <div className="flex items-center gap-3 whitespace-nowrap">
+  {/* Custom Order */}
+  <button
+    onClick={() =>
+      navigate("/custom-order")
+    }
+    className="px-6 py-3 bg-white border-2 border-amber-800 text-amber-800 rounded-full font-semibold hover:bg-amber-50 transition-all hover:shadow-sm active:scale-95"
+  >
+    Custom Order
+  </button>
+
+  {/* Cart */}
+  <button
+    onClick={() => setShowCart(true)}
+    className="relative px-6 py-3 bg-amber-800 text-white rounded-full font-semibold hover:bg-amber-900 transition-all hover:shadow-lg active:scale-95 flex items-center gap-2 group"
+  >
+    <svg
+      className="w-5 h-5"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+      />
+    </svg>
+
+    <span>Cart</span>
+
+    {cartCount > 0 && (
+      <span className="absolute -top-2 -right-2 inline-flex items-center justify-center min-w-[1.75rem] h-7 px-2 bg-red-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
+        {cartCount}
+      </span>
+    )}
+  </button>
+</div>
+
             </div>
 
             {/* Search Bar */}
