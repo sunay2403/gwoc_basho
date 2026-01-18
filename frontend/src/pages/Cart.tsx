@@ -135,8 +135,10 @@ const Cart: React.FC = () => {
           </div>
         </div>
       )}
+      
       {/* Cart Items - Scrollable */}
-      <div className="flex-1 overflow-y-auto px-6 py-4">
+<div className="max-h-[55vh] overflow-y-auto px-6 py-4">
+
         <div className="space-y-4">
           {items.map((it) => {
             const isUpdating = updatingIds.includes(it.id);
