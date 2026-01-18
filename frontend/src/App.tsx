@@ -23,6 +23,7 @@ import {
   Route,
   Navigate
 } from "react-router-dom";
+import Footer from "./components/Footer";
 
 const App: React.FC = () => {
   return (
@@ -59,6 +60,7 @@ const App: React.FC = () => {
           {/* Optional: 404 fallback */}
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
+        <Footer/>
       </BrowserRouter>
     </div>
   );
