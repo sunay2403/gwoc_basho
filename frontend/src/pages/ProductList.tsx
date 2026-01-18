@@ -114,7 +114,8 @@ function ProductList(): JSX.Element {
           onClick={() => setShowCart(false)}
         >
           <div
-            className="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] sm:max-h-[90vh] transform transition-all duration-300 ease-out"
+            className="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl
+             shadow-2xl flex flex-col max-h-[85vh] sm:max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center px-6 py-5 border-b border-stone-200 bg-gradient-to-r from-stone-50 to-white sticky top-0 z-10">
